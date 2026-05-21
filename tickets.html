@@ -394,24 +394,27 @@ async function runAISearch(query){
       return;
     }
 
-    const riskColor={LOW:'#1a7a3a',MEDIUM:'#c06010',HIGH:'#c04040'};
-    const riskBg={LOW:'#e0f5e8',MEDIUM:'#fff0e0',HIGH:'#fde8e8'};
-
     let html=`<div style="font-size:12px;color:#5a8a9a;margin-bottom:14px;padding:10px;background:#e8f4f8;border-radius:6px">${parsed.summary||''}</div>`;
-    
-    html+=parsed.results.map(r=>`
-      <div style="background:#e8f4f8;border:0.5px solid #c8e8f4;border-radius:8px;padding:14px;margin-bottom:10px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-          <div style="font-size:13px;font-weight:500;color:#1a3a4a">${esc(r.title)}</div>
-          <span style="font-size:11px;padding:3px 10px;border-radius:10px;background:${riskBg[r.risk]||'#e8f4f8'};color:${riskColor[r.risk]||'#7aaab8'};font-weight:500">${r.risk} RISK</span>
-        </div>
-        <div style="font-size:11px;color:#7aaab8;margin-bottom:8px">${esc(r.reason)}</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <a href="${esc(r.url)}" target="_blank" class="btn btn-primary" style="font-size:11px;padding:5px 12px"><i class="ti ti-external-link"></i> View tickets</a>
-          <span style="font-size:11px;color:${r.available?'#1a7a3a':'#c04040'}">${r.available?'✓ Tickets likely available':'✗ May be sold out'}</span>
-        </div>
-      </div>
-    `).join('');
+
+    if(!parsed.results||parsed.results.length===0){
+      html+='<div style="text-align:center;padding:24px;color:#c04040;font-size:13px">🚫 No resale tickets found for this event right now.</div>';
+    } else {
+      html+=parsed.results.map(r=>{
+        const risk=r.riskPercent||0;
+        const riskColor=risk<30?'#1a7a3a':risk<60?'#c06010':'#c04040';
+        const riskBg=risk<30?'#e0f5e8':risk<60?'#fff0e0':'#fde8e8';
+        const hasListings=r.hasListings!==false;
+        return `<div style="background:#e8f4f8;border:0.5px solid #c8e8f4;border-radius:8px;padding:14px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <div style="font-size:13px;font-weight:500;color:#1a3a4a">${esc(r.title)}</div>
+            <span style="font-size:11px;padding:3px 10px;border-radius:10px;background:${riskBg};color:${riskColor};font-weight:500">${risk}% scam risk</span>
+          </div>
+          <div style="font-size:11px;color:#7aaab8;margin-bottom:6px">${esc(r.reason)}</div>
+          <div style="font-size:11px;margin-bottom:8px;color:${hasListings?'#1a7a3a':'#c04040'};font-weight:500">${hasListings?'✓ Resale listings found':'✗ No listings found'}</div>
+          <a href="${esc(r.url)}" target="_blank" class="btn btn-primary" style="font-size:11px;padding:5px 12px"><i class="ti ti-external-link"></i> View resale tickets</a>
+        </div>`;
+      }).join('');
+    }
 
     document.getElementById('ai-results').innerHTML=html;
   }catch(err){
