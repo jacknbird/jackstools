@@ -378,10 +378,9 @@ async function runAISearch(query){
     // parse Claude's response
     let parsed=null;
     try{
-      // handle array or object response
       const item=Array.isArray(data)?data[0]:data;
-      const text=item?.json?.content?.[0]?.text||item?.content?.[0]?.text||'';
-      const match=text.match(/\{[\s\S]*\}/);
+      const text=item?.content?.[0]?.text||item?.json?.content?.[0]?.text||'';
+      const match=text.match(/\{[\s\S]*\}/s);
       if(match)parsed=JSON.parse(match[0]);
     }catch(e){console.log('parse error',e);}
 
