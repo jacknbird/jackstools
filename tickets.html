@@ -346,6 +346,7 @@ function buildSummary(all,lm,q){
 }
 
 
+let currentAIQuery='';
 const AI_WEBHOOK='https://n8n.srv1495700.hstgr.cloud/webhook/8f9d49b9-f0b6-463e-aa38-2f24ae262776';
 
 function openAISearch(idx){
@@ -354,7 +355,8 @@ function openAISearch(idx){
   if(!e)return;
   const venue=e._embedded?.venues?.[0];
   const city=venue?.city?.name||'';
-  const query=e.name+(city?' '+city:'');
+  const query=e.name+(city?' '+city:'')+' tickets';
+  currentAIQuery=query;
   document.getElementById('ai-event-label').textContent=e.name;
   document.getElementById('ai-results').innerHTML='';
   document.getElementById('ai-loading').style.display='block';
@@ -374,18 +376,17 @@ async function runAISearch(query){
     });
     const data=await res.json();
     document.getElementById('ai-loading').style.display='none';
-    // debug - show raw response
-    document.getElementById('ai-results').innerHTML='<pre style="font-size:10px;color:#1a3a4a;overflow:auto;max-height:300px">'+JSON.stringify(data,null,2)+'</pre>';
-    return;
     
     // parse Claude's response
     let parsed=null;
     try{
       const item=Array.isArray(data)?data[0]:data;
       const text=item?.content?.[0]?.text||item?.json?.content?.[0]?.text||'';
-      const match=text.match(/\{[\s\S]*\}/s);
+      // strip markdown code fences
+      const clean=text.replace(/```json\n?/g,'').replace(/```/g,'').trim();
+      const match=clean.match(/\{[\s\S]*\}/);
       if(match)parsed=JSON.parse(match[0]);
-    }catch(e){console.log('parse error',e);}
+    }catch(e){console.log('parse error',e,data);}
 
     if(!parsed||!parsed.results){
       document.getElementById('ai-results').innerHTML='<p style="color:#c04040;font-size:13px">No results found. Try again.</p>';
