@@ -383,9 +383,10 @@ async function runAISearch(query){
       const item=Array.isArray(data)?data[0]:data;
       const text=item?.content?.[0]?.text||item?.json?.content?.[0]?.text||'';
       // strip markdown code fences
-      const clean=text.replace(/```json\n?/g,'').replace(/```/g,'').trim();
-      const match=clean.match(/\{[\s\S]*\}/);
-      if(match)parsed=JSON.parse(match[0]);
+      const clean=text.replace(/```json/g,'').replace(/```/g,'').trim();
+      const start=clean.indexOf('{');
+      const end=clean.lastIndexOf('}');
+      if(start!==-1&&end!==-1)parsed=JSON.parse(clean.slice(start,end+1));
     }catch(e){console.log('parse error',e,data);}
 
     if(!parsed||!parsed.results){
