@@ -374,6 +374,9 @@ async function runAISearch(query){
     });
     const data=await res.json();
     document.getElementById('ai-loading').style.display='none';
+    // debug - show raw response
+    document.getElementById('ai-results').innerHTML='<pre style="font-size:10px;color:#1a3a4a;overflow:auto;max-height:300px">'+JSON.stringify(data,null,2)+'</pre>';
+    return;
     
     // parse Claude's response
     let parsed=null;
