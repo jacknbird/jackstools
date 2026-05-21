@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ticket Finder — Jacks Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#e8f4f8;color:#1a3a4a;font-family:'DM Sans',sans-serif}
+.topbar{display:flex;align-items:center;gap:12px;padding:12px 32px;border-bottom:0.5px solid #b0d4e3;background:#f0faff;position:sticky;top:0;z-index:10}
+.back-btn{font-size:12px;padding:5px 11px;border-radius:5px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#3a7a9a;cursor:pointer;display:flex;align-items:center;gap:5px;text-decoration:none}
+.back-btn:hover{background:#dff0f8;color:#1a3a4a}
+.topbar-title{font-size:18px;font-weight:500;color:#1a3a4a}
+.topbar-title span{color:#2a7fa5}
+.page{padding:32px;max-width:900px;margin:0 auto}
+.search-box{background:#f0faff;border:0.5px solid #b0d4e3;border-radius:12px;padding:20px;margin-bottom:24px}
+.search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.search-input{flex:1;min-width:200px;font-size:14px;padding:10px 14px;border-radius:8px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#1a3a4a;font-family:'DM Sans',sans-serif;outline:none}
+.search-input:focus{border-color:#2a7fa5}
+.select-input{font-size:13px;padding:10px 12px;border-radius:8px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#1a3a4a;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer}
+.btn{font-size:12px;padding:7px 14px;border-radius:6px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#3a7a9a;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;transition:background .1s;text-decoration:none;white-space:nowrap}
+.btn:hover{background:#dff0f8;color:#1a3a4a;border-color:#7abcd4}
+.btn-primary{background:#2a7fa5;color:#fff;border-color:#2a7fa5}
+.btn-primary:hover{background:#1a6a8a;color:#fff}
+.btn-watch{background:#fff8f0;color:#c06010;border-color:#f0c080}
+.btn-watch:hover{background:#fff0e0}
+.tabs{display:flex;border-bottom:0.5px solid #b0d4e3;margin-bottom:20px}
+.tab{padding:10px 20px;font-size:13px;cursor:pointer;color:#7aaab8;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px}
+.tab.active{color:#1a3a4a;border-bottom-color:#2a7fa5}
+.tab-count{font-size:10px;background:#b0d4e3;color:#1a5a7a;padding:2px 7px;border-radius:10px}
+.tab.active .tab-count{background:#2a7fa5;color:#fff}
+.tab-refresh{margin-left:auto;color:#7aaab8}
+.loading{text-align:center;padding:48px;color:#7aaab8;font-size:14px}
+.loading i{font-size:32px;display:block;margin-bottom:12px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.empty{text-align:center;padding:48px;color:#9acad8}
+.empty i{font-size:40px;display:block;margin-bottom:12px;color:#b0d4e3}
+.event-card{background:#f0faff;border:0.5px solid #c8e8f4;border-radius:10px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px}
+.event-card:hover{border-color:#7abcd4}
+.event-card.last-minute{border-left:3px solid #e07a2a}
+.event-card.sold-out{opacity:0.8;background:#fafafa}
+.event-date{text-align:center;background:#e8f4f8;border:0.5px solid #b0d4e3;border-radius:8px;padding:8px 10px;min-width:52px;flex-shrink:0}
+.event-date .day{font-size:20px;font-weight:500;color:#1a3a4a;line-height:1}
+.event-date .month{font-size:10px;text-transform:uppercase;color:#7aaab8;letter-spacing:.06em}
+.event-date .year{font-size:10px;color:#9acad8}
+.event-info{flex:1;min-width:0}
+.event-name{font-size:14px;font-weight:500;color:#1a3a4a;margin-bottom:4px}
+.event-meta{font-size:12px;color:#7aaab8;display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.event-meta span{display:flex;align-items:center;gap:4px}
+.event-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;background:#dff0f8;color:#2a7fa5;border:0.5px solid #b0d4e3}
+.tag.sold-out-tag{background:#fde8e8;color:#c04040;border-color:#f0b0b0}
+.tag.urgent{background:#fff0e0;color:#c06010;border-color:#f0c080}
+.tag.cheap{background:#e0f5e8;color:#1a7a3a;border-color:#90d0a0}
+.event-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.event-price{text-align:right;flex-shrink:0;min-width:60px}
+.price-from{font-size:10px;color:#9acad8}
+.price-val{font-size:18px;font-weight:500;color:#1a3a4a}
+.price-val.good{color:#1a7a3a}
+.no-price{font-size:12px;color:#9acad8}
+.sold-out-price{font-size:12px;color:#c04040;font-weight:500}
+.ai-box{background:#e8f4f8;border:0.5px solid #b0d4e3;border-radius:10px;padding:14px 16px;margin-bottom:18px;font-size:13px;line-height:1.7;color:#1a3a4a}
+.ai-box-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#7aaab8;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.error-box{background:#fde8e8;border:0.5px solid #f0b0b0;border-radius:8px;padding:14px;font-size:13px;color:#8a2020;margin-bottom:16px}
+/* modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(30,80,110,.25);display:none;align-items:center;justify-content:center;z-index:999}
+.modal{background:#f0faff;border:0.5px solid #b0d4e3;border-radius:12px;padding:24px;width:320px;box-shadow:0 12px 40px rgba(30,80,110,.15)}
+.modal h3{font-size:15px;font-weight:500;margin-bottom:6px;color:#1a3a4a}
+.modal-event{font-size:12px;color:#2a7fa5;font-weight:500;margin-bottom:4px}
+.modal-sub{font-size:12px;color:#5a8a9a;margin-bottom:16px;line-height:1.6}
+.modal label{font-size:12px;color:#3a7a9a;display:block;margin-bottom:4px}
+.modal input[type=email],.modal input[type=number]{width:100%;font-size:13px;padding:9px 12px;border-radius:6px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#1a3a4a;font-family:'DM Sans',sans-serif;margin-bottom:14px;outline:none}
+.modal input:focus{border-color:#2a7fa5}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.notify-status{font-size:12px;min-height:18px;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="index.html" class="back-btn"><i class="ti ti-arrow-left"></i> Home</a>
+  <div class="topbar-title">Ticket <span>Finder</span></div>
+</div>
+<div class="page">
+  <div class="search-box">
+    <div class="search-row">
+      <input class="search-input" id="search-q" placeholder="Artist or event name…" onkeydown="if(event.key==='Enter')doSearch()">
+      <select class="select-input" id="search-country">
+        <option value="GB">🇬🇧 UK</option>
+        <option value="US">🇺🇸 USA</option>
+        <option value="IE">🇮🇪 Ireland</option>
+        <option value="DE">🇩🇪 Germany</option>
+        <option value="FR">🇫🇷 France</option>
+        <option value="AU">🇦🇺 Australia</option>
+      </select>
+      <button class="btn btn-primary" onclick="doSearch()"><i class="ti ti-search"></i> Search</button>
+    </div>
+  </div>
+
+  <div id="loading-area" style="display:none"><div class="loading"><i class="ti ti-loader"></i> Searching…</div></div>
+  <div id="error-area" style="display:none"><div class="error-box" id="error-msg"></div></div>
+
+  <div id="results-section" style="display:none">
+    <div id="ai-summary"></div>
+    <div class="tabs">
+      <button class="tab active" id="tab-all" onclick="switchTab('all')">
+        <i class="ti ti-ticket"></i> All shows <span class="tab-count" id="count-all">0</span>
+      </button>
+      <button class="tab" id="tab-lm" onclick="switchTab('lm')">
+        <i class="ti ti-clock"></i> Last minute <span class="tab-count" id="count-lm">0</span>
+      </button>
+      <button class="tab tab-refresh" onclick="refreshNow()" title="Refresh"><i class="ti ti-refresh" id="refresh-icon"></i> Refresh</button>
+    </div>
+    <div id="results-area"></div>
+  </div>
+
+  <div id="empty-area" style="display:none"><div class="empty"><i class="ti ti-music-off"></i><p style="margin-top:8px;font-size:14px">No results found — try a different search</p></div></div>
+</div>
+
+<!-- notify modal -->
+<div class="modal-overlay" id="notify-modal" onclick="if(event.target===this)closeNotify()">
+  <div class="modal">
+    <h3>🔔 Watch for resale tickets</h3>
+    <div class="modal-event" id="modal-event-name"></div>
+    <div class="modal-sub">We'll email you the moment a resale ticket appears under your max price.</div>
+    <label>Your email</label>
+    <input type="email" id="notify-email" placeholder="you@example.com">
+    <label>Max price (£)</label>
+    <input type="number" id="notify-price" placeholder="e.g. 50" min="1">
+    <div class="notify-status" id="notify-status"></div>
+    <div class="modal-btns">
+      <button class="btn" onclick="closeNotify()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitNotify()"><i class="ti ti-bell"></i> Notify me</button>
+    </div>
+  </div>
+</div>
+
+<script>
+if(sessionStorage.getItem('jt_unlocked')!=='1')window.location.href='index.html';
+
+const API_KEY='Xc6KJeflLI55T8NHZ06WyfIlOItGGmjB';
+const WEBHOOK='https://n8n.srv1495700.hstgr.cloud/webhook/45c2830c-3cce-431e-b06e-6dba6a4b3863';
+
+let allEvents=[];
+let lastMinute=[];
+let currentTab='all';
+let watchEvent={id:'',name:'',date:''};
+
+async function doSearch(){
+  const q=document.getElementById('search-q').value.trim();
+  const country=document.getElementById('search-country').value;
+  if(!q)return;
+  document.getElementById('results-section').style.display='none';
+  document.getElementById('empty-area').style.display='none';
+  document.getElementById('error-area').style.display='none';
+  document.getElementById('loading-area').style.display='block';
+  try{
+    const url=`https://app.ticketmaster.com/discovery/v2/events.json?keyword=${encodeURIComponent(q)}&countryCode=${country}&size=50&sort=date,asc&apikey=${API_KEY}`;
+    const res=await fetch(url);
+    const data=await res.json();
+    document.getElementById('loading-area').style.display='none';
+    if(!data._embedded||!data._embedded.events||!data._embedded.events.length){
+      document.getElementById('empty-area').style.display='block';return;
+    }
+    processEvents(data._embedded.events,q);
+  }catch(err){
+    document.getElementById('loading-area').style.display='none';
+    document.getElementById('error-area').style.display='block';
+    document.getElementById('error-msg').textContent='Something went wrong. Check your connection and try again.';
+  }
+}
+
+function processEvents(events,q){
+  const now=new Date();
+  const in48h=new Date(now.getTime()+48*60*60*1000);
+  allEvents=events;
+  lastMinute=events.filter(e=>{
+    const d=new Date(e.dates?.start?.dateTime||e.dates?.start?.localDate);
+    return d>=now&&d<=in48h;
+  });
+  document.getElementById('count-all').textContent=allEvents.length;
+  document.getElementById('count-lm').textContent=lastMinute.length;
+  if(q)buildSummary(allEvents,lastMinute,q);
+  document.getElementById('results-section').style.display='block';
+  renderTab(currentTab);
+}
+
+function switchTab(t){
+  currentTab=t;
+  document.getElementById('tab-all').classList.toggle('active',t==='all');
+  document.getElementById('tab-lm').classList.toggle('active',t==='lm');
+  renderTab(t);
+}
+
+function renderTab(t){
+  const events=t==='all'?allEvents:lastMinute;
+  const area=document.getElementById('results-area');
+  if(!events.length){
+    area.innerHTML=`<div class="empty"><i class="ti ti-clock-off"></i><p style="margin-top:8px;font-size:14px">${t==='lm'?'No shows in the next 48 hours':'No results'}</p></div>`;
+    return;
+  }
+  area.innerHTML=events.map((e,i)=>renderCard(e,t==='lm',i)).join('');
+}
+
+function renderCard(e,isLM,idx){
+  const dateStr=e.dates?.start?.dateTime||e.dates?.start?.localDate||'';
+  const d=dateStr?new Date(dateStr):null;
+  const day=d?d.getDate():'?';
+  const month=d?d.toLocaleString('default',{month:'short'}):'';
+  const year=d?d.getFullYear():'';
+  const time=e.dates?.start?.dateTime?new Date(e.dates.start.dateTime).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';
+  const venue=e._embedded?.venues?.[0];
+  const location=[venue?.name,venue?.city?.name].filter(Boolean).join(', ');
+  const status=e.dates?.status?.code||'';
+  const isSoldOut=status==='offsale'||status==='cancelled'||status==='soldout';
+  const priceRange=e.priceRanges?.[0];
+
+  let priceHtml='<div class="no-price">See site</div>';
+  if(isSoldOut){priceHtml='<div class="sold-out-price">Sold out</div>';}
+  else if(priceRange){
+    const sym=priceRange.currency==='GBP'?'£':priceRange.currency==='USD'?'$':'€';
+    priceHtml=`<div class="price-from">from</div><div class="price-val${priceRange.min<50?' good':''}">${sym}${priceRange.min.toFixed(0)}</div>`;
+  }
+
+  // availability indicator
+  let availHtml='';
+  if(isSoldOut){
+    availHtml='<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#c04040;font-weight:500;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#c04040;flex-shrink:0;display:inline-block"></span>Sold out</div>';
+  } else if(status==='onsale'){
+    availHtml='<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#1a7a3a;font-weight:500;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#2a9a5a;flex-shrink:0;display:inline-block;animation:pulse 1.5s infinite"></span>Tickets available</div>';
+  } else if(status==='offsale'){
+    availHtml='<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#c04040;font-weight:500;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#c04040;flex-shrink:0;display:inline-block"></span>Sold out</div>';
+  } else {
+    availHtml='<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#7aaab8;margin-bottom:6px"><span style="width:8px;height:8px;border-radius:50%;background:#7aaab8;flex-shrink:0;display:inline-block"></span>Check availability</div>';
+  }
+
+  const tags=[];
+  if(isLM)tags.push('<span class="tag urgent">⚡ Last minute</span>');
+  if(priceRange&&priceRange.min<40&&!isSoldOut)tags.push('<span class="tag cheap">💚 Good price</span>');
+
+  const ticketBtn=isSoldOut?'':` <a href="${e.url||'#'}" target="_blank" class="btn btn-primary" style="font-size:11px;padding:5px 12px"><i class="ti ti-external-link"></i> Ticketmaster</a>`;
+
+  const q=encodeURIComponent(e.name);
+  const platformBtns=`
+    <a href="https://www.viagogo.co.uk/Concert-Tickets/-/${q}" target="_blank" class="btn" style="font-size:11px;padding:5px 10px"><i class="ti ti-external-link"></i> Viagogo</a>
+    <a href="https://www.stubhub.co.uk/secure/search?q=${q}" target="_blank" class="btn" style="font-size:11px;padding:5px 10px"><i class="ti ti-external-link"></i> StubHub</a>
+    <a href="https://www.seatgeek.com/${q}-tickets" target="_blank" class="btn" style="font-size:11px;padding:5px 10px"><i class="ti ti-external-link"></i> SeatGeek</a>
+    <a href="https://www.axs.com/search?q=${q}" target="_blank" class="btn" style="font-size:11px;padding:5px 10px"><i class="ti ti-external-link"></i> AXS</a>
+  `;
+
+  return `<div class="event-card${isLM?' last-minute':''}${isSoldOut?' sold-out':''}">
+    <div class="event-date"><div class="day">${day}</div><div class="month">${month}</div><div class="year">${year}</div></div>
+    <div class="event-info">
+      ${availHtml}<div class="event-name">${esc(e.name)}</div>
+      <div class="event-meta">
+        ${location?`<span><i class="ti ti-map-pin"></i>${esc(location)}</span>`:''}
+        ${time?`<span><i class="ti ti-clock"></i>${time}</span>`:''}
+      </div>
+      ${tags.length?`<div class="event-tags">${tags.join('')}</div>`:''}
+      <div class="event-actions">
+        ${ticketBtn}
+        ${platformBtns}
+        <button class="btn btn-watch" style="font-size:11px;padding:5px 12px" onclick="openWatch(${idx})"><i class="ti ti-bell"></i> Watch for resale</button>
+        <button class="btn" style="font-size:11px;padding:5px 12px;background:#f0f8ff;color:#2a7fa5;border-color:#b0d4e3" onclick="openAISearch(${idx})"><i class="ti ti-sparkles"></i> AI search</button>
+      </div>
+    </div>
+    <div class="event-price">${priceHtml}</div>
+  </div>`;
+}
+
+function openWatch(idx){
+  const events=currentTab==='all'?allEvents:lastMinute;
+  const e=events[idx];
+  if(!e)return;
+  const dateStr=e.dates?.start?.localDate||e.dates?.start?.dateTime||'';
+  const d=dateStr?new Date(dateStr):null;
+  const dateLabel=d?d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric',year:'numeric'}):'';
+  watchEvent={id:e.id||'',name:e.name||'',date:dateLabel};
+  document.getElementById('modal-event-name').textContent=e.name+(dateLabel?' — '+dateLabel:'');
+  document.getElementById('notify-status').textContent='';
+  document.getElementById('notify-status').style.color='';
+  const m=document.getElementById('notify-modal');
+  m.style.display='flex';
+  setTimeout(()=>document.getElementById('notify-email').focus(),50);
+}
+
+function closeNotify(){document.getElementById('notify-modal').style.display='none';}
+
+async function submitNotify(){
+  const email=document.getElementById('notify-email').value.trim();
+  const maxPrice=document.getElementById('notify-price').value.trim();
+  const status=document.getElementById('notify-status');
+  if(!email||!maxPrice){status.style.color='#c04040';status.textContent='Please fill in both fields.';return;}
+  status.style.color='#7aaab8';status.textContent='Setting up alert…';
+  try{
+    await fetch(WEBHOOK,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        email,
+        maxPrice:parseFloat(maxPrice),
+        artist:watchEvent.name,
+        eventId:watchEvent.id,
+        country:document.getElementById('search-country').value
+      })
+    });
+    status.style.color='#2a9a5a';
+    status.textContent='✓ Alert set! We\'ll email you when tickets drop below £'+maxPrice;
+    setTimeout(closeNotify,2500);
+  }catch(err){
+    status.style.color='#c04040';
+    status.textContent='Something went wrong. Try again.';
+  }
+}
+
+async function refreshNow(){
+  const q=document.getElementById('search-q').value.trim();
+  const country=document.getElementById('search-country').value;
+  if(!q)return;
+  const icon=document.getElementById('refresh-icon');
+  icon.style.animation='spin 1s linear infinite';
+  try{
+    const url=`https://app.ticketmaster.com/discovery/v2/events.json?keyword=${encodeURIComponent(q)}&countryCode=${country}&size=50&sort=date,asc&apikey=${API_KEY}`;
+    const res=await fetch(url);
+    const data=await res.json();
+    if(data._embedded&&data._embedded.events)processEvents(data._embedded.events,null);
+  }catch(e){}
+  icon.style.animation='';
+}
+
+function buildSummary(all,lm,q){
+  const box=document.getElementById('ai-summary');
+  const withPrice=all.filter(e=>e.priceRanges?.[0]).sort((a,b)=>a.priceRanges[0].min-b.priceRanges[0].min);
+  const cheapest=withPrice[0];
+  const soonest=all[0];
+  const soldOut=all.filter(e=>{const s=e.dates?.status?.code;return s==='offsale'||s==='soldout';}).length;
+  let tips=[];
+  if(soonest){const d=new Date(soonest.dates?.start?.dateTime||soonest.dates?.start?.localDate);tips.push(`📅 Next show: <b>${esc(soonest.name)}</b> on <b>${d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'})}</b>`);}
+  if(cheapest){const p=cheapest.priceRanges[0];const sym=p.currency==='GBP'?'£':p.currency==='USD'?'$':'€';tips.push(`💰 Cheapest: <b>${esc(cheapest.name)}</b> from <b>${sym}${p.min.toFixed(0)}</b>`);}
+  if(soldOut>0)tips.push(`🔴 <b>${soldOut} show${soldOut>1?'s':''}</b> sold out — click <b>Watch for resale</b> to get notified`);
+  if(lm.length>0)tips.push(`⚡ <b>${lm.length} last-minute show${lm.length>1?'s':''}</b> in the next 48 hours`);
+  box.innerHTML=`<div class="ai-box"><div class="ai-box-title"><i class="ti ti-sparkles"></i> Summary for "${esc(q)}"</div>${tips.map(t=>`<div style="margin-bottom:4px">${t}</div>`).join('')}<div style="margin-top:6px;font-size:11px;color:#9acad8">${all.length} events found &middot; Ticketmaster</div></div>`;
+}
+
+
+const AI_WEBHOOK='https://n8n.srv1495700.hstgr.cloud/webhook/8f9d49b9-f0b6-463e-aa38-2f24ae262776';
+
+function openAISearch(idx){
+  const events=currentTab==='all'?allEvents:lastMinute;
+  const e=events[idx];
+  if(!e)return;
+  const venue=e._embedded?.venues?.[0];
+  const city=venue?.city?.name||'';
+  const query=e.name+(city?' '+city:'');
+  document.getElementById('ai-event-label').textContent=e.name;
+  document.getElementById('ai-results').innerHTML='';
+  document.getElementById('ai-loading').style.display='block';
+  const m=document.getElementById('ai-modal');
+  m.style.display='flex';
+  runAISearch(query);
+}
+
+function closeAI(){document.getElementById('ai-modal').style.display='none';}
+
+async function runAISearch(query){
+  try{
+    const res=await fetch(AI_WEBHOOK,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({query})
+    });
+    const data=await res.json();
+    document.getElementById('ai-loading').style.display='none';
+    
+    // parse Claude's response
+    let parsed=null;
+    try{
+      const text=data[0]?.json?.content?.[0]?.text||'';
+      const match=text.match(/\{[\s\S]*\}/);
+      if(match)parsed=JSON.parse(match[0]);
+    }catch(e){}
+
+    if(!parsed||!parsed.results){
+      document.getElementById('ai-results').innerHTML='<p style="color:#c04040;font-size:13px">No results found. Try again.</p>';
+      return;
+    }
+
+    const riskColor={LOW:'#1a7a3a',MEDIUM:'#c06010',HIGH:'#c04040'};
+    const riskBg={LOW:'#e0f5e8',MEDIUM:'#fff0e0',HIGH:'#fde8e8'};
+
+    let html=`<div style="font-size:12px;color:#5a8a9a;margin-bottom:14px;padding:10px;background:#e8f4f8;border-radius:6px">${parsed.summary||''}</div>`;
+    
+    html+=parsed.results.map(r=>`
+      <div style="background:#e8f4f8;border:0.5px solid #c8e8f4;border-radius:8px;padding:14px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div style="font-size:13px;font-weight:500;color:#1a3a4a">${esc(r.title)}</div>
+          <span style="font-size:11px;padding:3px 10px;border-radius:10px;background:${riskBg[r.risk]||'#e8f4f8'};color:${riskColor[r.risk]||'#7aaab8'};font-weight:500">${r.risk} RISK</span>
+        </div>
+        <div style="font-size:11px;color:#7aaab8;margin-bottom:8px">${esc(r.reason)}</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <a href="${esc(r.url)}" target="_blank" class="btn btn-primary" style="font-size:11px;padding:5px 12px"><i class="ti ti-external-link"></i> View tickets</a>
+          <span style="font-size:11px;color:${r.available?'#1a7a3a':'#c04040'}">${r.available?'✓ Tickets likely available':'✗ May be sold out'}</span>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('ai-results').innerHTML=html;
+  }catch(err){
+    document.getElementById('ai-loading').style.display='none';
+    document.getElementById('ai-results').innerHTML='<p style="color:#c04040;font-size:13px">Something went wrong. Try again.</p>';
+  }
+}
+
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+
+<!-- AI search modal -->
+<div class="modal-overlay" id="ai-modal" onclick="if(event.target===this)closeAI()">
+  <div style="background:#f0faff;border:0.5px solid #b0d4e3;border-radius:12px;padding:24px;width:560px;max-width:95vw;max-height:80vh;overflow-y:auto;box-shadow:0 12px 40px rgba(30,80,110,.15)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:500;color:#1a3a4a">✨ AI Ticket Search</h3>
+      <button class="btn" onclick="closeAI()" style="padding:4px 8px">✕</button>
+    </div>
+    <div id="ai-event-label" style="font-size:13px;color:#2a7fa5;font-weight:500;margin-bottom:16px"></div>
+    <div id="ai-loading" style="text-align:center;padding:32px;color:#7aaab8;display:none">
+      <div style="font-size:28px;margin-bottom:8px;animation:spin 1s linear infinite;display:inline-block">⟳</div>
+      <div style="font-size:13px">Searching the web and analysing results…</div>
+    </div>
+    <div id="ai-results"></div>
+  </div>
+</div>
+</body>
+</html>
