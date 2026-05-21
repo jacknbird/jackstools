@@ -378,10 +378,12 @@ async function runAISearch(query){
     // parse Claude's response
     let parsed=null;
     try{
-      const text=data[0]?.json?.content?.[0]?.text||'';
+      // handle array or object response
+      const item=Array.isArray(data)?data[0]:data;
+      const text=item?.json?.content?.[0]?.text||item?.content?.[0]?.text||'';
       const match=text.match(/\{[\s\S]*\}/);
       if(match)parsed=JSON.parse(match[0]);
-    }catch(e){}
+    }catch(e){console.log('parse error',e);}
 
     if(!parsed||!parsed.results){
       document.getElementById('ai-results').innerHTML='<p style="color:#c04040;font-size:13px">No results found. Try again.</p>';
