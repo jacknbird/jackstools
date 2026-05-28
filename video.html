@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Generator — Jacks Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#e8f4f8;color:#1a3a4a;font-family:'DM Sans',sans-serif}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 32px;border-bottom:0.5px solid #b0d4e3;background:#f0faff}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.back-btn{font-size:12px;padding:5px 11px;border-radius:5px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#3a7a9a;cursor:pointer;display:flex;align-items:center;gap:5px;text-decoration:none;transition:background .1s}
+.back-btn:hover{background:#dff0f8;color:#1a3a4a}
+.topbar-title{font-family:'DM Serif Display',serif;font-size:20px;color:#1a3a4a}
+.topbar-title span{color:#2a7fa5}
+.btn{font-size:12px;padding:7px 14px;border-radius:6px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#3a7a9a;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;transition:background .1s}
+.btn:hover{background:#dff0f8;color:#1a3a4a;border-color:#7abcd4}
+.btn-primary{background:#2a7fa5;color:#fff;border-color:#2a7fa5}
+.btn-primary:hover{background:#1a6a8a;color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.page{padding:36px 32px;max-width:760px;margin:0 auto;width:100%}
+.page-header{margin-bottom:28px}
+.page-title{font-size:22px;font-weight:500;color:#1a3a4a}
+.page-sub{font-size:12px;color:#7aaab8;margin-top:3px}
+
+/* Form */
+.form-section{background:#f0faff;border:0.5px solid #c8e8f4;border-radius:10px;padding:24px;margin-bottom:16px}
+.form-section-title{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:#5a9ab5;margin-bottom:16px}
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:12px;color:#5a8a9a;margin-bottom:5px}
+.field textarea{width:100%;padding:10px 12px;border-radius:7px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#1a3a4a;font-family:'DM Sans',sans-serif;font-size:13px;resize:vertical;outline:none;min-height:80px}
+.field textarea:focus{border-color:#2a7fa5}
+.field input[type=text]{width:100%;padding:9px 12px;border-radius:7px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#1a3a4a;font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.field input[type=text]:focus{border-color:#2a7fa5}
+.field select{width:100%;padding:9px 12px;border-radius:7px;border:0.5px solid #b0d4e3;background:#e8f4f8;color:#1a3a4a;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;cursor:pointer}
+.field select:focus{border-color:#2a7fa5}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Generate button row */
+.generate-row{display:flex;justify-content:flex-end;margin-bottom:28px}
+
+/* Output area */
+.output{background:#f0faff;border:0.5px solid #c8e8f4;border-radius:10px;padding:24px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.output-empty{text-align:center;color:#9acad8}
+.output-empty .icon{font-size:32px;margin-bottom:8px}
+.output-empty p{font-size:13px}
+.output-empty span{font-size:11px;color:#b0d4e3}
+.output-result{width:100%}
+.output-result video{width:100%;border-radius:7px;background:#1a3a4a}
+.output-meta{margin-top:14px;font-size:11px;color:#7aaab8;display:flex;justify-content:space-between;align-items:center}
+.output-meta a{color:#2a7fa5;text-decoration:none}
+.output-meta a:hover{text-decoration:underline}
+
+/* Status / spinner */
+.status-bar{display:none;align-items:center;gap:10px;padding:12px 16px;background:#e0f2fc;border:0.5px solid #a0d4ec;border-radius:8px;font-size:12px;color:#2a7fa5;margin-bottom:16px}
+.spinner{width:14px;height:14px;border:2px solid #a0d4ec;border-top-color:#2a7fa5;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status-bar.error{background:#fce8e8;border-color:#e0a0a0;color:#a03030}
+.status-bar.error .spinner{display:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="back-btn">← Back</a>
+    <span class="topbar-title">Video <span>Generator</span></span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">Astronomy Video Generator</div>
+    <div class="page-sub">Generate cinematic marketing videos powered by Runway Gen-4 + ElevenLabs narration</div>
+  </div>
+
+  <!-- Status bar -->
+  <div class="status-bar" id="status-bar">
+    <div class="spinner" id="spinner"></div>
+    <span id="status-text">Generating video…</span>
+  </div>
+
+  <!-- Form -->
+  <div class="form-section">
+    <div class="form-section-title">Video Prompt</div>
+    <div class="field">
+      <label>Scene description</label>
+      <textarea id="prompt" placeholder="e.g. A comet streaking through the solar system, glowing blue tail stretching across the stars…"></textarea>
+    </div>
+    <div class="field">
+      <label>Narrator script (optional — auto-generated if blank)</label>
+      <textarea id="narrator" placeholder="e.g. Witness the breathtaking scale of our solar system…" style="min-height:60px"></textarea>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-section-title">Options</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Visual style</label>
+        <select id="style">
+          <option value="cinematic">Cinematic</option>
+          <option value="documentary">Documentary</option>
+          <option value="dramatic">Dramatic</option>
+          <option value="timelapse">Timelapse</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Duration (seconds)</label>
+        <select id="duration">
+          <option value="5">5s</option>
+          <option value="10" selected>10s</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>n8n Webhook URL</label>
+      <input type="text" id="webhook-url" placeholder="https://your-n8n-domain.com/webhook/generate-video">
+    </div>
+  </div>
+
+  <div class="generate-row">
+    <button class="btn btn-primary" id="generate-btn" onclick="generateVideo()">🎬 Generate Video</button>
+  </div>
+
+  <!-- Output -->
+  <div class="output" id="output">
+    <div class="output-empty" id="output-empty">
+      <div class="icon">🎬</div>
+      <p>Your video will appear here</p>
+      <span>Enter a prompt and click Generate</span>
+    </div>
+    <div class="output-result" id="output-result" style="display:none">
+      <video id="output-video" controls></video>
+      <div class="output-meta">
+        <span id="output-meta-text"></span>
+        <a id="output-download" href="#" download>↓ Download</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Session check (inherits password from homepage) ──────────────
+if(sessionStorage.getItem('jt_unlocked')!=='1'){
+  window.location.href='index.html';
+}
+
+// ── Generate ─────────────────────────────────────────────────────
+async function generateVideo(){
+  const prompt   = document.getElementById('prompt').value.trim();
+  const narrator = document.getElementById('narrator').value.trim();
+  const style    = document.getElementById('style').value;
+  const duration = parseInt(document.getElementById('duration').value);
+  const webhook  = document.getElementById('webhook-url').value.trim();
+
+  if(!prompt){ alert('Please enter a scene description.'); return; }
+  if(!webhook){ alert('Please enter your n8n webhook URL.'); return; }
+
+  setStatus('Sending to n8n workflow…');
+  setLoading(true);
+
+  try {
+    const res = await fetch(webhook, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ prompt, narrator_text: narrator, style, duration })
+    });
+
+    if(!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+
+    const data = await res.json();
+
+    if(data.success && data.video_url){
+      showResult(data);
+      clearStatus();
+    } else {
+      throw new Error(data.error || 'Unknown error from workflow');
+    }
+
+  } catch(err) {
+    setStatus('Error: ' + err.message, true);
+  } finally {
+    setLoading(false);
+  }
+}
+
+function showResult(data){
+  document.getElementById('output-empty').style.display  = 'none';
+  document.getElementById('output-result').style.display = 'block';
+  const vid = document.getElementById('output-video');
+  vid.src = data.video_url;
+  vid.load();
+  document.getElementById('output-download').href = data.video_url;
+  document.getElementById('output-meta-text').textContent =
+    `Style: ${data.style} · Generated ${new Date(data.generated_at).toLocaleTimeString()}`;
+}
+
+function setStatus(msg, isError=false){
+  const bar = document.getElementById('status-bar');
+  bar.style.display = 'flex';
+  bar.className = 'status-bar' + (isError ? ' error' : '');
+  document.getElementById('spinner').style.display = isError ? 'none' : '';
+  document.getElementById('status-text').textContent = msg;
+}
+
+function clearStatus(){
+  document.getElementById('status-bar').style.display = 'none';
+}
+
+function setLoading(on){
+  document.getElementById('generate-btn').disabled = on;
+  if(on) setStatus('Generating video — this takes 2–4 minutes…');
+}
+</script>
+</body>
+</html>
