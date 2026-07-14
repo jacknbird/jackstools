@@ -24,10 +24,11 @@ button,input{font:inherit}
 .top-actions{display:flex;align-items:center;gap:8px}
 .btn{border:0.5px solid var(--line);background:var(--wash);color:#3a7a9a;border-radius:7px;padding:8px 11px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:12px;transition:.15s ease;white-space:nowrap}
 .btn:hover{background:var(--hover);border-color:#7abcd4;color:var(--ink)}
+.btn:disabled{opacity:.48;cursor:not-allowed;background:#dcecf2;color:#7599a7;border-color:#bad4de}
 .btn:focus-visible,.upload:focus-visible,.home:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .btn.primary{background:var(--blue);color:white;border-color:var(--blue)}
 .btn.primary:hover{background:#1a6a8a}
-.workspace{min-height:0;flex:1;display:grid;grid-template-columns:minmax(0,1fr) 250px}
+.workspace{min-height:0;flex:1;display:grid;grid-template-columns:minmax(0,1fr) 330px}
 .viewport{position:relative;min-width:0;background:#d9edf5;overflow:hidden}
 #canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
 .hint{position:absolute;left:16px;bottom:16px;background:rgba(240,250,255,.88);backdrop-filter:blur(8px);border:0.5px solid rgba(176,212,227,.9);border-radius:8px;padding:8px 11px;font-size:11px;color:var(--muted);pointer-events:none;box-shadow:0 3px 12px rgba(20,70,90,.06)}
@@ -42,19 +43,42 @@ button,input{font:inherit}
 .loading-card{display:flex;align-items:center;gap:10px;background:var(--paper);border:0.5px solid var(--line);padding:11px 14px;border-radius:9px;color:var(--muted);font-size:12px;box-shadow:0 8px 24px rgba(20,70,90,.09)}
 .spinner{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.sidebar{background:var(--paper);border-left:0.5px solid var(--line);padding:18px;overflow-y:auto}
-.section{padding-bottom:18px;margin-bottom:18px;border-bottom:0.5px solid var(--line)}
-.section:last-child{border-bottom:0;margin-bottom:0}
-.section-title{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#7aaab8;font-weight:600;margin-bottom:11px}
-.upload{width:100%;border:1px dashed #8fc3d6;background:var(--wash);border-radius:9px;padding:17px 12px;text-align:center;cursor:pointer;color:var(--blue);display:block;transition:.15s ease}
+.sidebar{background:var(--paper);border-left:0.5px solid var(--line);overflow-y:auto;display:flex;flex-direction:column;min-height:0}
+.sidebar-model{padding:14px;border-bottom:0.5px solid var(--line)}
+.upload{width:100%;border:1px dashed #8fc3d6;background:var(--wash);border-radius:9px;padding:11px 12px;text-align:left;cursor:pointer;color:var(--blue);display:flex;align-items:center;gap:10px;transition:.15s ease}
 .upload:hover{background:var(--hover);border-color:var(--blue)}
-.upload-icon{width:34px;height:34px;border-radius:8px;background:var(--paper);border:0.5px solid var(--line);display:grid;place-items:center;margin:0 auto 8px;font-size:18px}
+.upload-icon{width:34px;height:34px;border-radius:8px;background:var(--paper);border:0.5px solid var(--line);display:grid;place-items:center;font-size:18px;flex-shrink:0}
 .upload strong{display:block;font-size:12px;font-weight:600}
 .upload small{display:block;font-size:10px;color:#7aaab8;margin-top:3px}
 #file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
-.model-name{font-size:13px;font-weight:500;word-break:break-word;margin-bottom:9px}
-.stat-list{display:grid;grid-template-columns:1fr auto;gap:7px;font-size:11px}
-.stat-label{color:#7aaab8}.stat-value{color:#3a6a7a;font-variant-numeric:tabular-nums}
+.model-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.model-name{font-size:12px;font-weight:500;word-break:break-word;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.stat-list{display:flex;align-items:center;gap:9px;font-size:10px;color:#7aaab8}
+.stat-item{white-space:nowrap}.stat-value{color:#3a6a7a;font-variant-numeric:tabular-nums;font-weight:500}
+.tool-nav{display:grid;grid-template-columns:1fr 1fr;padding:10px 12px;gap:7px;border-bottom:0.5px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:2}
+.tool-tab{border:0.5px solid var(--line);background:var(--wash);border-radius:8px;padding:9px 7px;color:#5f8c9d;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
+.tool-tab:hover{background:var(--hover);color:var(--ink)}
+.tool-tab.active{background:#cce8f4;border-color:var(--blue);color:#1a5a7a;box-shadow:inset 0 0 0 .5px var(--blue)}
+.tool-tab:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.tool-icon-small{font-size:14px;line-height:1}
+.tool-panels{flex:1}
+.tool-panel{display:none;padding:17px 16px 20px}
+.tool-panel.active{display:block}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:17px}
+.panel-title{font-size:14px;font-weight:600;color:var(--ink)}
+.panel-copy{font-size:10px;color:#7aaab8;margin-top:3px;line-height:1.4}
+.layout-badge{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#7aaab8;background:var(--wash);border:0.5px solid var(--line);border-radius:12px;padding:4px 7px;white-space:nowrap}
+.field{margin-bottom:14px}
+.field-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.field label,.field-label{font-size:11px;font-weight:500;color:#456f80}
+.field-value{font-size:10px;color:#7aaab8;font-variant-numeric:tabular-nums}
+.input,.select{width:100%;border:0.5px solid var(--line);background:var(--wash);color:var(--ink);border-radius:7px;padding:8px 9px;font-size:11px;outline:none}
+.input:focus,.select:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(42,127,165,.1)}
+.range{width:100%;height:4px;accent-color:var(--blue);cursor:pointer}
+.choice-row{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.choice{border:0.5px solid var(--line);background:var(--wash);color:#678f9f;border-radius:6px;padding:7px 4px;font-size:10px;cursor:default}
+.choice.active{background:#dff0f8;border-color:#7abcd4;color:#1a5a7a;font-weight:500}
+.subsection-title{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#91b1bd;font-weight:600;margin:18px 0 8px}
 .control-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:11px;font-size:12px;color:#3a6a7a}
 .switch{position:relative;width:34px;height:19px;flex-shrink:0}
 .switch input{opacity:0;width:0;height:0}
@@ -63,15 +87,28 @@ button,input{font:inherit}
 .switch input:checked + .slider{background:var(--blue)}
 .switch input:checked + .slider:before{transform:translateX(15px)}
 .switch input:focus-visible + .slider{outline:2px solid var(--blue);outline-offset:2px}
-.note{font-size:11px;line-height:1.55;color:#7aaab8;background:var(--wash);border-radius:7px;padding:10px}
+.tool-action{width:100%;margin-top:18px;padding:10px 12px;border-radius:7px;border:0.5px solid var(--blue);background:var(--blue);color:#fff;font-size:11px;font-weight:600;cursor:pointer;transition:.15s}
+.tool-action:hover{background:#1a6a8a}.tool-action:disabled{border-color:#9fc8d8;background:#dbeef5;color:#6f9baa;cursor:not-allowed}
+.ai-connect{background:var(--wash);border:0.5px solid var(--line);border-radius:8px;padding:10px;margin-bottom:16px}
+.ai-connect-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+.ai-connect-title{font-size:10px;font-weight:600;color:#456f80;display:flex;align-items:center;gap:6px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#d0964a;box-shadow:0 0 0 3px rgba(208,150,74,.12)}
+.status-dot.connected{background:#36a268;box-shadow:0 0 0 3px rgba(54,162,104,.12)}
+.ai-connect-state{font-size:9px;color:#7aaab8}
+.endpoint-row{display:flex;gap:5px}.endpoint-row .input{min-width:0}.endpoint-save{border:0.5px solid var(--line);background:var(--paper);color:var(--blue);border-radius:7px;padding:0 9px;font-size:10px;cursor:pointer}
+.endpoint-save:hover{background:var(--hover)}
+.ai-note{font-size:9px;color:#8ba9b5;line-height:1.45;margin-top:6px}
+.unwrap-status{display:none;margin-top:10px;border-radius:7px;padding:9px 10px;font-size:10px;line-height:1.5;background:#e5f3f8;color:#4f7b8c;border:0.5px solid #bdd9e4}
+.unwrap-status.show{display:block}.unwrap-status.success{background:#e3f5ea;color:#34734d;border-color:#b7dfc6}.unwrap-status.error{background:#fff0f0;color:#9a4f4f;border-color:#e8c1c1}
+.sidebar-footer{padding:12px 16px 16px;border-top:0.5px solid var(--line);background:#edf8fc}
+.sidebar-footer .subsection-title{margin:0 0 8px}.sidebar-footer .control-row{margin-top:8px;font-size:11px}
 .error-toast{position:absolute;top:16px;left:50%;transform:translate(-50%,-8px);background:#fff2f2;color:#a44040;border:0.5px solid #e4abab;border-radius:8px;padding:9px 12px;font-size:12px;box-shadow:0 8px 24px rgba(100,30,30,.1);opacity:0;pointer-events:none;transition:.2s;z-index:6;max-width:calc(100% - 32px);text-align:center}
 .error-toast.show{opacity:1;transform:translate(-50%,0)}
 .mobile-upload{display:none}
 @media(max-width:720px){
-  .workspace{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
-  .sidebar{border-left:0;border-top:0.5px solid var(--line);padding:11px 14px;display:flex;align-items:center;gap:10px;overflow:visible}
-  .sidebar .section{display:none}.sidebar .section:first-child{display:block;border:0;padding:0;margin:0;flex:1}.sidebar .section:first-child .section-title{display:none}
-  .upload{padding:9px 12px;text-align:left;display:flex;align-items:center;gap:9px}.upload-icon{margin:0;width:30px;height:30px}.upload small{display:none}
+  .workspace{grid-template-columns:1fr;grid-template-rows:minmax(260px,56%) minmax(240px,44%)}
+  .sidebar{border-left:0;border-top:0.5px solid var(--line)}
+  .sidebar-model{display:none}.tool-nav{top:0}.sidebar-footer{display:none}
   .topbar{height:54px;padding:0 10px}.divider,.pill{display:none}.home span{display:none}.title{font-size:13px}.top-actions .btn span{display:none}
   .hint{bottom:12px;left:12px}.mobile-upload{display:inline-flex}
 }
@@ -96,6 +133,7 @@ button,input{font:inherit}
     <div class="top-actions">
       <button class="btn" id="fit-btn" type="button" title="Fit model in view"><span aria-hidden="true">⌗</span><span>Fit view</span></button>
       <button class="btn" id="reset-btn" type="button" title="Restore the demo model"><span aria-hidden="true">↺</span><span>Reset</span></button>
+      <button class="btn" id="download-btn" type="button" title="Download unwrapped GLB" disabled><span aria-hidden="true">↓</span><span>Download GLB</span></button>
       <button class="btn primary mobile-upload" id="mobile-upload-btn" type="button"><span aria-hidden="true">＋</span><span>Open</span></button>
     </div>
   </header>
@@ -112,36 +150,107 @@ button,input{font:inherit}
     </section>
 
     <aside class="sidebar">
-      <section class="section">
-        <div class="section-title">Model</div>
+      <div class="sidebar-model">
         <label class="upload" for="file-input">
           <span class="upload-icon" aria-hidden="true">＋</span>
           <span><strong>Open a 3D model</strong><small>GLB or OBJ · max 50 MB</small></span>
         </label>
         <input id="file-input" type="file" accept=".glb,.obj,model/gltf-binary,text/plain">
-      </section>
-
-      <section class="section">
-        <div class="section-title">Scene info</div>
-        <div class="model-name" id="model-name">Demo knot</div>
-        <div class="stat-list">
-          <span class="stat-label">Vertices</span><span class="stat-value" id="vertices">—</span>
-          <span class="stat-label">Triangles</span><span class="stat-value" id="triangles">—</span>
-          <span class="stat-label">Objects</span><span class="stat-value" id="objects">—</span>
+        <div class="model-summary">
+          <div class="model-name" id="model-name">Demo knot</div>
+          <div class="stat-list" aria-label="Model statistics">
+            <span class="stat-item"><span class="stat-value" id="vertices">—</span> verts</span>
+            <span class="stat-item"><span class="stat-value" id="triangles">—</span> tris</span>
+            <span class="stat-item"><span class="stat-value" id="objects">—</span> objects</span>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <section class="section">
-        <div class="section-title">Display</div>
+      <nav class="tool-nav" aria-label="Mesh tools">
+        <button class="tool-tab active" type="button" data-tool="retopology" aria-selected="true"><span class="tool-icon-small" aria-hidden="true">◇</span>Retopology</button>
+        <button class="tool-tab" type="button" data-tool="unwrap" aria-selected="false"><span class="tool-icon-small" aria-hidden="true">▦</span>UV Unwrap</button>
+      </nav>
+
+      <div class="tool-panels">
+        <section class="tool-panel active" id="retopology-panel">
+          <div class="panel-head">
+            <div><div class="panel-title">Retopology</div><div class="panel-copy">Create a clean, animation-ready mesh.</div></div>
+            <span class="layout-badge">Layout only</span>
+          </div>
+
+          <div class="field">
+            <div class="field-head"><span class="field-label">Topology type</span></div>
+            <div class="choice-row"><button class="choice active" type="button">Quads</button><button class="choice" type="button">Tris</button><button class="choice" type="button">Adaptive</button></div>
+          </div>
+          <div class="field">
+            <div class="field-head"><label for="target-faces">Target face count</label></div>
+            <input class="input" id="target-faces" type="number" value="5000" min="100" step="100">
+          </div>
+          <div class="field">
+            <div class="field-head"><label for="surface-detail">Surface detail</label><span class="field-value">65%</span></div>
+            <input class="range" id="surface-detail" type="range" min="0" max="100" value="65">
+          </div>
+          <div class="field">
+            <div class="field-head"><label for="edge-flow">Edge-flow smoothing</label><span class="field-value">40%</span></div>
+            <input class="range" id="edge-flow" type="range" min="0" max="100" value="40">
+          </div>
+
+          <div class="subsection-title">Preserve</div>
+          <div class="control-row"><span>Open boundaries</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="control-row"><span>Sharp edges</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="control-row"><span>Mesh symmetry</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+          <div class="control-row"><span>Material borders</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+
+          <button class="tool-action" type="button" disabled>Generate retopology · Coming soon</button>
+        </section>
+
+        <section class="tool-panel" id="unwrap-panel">
+          <div class="panel-head">
+            <div><div class="panel-title">UV Unwrapping</div><div class="panel-copy">Create, relax and pack texture islands.</div></div>
+            <span class="layout-badge">AI assisted</span>
+          </div>
+
+          <div class="ai-connect">
+            <div class="ai-connect-head"><span class="ai-connect-title"><span class="status-dot" id="ai-status-dot"></span>OpenAI service</span><span class="ai-connect-state" id="ai-connect-state">Not connected</span></div>
+            <div class="endpoint-row"><input class="input" id="ai-endpoint" type="url" placeholder="Paste your secure Worker URL"><button class="endpoint-save" id="save-endpoint" type="button">Save</button></div>
+            <div class="ai-note">Paste the Worker URL—not your API key. Your key stays protected on the server.</div>
+          </div>
+
+          <div class="field">
+            <div class="field-head"><label for="seam-strategy">Seam strategy</label></div>
+            <select class="select" id="seam-strategy"><option>AI assisted</option><option>Angle based</option><option>Minimal seams</option><option>Use existing seams</option></select>
+          </div>
+          <div class="field">
+            <div class="field-head"><label for="angle-threshold">Angle threshold</label><span class="field-value">66°</span></div>
+            <input class="range" id="angle-threshold" type="range" min="1" max="180" value="66">
+          </div>
+          <div class="field">
+            <div class="field-head"><label for="island-padding">Island padding</label></div>
+            <input class="input" id="island-padding" type="number" value="8" min="0" max="128">
+          </div>
+          <div class="field">
+            <div class="field-head"><label for="texture-size">Texture size</label></div>
+            <select class="select" id="texture-size"><option>1024 × 1024</option><option selected>2048 × 2048</option><option>4096 × 4096</option><option>8192 × 8192</option></select>
+          </div>
+
+          <div class="subsection-title">Island controls</div>
+          <div class="control-row"><span>Normalize texel density</span><label class="switch"><input id="normalize-texel" type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="control-row"><span>Pack islands</span><label class="switch"><input id="pack-islands" type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="control-row"><span>Allow island rotation</span><label class="switch"><input id="rotate-islands" type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="control-row"><span>Fix overlaps</span><label class="switch"><input id="fix-overlaps" type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="control-row"><span>Preserve existing seams</span><label class="switch"><input id="preserve-seams" type="checkbox"><span class="slider"></span></label></div>
+
+          <button class="tool-action" id="unwrap-btn" type="button">Generate AI UV layout</button>
+          <div class="unwrap-status" id="unwrap-status" aria-live="polite"></div>
+        </section>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="subsection-title">Viewer display</div>
         <div class="control-row"><span>Show grid</span><label class="switch"><input id="grid-toggle" type="checkbox" checked><span class="slider"></span></label></div>
         <div class="control-row"><span>Wireframe</span><label class="switch"><input id="wire-toggle" type="checkbox"><span class="slider"></span></label></div>
         <div class="control-row"><span>Auto rotate</span><label class="switch"><input id="rotate-toggle" type="checkbox"><span class="slider"></span></label></div>
-      </section>
-
-      <section class="section">
-        <div class="section-title">Next step</div>
-        <div class="note">This viewer is ready to become the front end for automatic seam detection and UV unwrapping.</div>
-      </section>
+      </div>
     </aside>
   </main>
 </div>
@@ -151,6 +260,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 
 if(sessionStorage.getItem('jt_unlocked')!=='1') window.location.replace('index.html');
 
@@ -192,6 +302,7 @@ scene.add(grid);
 
 let currentModel=null;
 let currentName='Demo knot';
+let hasGeneratedUVs=false;
 
 function createDemo(){
   const geometry=new THREE.TorusKnotGeometry(1,.32,160,24);
@@ -219,6 +330,9 @@ function setModel(object,name){
   if(currentModel){scene.remove(currentModel);disposeModel(currentModel);}
   currentModel=object;
   currentName=name;
+  hasGeneratedUVs=false;
+  document.getElementById('download-btn').disabled=true;
+  setUnwrapStatus('');
   object.traverse(child=>{
     if(child.isMesh){child.castShadow=true;child.receiveShadow=true;}
   });
@@ -241,6 +355,203 @@ function updateStats(){
   document.getElementById('vertices').textContent=Math.round(vertices).toLocaleString();
   document.getElementById('triangles').textContent=Math.round(triangles).toLocaleString();
   document.getElementById('objects').textContent=objects.toLocaleString();
+}
+
+function setUnwrapStatus(message,type=''){
+  const status=document.getElementById('unwrap-status');
+  status.textContent=message;
+  status.className='unwrap-status'+(message?' show':'')+(type?' '+type:'');
+}
+
+function getUnwrapPreferences(){
+  return {
+    seamStrategy:document.getElementById('seam-strategy').value,
+    angleThreshold:Number(document.getElementById('angle-threshold').value),
+    padding:Number(document.getElementById('island-padding').value),
+    textureSize:Number.parseInt(document.getElementById('texture-size').value,10),
+    normalizeTexelDensity:document.getElementById('normalize-texel').checked,
+    packIslands:document.getElementById('pack-islands').checked,
+    rotateIslands:document.getElementById('rotate-islands').checked,
+    fixOverlaps:document.getElementById('fix-overlaps').checked,
+    preserveSeams:document.getElementById('preserve-seams').checked
+  };
+}
+
+function collectMeshProfile(){
+  let vertices=0,triangles=0,meshCount=0,meshesWithUVs=0;
+  currentModel?.traverse(child=>{
+    if(!child.isMesh||!child.geometry?.attributes?.position)return;
+    meshCount++;
+    const geometry=child.geometry;
+    vertices+=geometry.attributes.position.count;
+    triangles+=geometry.index?geometry.index.count/3:geometry.attributes.position.count/3;
+    if(geometry.attributes.uv)meshesWithUVs++;
+  });
+  const box=new THREE.Box3().setFromObject(currentModel);
+  const size=box.getSize(new THREE.Vector3());
+  return {
+    name:currentName,
+    vertices:Math.round(vertices),
+    triangles:Math.round(triangles),
+    meshCount,
+    meshesWithExistingUVs:meshesWithUVs,
+    bounds:{x:Number(size.x.toFixed(4)),y:Number(size.y.toFixed(4)),z:Number(size.z.toFixed(4))}
+  };
+}
+
+function localUnwrapPlan(preferences){
+  return {
+    strategy:preferences.textureSize>=4096?'detail':'balanced',
+    angleThreshold:preferences.angleThreshold,
+    padding:preferences.padding,
+    textureSize:preferences.textureSize,
+    rotateIslands:preferences.rotateIslands,
+    summary:'Secure AI endpoint not connected, so your selected settings were used locally.'
+  };
+}
+
+function normalizePlan(plan,preferences){
+  const allowedSizes=[1024,2048,4096,8192];
+  return {
+    strategy:['balanced','detail','compact'].includes(plan?.strategy)?plan.strategy:'balanced',
+    angleThreshold:THREE.MathUtils.clamp(Number(plan?.angleThreshold)||preferences.angleThreshold,1,180),
+    padding:THREE.MathUtils.clamp(Math.round(Number(plan?.padding)||preferences.padding),1,64),
+    textureSize:allowedSizes.includes(Number(plan?.textureSize))?Number(plan.textureSize):preferences.textureSize,
+    rotateIslands:typeof plan?.rotateIslands==='boolean'?plan.rotateIslands:preferences.rotateIslands,
+    summary:String(plan?.summary||'The AI selected a balanced unwrap plan.').slice(0,240)
+  };
+}
+
+async function requestAIUnwrapPlan(profile,preferences){
+  const endpoint=localStorage.getItem('jt_ai_unwrap_endpoint')||'';
+  if(!endpoint)return null;
+  const response=await fetch(endpoint,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({mesh:profile,preferences})
+  });
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(data.error||'The AI service could not create an unwrap plan.');
+  return data;
+}
+
+function applyTriangleAtlas(plan){
+  const meshEntries=[];
+  let totalTriangles=0;
+  currentModel.traverse(mesh=>{
+    if(!mesh.isMesh||!mesh.geometry?.attributes?.position)return;
+    const geometry=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
+    const triangleCount=Math.floor(geometry.attributes.position.count/3);
+    if(!triangleCount){geometry.dispose();return;}
+    meshEntries.push({mesh,geometry,triangleCount});
+    totalTriangles+=triangleCount;
+  });
+  if(!totalTriangles)throw new Error('This model does not contain any triangles to unwrap.');
+  if(totalTriangles>150000)throw new Error('This first version supports models up to 150,000 triangles.');
+
+  const density=plan.strategy==='detail'?1.15:plan.strategy==='compact'?0.9:1;
+  const columns=Math.max(1,Math.ceil(Math.sqrt(totalTriangles*density)));
+  const rows=Math.max(1,Math.ceil(totalTriangles/columns));
+  const cellWidth=1/columns;
+  const cellHeight=1/rows;
+  const globalPadding=plan.padding/plan.textureSize;
+  const padX=THREE.MathUtils.clamp(globalPadding/cellWidth,.015,.22);
+  const padY=THREE.MathUtils.clamp(globalPadding/cellHeight,.015,.22);
+  const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3();
+  const edgeA=new THREE.Vector3(),edgeB=new THREE.Vector3(),normal=new THREE.Vector3();
+  let atlasIndex=0;
+
+  for(const entry of meshEntries){
+    const positions=entry.geometry.attributes.position;
+    const uv=new Float32Array(positions.count*2);
+    for(let triangle=0;triangle<entry.triangleCount;triangle++,atlasIndex++){
+      const offset=triangle*3;
+      a.fromBufferAttribute(positions,offset);
+      b.fromBufferAttribute(positions,offset+1);
+      c.fromBufferAttribute(positions,offset+2);
+      edgeA.subVectors(b,a);edgeB.subVectors(c,a);normal.crossVectors(edgeA,edgeB).normalize();
+      const ax=Math.abs(normal.x),ay=Math.abs(normal.y),az=Math.abs(normal.z);
+      let projected;
+      if(ax>=ay&&ax>=az)projected=[[a.y,a.z],[b.y,b.z],[c.y,c.z]];
+      else if(ay>=az)projected=[[a.x,a.z],[b.x,b.z],[c.x,c.z]];
+      else projected=[[a.x,a.y],[b.x,b.y],[c.x,c.y]];
+
+      if(plan.rotateIslands){
+        const width=Math.max(...projected.map(p=>p[0]))-Math.min(...projected.map(p=>p[0]));
+        const height=Math.max(...projected.map(p=>p[1]))-Math.min(...projected.map(p=>p[1]));
+        if((cellWidth<cellHeight&&width>height)||(cellWidth>cellHeight&&height>width))projected=projected.map(p=>[p[1],p[0]]);
+      }
+
+      const minX=Math.min(...projected.map(p=>p[0])),maxX=Math.max(...projected.map(p=>p[0]));
+      const minY=Math.min(...projected.map(p=>p[1])),maxY=Math.max(...projected.map(p=>p[1]));
+      const width=Math.max(maxX-minX,1e-8),height=Math.max(maxY-minY,1e-8);
+      const usableX=1-padX*2,usableY=1-padY*2;
+      const scale=Math.min(usableX/width,usableY/height);
+      const drawnWidth=width*scale,drawnHeight=height*scale;
+      const insetX=padX+(usableX-drawnWidth)/2,insetY=padY+(usableY-drawnHeight)/2;
+      const cellX=atlasIndex%columns,cellY=Math.floor(atlasIndex/columns);
+      projected.forEach((point,index)=>{
+        uv[(offset+index)*2]=(cellX+insetX+(point[0]-minX)*scale)*cellWidth;
+        uv[(offset+index)*2+1]=1-(cellY+insetY+(point[1]-minY)*scale)*cellHeight;
+      });
+    }
+    entry.geometry.setAttribute('uv',new THREE.BufferAttribute(uv,2));
+    entry.geometry.attributes.uv.needsUpdate=true;
+    const oldGeometry=entry.mesh.geometry;
+    entry.mesh.geometry=entry.geometry;
+    oldGeometry.dispose();
+  }
+  return totalTriangles;
+}
+
+async function runUVUnwrap(){
+  if(!currentModel)return;
+  const button=document.getElementById('unwrap-btn');
+  button.disabled=true;
+  button.textContent='Analysing mesh…';
+  setUnwrapStatus('Preparing mesh statistics and unwrap settings…');
+  const preferences=getUnwrapPreferences();
+  const profile=collectMeshProfile();
+  try{
+    let response=null;
+    try{response=await requestAIUnwrapPlan(profile,preferences);}
+    catch(error){setUnwrapStatus(error.message+' Falling back to the local settings.','error');}
+    const plan=normalizePlan(response?.plan||localUnwrapPlan(preferences),preferences);
+    document.getElementById('angle-threshold').value=plan.angleThreshold;
+    document.getElementById('island-padding').value=plan.padding;
+    const sizeOption=[...document.getElementById('texture-size').options].find(option=>Number.parseInt(option.value,10)===plan.textureSize);
+    if(sizeOption)document.getElementById('texture-size').value=sizeOption.value;
+    document.getElementById('rotate-islands').checked=plan.rotateIslands;
+    button.textContent='Building UV atlas…';
+    const triangleCount=applyTriangleAtlas(plan);
+    hasGeneratedUVs=true;
+    document.getElementById('download-btn').disabled=false;
+    const tokens=response?.usage?.total_tokens;
+    setUnwrapStatus(`${plan.summary} ${triangleCount.toLocaleString()} triangles packed.${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}`,'success');
+  }catch(error){
+    console.error(error);
+    setUnwrapStatus(error.message||'The UV layout could not be generated.','error');
+  }finally{
+    button.disabled=false;
+    button.textContent='Generate AI UV layout';
+  }
+}
+
+function downloadUnwrappedGLB(){
+  if(!currentModel||!hasGeneratedUVs)return;
+  const button=document.getElementById('download-btn');
+  button.disabled=true;
+  new GLTFExporter().parse(currentModel,result=>{
+    const blob=new Blob([result],{type:'model/gltf-binary'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    const base=currentName.replace(/\.[^.]+$/,'').replace(/[^a-z0-9_-]+/gi,'-')||'model';
+    link.href=url;link.download=base+'-unwrapped.glb';link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    button.disabled=false;
+  },error=>{
+    console.error(error);button.disabled=false;setUnwrapStatus('The GLB export failed.','error');
+  },{binary:true,onlyVisible:false});
 }
 
 function fitView(){
@@ -323,6 +634,39 @@ document.getElementById('wire-toggle').addEventListener('change',event=>{
   });
 });
 document.getElementById('rotate-toggle').addEventListener('change',event=>controls.autoRotate=event.target.checked);
+document.getElementById('unwrap-btn').addEventListener('click',runUVUnwrap);
+document.getElementById('download-btn').addEventListener('click',downloadUnwrappedGLB);
+
+function updateEndpointUI(){
+  const endpoint=localStorage.getItem('jt_ai_unwrap_endpoint')||'';
+  document.getElementById('ai-endpoint').value=endpoint;
+  document.getElementById('ai-status-dot').classList.toggle('connected',Boolean(endpoint));
+  document.getElementById('ai-connect-state').textContent=endpoint?'Connected':'Not connected';
+}
+document.getElementById('save-endpoint').addEventListener('click',()=>{
+  const input=document.getElementById('ai-endpoint');
+  const value=input.value.trim().replace(/\/$/,'');
+  if(value&&!/^https:\/\//i.test(value)&&!/^http:\/\/(localhost|127\.0\.0\.1)/i.test(value)){
+    setUnwrapStatus('Enter a secure HTTPS Worker URL. Do not paste an API key here.','error');return;
+  }
+  if(value)localStorage.setItem('jt_ai_unwrap_endpoint',value);
+  else localStorage.removeItem('jt_ai_unwrap_endpoint');
+  updateEndpointUI();
+  setUnwrapStatus(value?'AI endpoint saved. Your API key remains on the server.':'AI endpoint removed.',value?'success':'');
+});
+updateEndpointUI();
+
+document.querySelectorAll('.tool-tab').forEach(button=>{
+  button.addEventListener('click',()=>{
+    document.querySelectorAll('.tool-tab').forEach(tab=>{
+      const selected=tab===button;
+      tab.classList.toggle('active',selected);
+      tab.setAttribute('aria-selected',String(selected));
+    });
+    document.querySelectorAll('.tool-panel').forEach(panel=>panel.classList.remove('active'));
+    document.getElementById(button.dataset.tool+'-panel').classList.add('active');
+  });
+});
 
 let dragDepth=0;
 viewport.addEventListener('dragenter',event=>{event.preventDefault();dragDepth++;document.getElementById('drop-overlay').classList.add('show');});
