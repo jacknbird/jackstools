@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Viewer — Jacks Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a3a4a;--muted:#5a8a9a;--blue:#2a7fa5;--line:#b0d4e3;--paper:#f0faff;--wash:#e8f4f8;--hover:#dff0f8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--wash);color:var(--ink)}
+button,input{font:inherit}
+.app{height:100%;display:flex;flex-direction:column}
+.topbar{height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 18px;background:var(--paper);border-bottom:0.5px solid var(--line);flex-shrink:0}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.home{display:inline-flex;align-items:center;gap:7px;color:var(--blue);text-decoration:none;font-size:13px;font-weight:500;padding:7px 9px;border-radius:6px}
+.home:hover{background:var(--hover)}
+.divider{height:20px;width:1px;background:var(--line)}
+.title-wrap{display:flex;align-items:center;gap:9px;min-width:0}
+.title{font-size:14px;font-weight:600;white-space:nowrap}
+.pill{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);background:var(--hover);border:0.5px solid var(--line);padding:3px 7px;border-radius:20px}
+.top-actions{display:flex;align-items:center;gap:8px}
+.btn{border:0.5px solid var(--line);background:var(--wash);color:#3a7a9a;border-radius:7px;padding:8px 11px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:12px;transition:.15s ease;white-space:nowrap}
+.btn:hover{background:var(--hover);border-color:#7abcd4;color:var(--ink)}
+.btn:focus-visible,.upload:focus-visible,.home:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.btn.primary{background:var(--blue);color:white;border-color:var(--blue)}
+.btn.primary:hover{background:#1a6a8a}
+.workspace{min-height:0;flex:1;display:grid;grid-template-columns:minmax(0,1fr) 250px}
+.viewport{position:relative;min-width:0;background:#d9edf5;overflow:hidden}
+#canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+.hint{position:absolute;left:16px;bottom:16px;background:rgba(240,250,255,.88);backdrop-filter:blur(8px);border:0.5px solid rgba(176,212,227,.9);border-radius:8px;padding:8px 11px;font-size:11px;color:var(--muted);pointer-events:none;box-shadow:0 3px 12px rgba(20,70,90,.06)}
+.drop-overlay{position:absolute;inset:14px;border:2px dashed #58a6c4;border-radius:14px;background:rgba(223,240,248,.9);display:none;align-items:center;justify-content:center;z-index:4;pointer-events:none}
+.drop-overlay.show{display:flex}
+.drop-card{text-align:center;color:var(--blue)}
+.drop-icon{font-size:38px;line-height:1;margin-bottom:10px}
+.drop-title{font-size:16px;font-weight:600}
+.drop-copy{font-size:12px;color:var(--muted);margin-top:4px}
+.loading{position:absolute;inset:0;background:rgba(232,244,248,.76);display:none;align-items:center;justify-content:center;z-index:5}
+.loading.show{display:flex}
+.loading-card{display:flex;align-items:center;gap:10px;background:var(--paper);border:0.5px solid var(--line);padding:11px 14px;border-radius:9px;color:var(--muted);font-size:12px;box-shadow:0 8px 24px rgba(20,70,90,.09)}
+.spinner{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sidebar{background:var(--paper);border-left:0.5px solid var(--line);padding:18px;overflow-y:auto}
+.section{padding-bottom:18px;margin-bottom:18px;border-bottom:0.5px solid var(--line)}
+.section:last-child{border-bottom:0;margin-bottom:0}
+.section-title{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#7aaab8;font-weight:600;margin-bottom:11px}
+.upload{width:100%;border:1px dashed #8fc3d6;background:var(--wash);border-radius:9px;padding:17px 12px;text-align:center;cursor:pointer;color:var(--blue);display:block;transition:.15s ease}
+.upload:hover{background:var(--hover);border-color:var(--blue)}
+.upload-icon{width:34px;height:34px;border-radius:8px;background:var(--paper);border:0.5px solid var(--line);display:grid;place-items:center;margin:0 auto 8px;font-size:18px}
+.upload strong{display:block;font-size:12px;font-weight:600}
+.upload small{display:block;font-size:10px;color:#7aaab8;margin-top:3px}
+#file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.model-name{font-size:13px;font-weight:500;word-break:break-word;margin-bottom:9px}
+.stat-list{display:grid;grid-template-columns:1fr auto;gap:7px;font-size:11px}
+.stat-label{color:#7aaab8}.stat-value{color:#3a6a7a;font-variant-numeric:tabular-nums}
+.control-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:11px;font-size:12px;color:#3a6a7a}
+.switch{position:relative;width:34px;height:19px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#c8dfe8;border-radius:20px;cursor:pointer;transition:.15s}
+.slider:before{content:'';position:absolute;width:15px;height:15px;left:2px;top:2px;background:white;border-radius:50%;box-shadow:0 1px 3px rgba(20,60,80,.18);transition:.15s}
+.switch input:checked + .slider{background:var(--blue)}
+.switch input:checked + .slider:before{transform:translateX(15px)}
+.switch input:focus-visible + .slider{outline:2px solid var(--blue);outline-offset:2px}
+.note{font-size:11px;line-height:1.55;color:#7aaab8;background:var(--wash);border-radius:7px;padding:10px}
+.error-toast{position:absolute;top:16px;left:50%;transform:translate(-50%,-8px);background:#fff2f2;color:#a44040;border:0.5px solid #e4abab;border-radius:8px;padding:9px 12px;font-size:12px;box-shadow:0 8px 24px rgba(100,30,30,.1);opacity:0;pointer-events:none;transition:.2s;z-index:6;max-width:calc(100% - 32px);text-align:center}
+.error-toast.show{opacity:1;transform:translate(-50%,0)}
+.mobile-upload{display:none}
+@media(max-width:720px){
+  .workspace{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
+  .sidebar{border-left:0;border-top:0.5px solid var(--line);padding:11px 14px;display:flex;align-items:center;gap:10px;overflow:visible}
+  .sidebar .section{display:none}.sidebar .section:first-child{display:block;border:0;padding:0;margin:0;flex:1}.sidebar .section:first-child .section-title{display:none}
+  .upload{padding:9px 12px;text-align:left;display:flex;align-items:center;gap:9px}.upload-icon{margin:0;width:30px;height:30px}.upload small{display:none}
+  .topbar{height:54px;padding:0 10px}.divider,.pill{display:none}.home span{display:none}.title{font-size:13px}.top-actions .btn span{display:none}
+  .hint{bottom:12px;left:12px}.mobile-upload{display:inline-flex}
+}
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <a class="home" href="index.html" aria-label="Back to home"><span aria-hidden="true">←</span><span>Home</span></a>
+      <div class="divider" aria-hidden="true"></div>
+      <div class="title-wrap"><div class="title">3D Viewer</div><span class="pill">UV Studio</span></div>
+    </div>
+    <div class="top-actions">
+      <button class="btn" id="fit-btn" type="button" title="Fit model in view"><span aria-hidden="true">⌗</span><span>Fit view</span></button>
+      <button class="btn" id="reset-btn" type="button" title="Restore the demo model"><span aria-hidden="true">↺</span><span>Reset</span></button>
+      <button class="btn primary mobile-upload" id="mobile-upload-btn" type="button"><span aria-hidden="true">＋</span><span>Open</span></button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="viewport" id="viewport" aria-label="Interactive 3D model viewer">
+      <canvas id="canvas" tabindex="0"></canvas>
+      <div class="hint">Drag to rotate · Scroll to zoom · Right-drag to pan</div>
+      <div class="drop-overlay" id="drop-overlay">
+        <div class="drop-card"><div class="drop-icon">↓</div><div class="drop-title">Drop your model here</div><div class="drop-copy">GLB or OBJ, up to 50 MB</div></div>
+      </div>
+      <div class="loading" id="loading"><div class="loading-card"><span class="spinner"></span><span>Loading model…</span></div></div>
+      <div class="error-toast" id="error-toast" role="alert"></div>
+    </section>
+
+    <aside class="sidebar">
+      <section class="section">
+        <div class="section-title">Model</div>
+        <label class="upload" for="file-input">
+          <span class="upload-icon" aria-hidden="true">＋</span>
+          <span><strong>Open a 3D model</strong><small>GLB or OBJ · max 50 MB</small></span>
+        </label>
+        <input id="file-input" type="file" accept=".glb,.obj,model/gltf-binary,text/plain">
+      </section>
+
+      <section class="section">
+        <div class="section-title">Scene info</div>
+        <div class="model-name" id="model-name">Demo knot</div>
+        <div class="stat-list">
+          <span class="stat-label">Vertices</span><span class="stat-value" id="vertices">—</span>
+          <span class="stat-label">Triangles</span><span class="stat-value" id="triangles">—</span>
+          <span class="stat-label">Objects</span><span class="stat-value" id="objects">—</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">Display</div>
+        <div class="control-row"><span>Show grid</span><label class="switch"><input id="grid-toggle" type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="control-row"><span>Wireframe</span><label class="switch"><input id="wire-toggle" type="checkbox"><span class="slider"></span></label></div>
+        <div class="control-row"><span>Auto rotate</span><label class="switch"><input id="rotate-toggle" type="checkbox"><span class="slider"></span></label></div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">Next step</div>
+        <div class="note">This viewer is ready to become the front end for automatic seam detection and UV unwrapping.</div>
+      </section>
+    </aside>
+  </main>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+
+if(sessionStorage.getItem('jt_unlocked')!=='1') window.location.replace('index.html');
+
+const canvas=document.getElementById('canvas');
+const viewport=document.getElementById('viewport');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.1;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xd9edf5);
+const camera=new THREE.PerspectiveCamera(38,1,0.01,10000);
+camera.position.set(4,2.6,5);
+
+const controls=new OrbitControls(camera,canvas);
+controls.enableDamping=true;
+controls.dampingFactor=.07;
+controls.screenSpacePanning=true;
+controls.minDistance=.02;
+controls.maxDistance=5000;
+
+scene.add(new THREE.HemisphereLight(0xe9f8ff,0x56717d,2.15));
+const keyLight=new THREE.DirectionalLight(0xffffff,3.2);
+keyLight.position.set(5,8,6);
+keyLight.castShadow=true;
+scene.add(keyLight);
+const rimLight=new THREE.DirectionalLight(0x8fd7f1,1.8);
+rimLight.position.set(-5,2,-4);
+scene.add(rimLight);
+
+const grid=new THREE.GridHelper(20,20,0x78b4c9,0xb7d6e1);
+grid.material.transparent=true;
+grid.material.opacity=.6;
+scene.add(grid);
+
+let currentModel=null;
+let currentName='Demo knot';
+
+function createDemo(){
+  const geometry=new THREE.TorusKnotGeometry(1,.32,160,24);
+  const material=new THREE.MeshStandardMaterial({color:0x2a7fa5,roughness:.28,metalness:.08});
+  const mesh=new THREE.Mesh(geometry,material);
+  mesh.castShadow=true;
+  mesh.receiveShadow=true;
+  return mesh;
+}
+
+function disposeModel(object){
+  object.traverse(child=>{
+    if(child.geometry)child.geometry.dispose();
+    if(child.material){
+      const materials=Array.isArray(child.material)?child.material:[child.material];
+      materials.forEach(material=>{
+        Object.values(material).forEach(value=>{if(value&&value.isTexture)value.dispose();});
+        material.dispose();
+      });
+    }
+  });
+}
+
+function setModel(object,name){
+  if(currentModel){scene.remove(currentModel);disposeModel(currentModel);}
+  currentModel=object;
+  currentName=name;
+  object.traverse(child=>{
+    if(child.isMesh){child.castShadow=true;child.receiveShadow=true;}
+  });
+  scene.add(object);
+  document.getElementById('wire-toggle').checked=false;
+  updateStats();
+  fitView();
+}
+
+function updateStats(){
+  let vertices=0,triangles=0,objects=0;
+  currentModel?.traverse(child=>{
+    if(!child.isMesh||!child.geometry)return;
+    objects++;
+    const g=child.geometry;
+    vertices+=g.attributes.position?.count||0;
+    triangles+=g.index?g.index.count/3:(g.attributes.position?.count||0)/3;
+  });
+  document.getElementById('model-name').textContent=currentName;
+  document.getElementById('vertices').textContent=Math.round(vertices).toLocaleString();
+  document.getElementById('triangles').textContent=Math.round(triangles).toLocaleString();
+  document.getElementById('objects').textContent=objects.toLocaleString();
+}
+
+function fitView(){
+  if(!currentModel)return;
+  const box=new THREE.Box3().setFromObject(currentModel);
+  if(box.isEmpty())return;
+  const size=box.getSize(new THREE.Vector3());
+  const center=box.getCenter(new THREE.Vector3());
+  const maxDim=Math.max(size.x,size.y,size.z,.01);
+  const distance=(maxDim/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))))*1.45;
+  const direction=new THREE.Vector3(1,.65,1).normalize();
+  camera.near=Math.max(distance/1000,.001);
+  camera.far=Math.max(distance*100,100);
+  camera.position.copy(center).add(direction.multiplyScalar(distance));
+  camera.updateProjectionMatrix();
+  controls.target.copy(center);
+  controls.minDistance=maxDim*.05;
+  controls.maxDistance=maxDim*30;
+  controls.update();
+  grid.position.y=box.min.y-.01*maxDim;
+  grid.scale.setScalar(Math.max(maxDim/4,.1));
+}
+
+function showError(message){
+  const toast=document.getElementById('error-toast');
+  toast.textContent=message;
+  toast.classList.add('show');
+  clearTimeout(showError.timer);
+  showError.timer=setTimeout(()=>toast.classList.remove('show'),3500);
+}
+
+async function loadFile(file){
+  if(!file)return;
+  const extension=file.name.split('.').pop().toLowerCase();
+  if(!['glb','obj'].includes(extension)){showError('Please choose a GLB or OBJ file.');return;}
+  if(file.size>50*1024*1024){showError('That file is larger than the 50 MB limit.');return;}
+  document.getElementById('loading').classList.add('show');
+  try{
+    let object;
+    if(extension==='glb'){
+      const data=await file.arrayBuffer();
+      const gltf=await new Promise((resolve,reject)=>new GLTFLoader().parse(data,'',resolve,reject));
+      object=gltf.scene;
+    }else{
+      const text=await file.text();
+      object=new OBJLoader().parse(text);
+      object.traverse(child=>{
+        if(child.isMesh&&!child.material?.map)child.material=new THREE.MeshStandardMaterial({color:0x6aaec5,roughness:.55,metalness:.02});
+      });
+    }
+    setModel(object,file.name);
+  }catch(error){
+    console.error(error);
+    showError('This model could not be opened. Check that the file is valid.');
+  }finally{
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('file-input').value='';
+  }
+}
+
+function resize(){
+  const width=viewport.clientWidth;
+  const height=viewport.clientHeight;
+  if(!width||!height)return;
+  renderer.setSize(width,height,false);
+  camera.aspect=width/height;
+  camera.updateProjectionMatrix();
+}
+
+document.getElementById('file-input').addEventListener('change',event=>loadFile(event.target.files[0]));
+document.getElementById('mobile-upload-btn').addEventListener('click',()=>document.getElementById('file-input').click());
+document.getElementById('fit-btn').addEventListener('click',fitView);
+document.getElementById('reset-btn').addEventListener('click',()=>setModel(createDemo(),'Demo knot'));
+document.getElementById('grid-toggle').addEventListener('change',event=>grid.visible=event.target.checked);
+document.getElementById('wire-toggle').addEventListener('change',event=>{
+  currentModel?.traverse(child=>{
+    if(!child.isMesh||!child.material)return;
+    const materials=Array.isArray(child.material)?child.material:[child.material];
+    materials.forEach(material=>{if('wireframe' in material){material.wireframe=event.target.checked;material.needsUpdate=true;}});
+  });
+});
+document.getElementById('rotate-toggle').addEventListener('change',event=>controls.autoRotate=event.target.checked);
+
+let dragDepth=0;
+viewport.addEventListener('dragenter',event=>{event.preventDefault();dragDepth++;document.getElementById('drop-overlay').classList.add('show');});
+viewport.addEventListener('dragover',event=>event.preventDefault());
+viewport.addEventListener('dragleave',event=>{event.preventDefault();dragDepth--;if(dragDepth<=0){dragDepth=0;document.getElementById('drop-overlay').classList.remove('show');}});
+viewport.addEventListener('drop',event=>{
+  event.preventDefault();dragDepth=0;document.getElementById('drop-overlay').classList.remove('show');
+  loadFile(event.dataTransfer.files[0]);
+});
+
+new ResizeObserver(resize).observe(viewport);
+setModel(createDemo(),'Demo knot');
+resize();
+
+function animate(){
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene,camera);
+}
+animate();
+</script>
+</body>
+</html>
