@@ -357,9 +357,10 @@ scene.add(grid);
 
 const hoverFaceGeometry=new THREE.BufferGeometry();
 hoverFaceGeometry.setAttribute('position',new THREE.BufferAttribute(new Float32Array(9),3));
-const hoverFace=new THREE.Mesh(hoverFaceGeometry,new THREE.MeshBasicMaterial({color:0x58d7ff,transparent:true,opacity:.82,side:THREE.DoubleSide,depthTest:false,depthWrite:false}));
+const hoverFace=new THREE.Mesh(hoverFaceGeometry,new THREE.MeshBasicMaterial({color:0x58d7ff,transparent:true,opacity:.82,side:THREE.DoubleSide,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
 hoverFace.visible=false;
 hoverFace.renderOrder=1000;
+hoverFace.frustumCulled=false;
 scene.add(hoverFace);
 
 function createCheckerTexture(){
@@ -392,6 +393,7 @@ let uvHitCells=[];
 let uvHitWidth=0;
 let uvHitHeight=0;
 let hoveredUVFace=null;
+let uvInfoDefault='No UV layout yet';
 
 let currentModel=null;
 let currentName='Demo knot';
@@ -617,6 +619,39 @@ function registerUVHit(hit){
   for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++)uvHitCells[y*UV_HIT_GRID+x].push(hit);
 }
 
+function assignUVIslandGroups(hits,firstId){
+  if(!hits.length)return [];
+  const parent=hits.map((_,index)=>index);
+  const find=index=>{
+    while(parent[index]!==index){parent[index]=parent[parent[index]];index=parent[index];}
+    return index;
+  };
+  const join=(a,b)=>{
+    const rootA=find(a),rootB=find(b);
+    if(rootA!==rootB)parent[rootB]=rootA;
+  };
+  const edges=new Map();
+  const pointKey=point=>`${Math.round(point[0]*1e7)},${Math.round(point[1]*1e7)}`;
+  hits.forEach((hit,index)=>{
+    const uv=hit.uvPoints;
+    [[uv[0],uv[1]],[uv[1],uv[2]],[uv[2],uv[0]]].forEach(([start,end])=>{
+      const a=pointKey(start),b=pointKey(end);
+      const key=a<b?`${a}|${b}`:`${b}|${a}`;
+      const other=edges.get(key);
+      if(other===undefined)edges.set(key,index);else join(index,other);
+    });
+  });
+  const groups=new Map();
+  hits.forEach((hit,index)=>{
+    const root=find(index);
+    if(!groups.has(root))groups.set(root,{id:firstId+groups.size+1,faces:[]});
+    const group=groups.get(root);
+    group.faces.push(hit);
+    hit.group=group;
+  });
+  return [...groups.values()];
+}
+
 function pointInUVTriangle(x,y,points){
   const [a,b,c]=points;
   const cross=(p,q)=>(x-q[0])*(p[1]-q[1])-(p[0]-q[0])*(y-q[1]);
@@ -632,12 +667,15 @@ function drawUVHoverOverlay(){
   uvHoverContext.setTransform(pixelRatio,0,0,pixelRatio,0,0);
   uvHoverContext.clearRect(0,0,uvHitWidth,uvHitHeight);
   if(!hoveredUVFace)return;
-  const points=hoveredUVFace.points;
+  const faces=hoveredUVFace.group?.faces||[hoveredUVFace];
   uvHoverContext.beginPath();
-  uvHoverContext.moveTo(points[0][0],points[0][1]);
-  uvHoverContext.lineTo(points[1][0],points[1][1]);
-  uvHoverContext.lineTo(points[2][0],points[2][1]);
-  uvHoverContext.closePath();
+  faces.forEach(face=>{
+    const points=face.points;
+    uvHoverContext.moveTo(points[0][0],points[0][1]);
+    uvHoverContext.lineTo(points[1][0],points[1][1]);
+    uvHoverContext.lineTo(points[2][0],points[2][1]);
+    uvHoverContext.closePath();
+  });
   uvHoverContext.fillStyle='rgba(88,215,255,.58)';
   uvHoverContext.fill();
   uvHoverContext.strokeStyle='#eaffff';
@@ -646,20 +684,29 @@ function drawUVHoverOverlay(){
 }
 
 function setHoveredUVFace(hit){
-  if(hit===hoveredUVFace)return;
+  if((hit?.group||hit)===(hoveredUVFace?.group||hoveredUVFace))return;
   hoveredUVFace=hit;
   drawUVHoverOverlay();
-  if(!hit){hoverFace.visible=false;return;}
-  const positions=hoverFaceGeometry.attributes.position;
+  const info=document.getElementById('uv-info');
+  if(!hit){hoverFace.visible=false;if(info)info.textContent=uvInfoDefault;return;}
+  const group=hit.group||{id:1,faces:[hit]};
+  const faces=group.faces;
+  const positions=new THREE.BufferAttribute(new Float32Array(faces.length*9),3);
+  positions.setUsage(THREE.DynamicDrawUsage);
   const vertex=new THREE.Vector3();
-  hit.mesh.updateWorldMatrix(true,false);
-  hit.indices.forEach((index,corner)=>{
-    if(typeof hit.mesh.getVertexPosition==='function')hit.mesh.getVertexPosition(index,vertex);
-    else vertex.fromBufferAttribute(hit.mesh.geometry.attributes.position,index);
-    vertex.applyMatrix4(hit.mesh.matrixWorld);
-    positions.setXYZ(corner,vertex.x,vertex.y,vertex.z);
-  });
-  positions.needsUpdate=true;
+  faces[0].mesh.updateWorldMatrix(true,false);
+  faces.forEach((face,faceIndex)=>face.indices.forEach((index,corner)=>{
+    if(typeof face.mesh.getVertexPosition==='function')face.mesh.getVertexPosition(index,vertex);
+    else vertex.fromBufferAttribute(face.mesh.geometry.attributes.position,index);
+    vertex.applyMatrix4(face.mesh.matrixWorld);
+    positions.setXYZ(faceIndex*3+corner,vertex.x,vertex.y,vertex.z);
+  }));
+  hoverFaceGeometry.setAttribute('position',positions);
+  hoverFaceGeometry.setDrawRange(0,faces.length*3);
+  if(info){
+    const simplified=faces.length===1&&uvInfoDefault.includes('preview simplified')?' · simplified preview':'';
+    info.textContent=`UV island ${group.id} · ${faces.length.toLocaleString()} highlighted faces${simplified}`;
+  }
   hoverFaceGeometry.computeBoundingSphere();
   hoverFace.visible=true;
 }
@@ -695,6 +742,7 @@ function drawUVPreview(){
 
   let uvTriangles=0;
   let drawnTriangles=0;
+  let uvIslandCount=0;
   let meshIndex=0;
   const palette=['#70d3ef','#9fe3bb','#ffc978','#ceabff','#ff9fa9'];
   currentModel?.traverse(mesh=>{
@@ -705,6 +753,7 @@ function drawUVPreview(){
     const triangleCount=Math.floor((index?index.count:uv.count)/3);
     uvTriangles+=triangleCount;
     const step=Math.max(1,Math.ceil(triangleCount/50000));
+    const meshHits=[];
     uvContext.strokeStyle=palette[meshIndex++%palette.length];
     uvContext.globalAlpha=.72;
     uvContext.lineWidth=.6;
@@ -712,7 +761,8 @@ function drawUVPreview(){
     for(let triangle=0;triangle<triangleCount;triangle+=step){
       const offset=triangle*3;
       const indices=index?[index.getX(offset),index.getX(offset+1),index.getX(offset+2)]:[offset,offset+1,offset+2];
-      const points=indices.map(i=>[left+uv.getX(i)*size,top+(1-uv.getY(i))*size]);
+      const uvPoints=indices.map(i=>[uv.getX(i),uv.getY(i)]);
+      const points=uvPoints.map(point=>[left+point[0]*size,top+(1-point[1])*size]);
       if(points.some(point=>!Number.isFinite(point[0])||!Number.isFinite(point[1])))continue;
       const signedArea=(points[1][0]-points[0][0])*(points[2][1]-points[0][1])-(points[2][0]-points[0][0])*(points[1][1]-points[0][1]);
       if(Math.abs(signedArea)<.02)continue;
@@ -720,16 +770,20 @@ function drawUVPreview(){
       uvContext.lineTo(points[1][0],points[1][1]);
       uvContext.lineTo(points[2][0],points[2][1]);
       uvContext.closePath();
-      registerUVHit({mesh,triangle,indices,points});
+      meshHits.push({mesh,triangle,indices,points,uvPoints});
       drawnTriangles++;
     }
     uvContext.stroke();
+    const groups=assignUVIslandGroups(meshHits,uvIslandCount);
+    uvIslandCount+=groups.length;
+    meshHits.forEach(registerUVHit);
   });
   uvContext.restore();
   uvContext.globalAlpha=1;
   drawUVHoverOverlay();
   const active=uvVersions.find(version=>version.id===activeVersionId);
-  document.getElementById('uv-info').textContent=uvTriangles?`${uvTriangles.toLocaleString()} UV triangles${active?' · '+active.name:''}${drawnTriangles<uvTriangles?' · preview simplified':''} · hover to locate faces`:'No UV layout found';
+  uvInfoDefault=uvTriangles?`${uvIslandCount.toLocaleString()} UV islands · ${uvTriangles.toLocaleString()} triangles${active?' · '+active.name:''}${drawnTriangles<uvTriangles?' · preview simplified':''} · hover an island to locate it`:'No UV layout found';
+  document.getElementById('uv-info').textContent=uvInfoDefault;
 }
 
 function captureUVVersion(plan,triangleCount){
