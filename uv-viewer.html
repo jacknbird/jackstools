@@ -30,7 +30,18 @@ button,input{font:inherit}
 .btn.primary:hover{background:#1a6a8a}
 .workspace{min-height:0;flex:1;display:grid;grid-template-columns:minmax(0,1fr) 330px}
 .viewport{position:relative;min-width:0;background:#d9edf5;overflow:hidden}
-#canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+.view-stage{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1fr)}
+.three-pane{position:relative;min-width:0;min-height:0;overflow:hidden}
+.uv-pane{position:relative;min-width:0;min-height:0;display:none;background:#10242e;border-left:0.5px solid #4d7484;overflow:hidden}
+.viewport.view-split .view-stage{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.viewport.view-split .uv-pane,.viewport.view-uv .uv-pane{display:block}
+.viewport.view-uv .three-pane{display:none}
+#canvas,#uv-canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+.view-mode-toggle{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:3;display:flex;padding:3px;background:rgba(240,250,255,.9);backdrop-filter:blur(8px);border:0.5px solid var(--line);border-radius:8px;box-shadow:0 3px 12px rgba(20,70,90,.08)}
+.view-mode{border:0;background:transparent;color:#648d9d;border-radius:5px;padding:6px 10px;font-size:10px;cursor:pointer}
+.view-mode:hover{color:var(--ink);background:#e4f3f8}.view-mode.active{background:var(--blue);color:#fff}
+.uv-label{position:absolute;top:15px;right:15px;z-index:1;color:#b8dbe8;background:rgba(11,31,40,.78);border:0.5px solid #385c6b;border-radius:7px;padding:6px 9px;font-size:10px;pointer-events:none}
+.uv-info{position:absolute;left:14px;bottom:14px;z-index:1;color:#9fc3d1;background:rgba(11,31,40,.8);border:0.5px solid #385c6b;border-radius:7px;padding:7px 9px;font-size:10px;pointer-events:none}
 .hint{position:absolute;left:16px;bottom:16px;background:rgba(240,250,255,.88);backdrop-filter:blur(8px);border:0.5px solid rgba(176,212,227,.9);border-radius:8px;padding:8px 11px;font-size:11px;color:var(--muted);pointer-events:none;box-shadow:0 3px 12px rgba(20,70,90,.06)}
 .drop-overlay{position:absolute;inset:14px;border:2px dashed #58a6c4;border-radius:14px;background:rgba(223,240,248,.9);display:none;align-items:center;justify-content:center;z-index:4;pointer-events:none}
 .drop-overlay.show{display:flex}
@@ -100,6 +111,16 @@ button,input{font:inherit}
 .ai-note{font-size:9px;color:#8ba9b5;line-height:1.45;margin-top:6px}
 .unwrap-status{display:none;margin-top:10px;border-radius:7px;padding:9px 10px;font-size:10px;line-height:1.5;background:#e5f3f8;color:#4f7b8c;border:0.5px solid #bdd9e4}
 .unwrap-status.show{display:block}.unwrap-status.success{background:#e3f5ea;color:#34734d;border-color:#b7dfc6}.unwrap-status.error{background:#fff0f0;color:#9a4f4f;border-color:#e8c1c1}
+.version-block{margin-top:17px;padding-top:15px;border-top:0.5px solid var(--line)}
+.version-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.version-title{font-size:10px;font-weight:600;color:#456f80}.version-badge{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:#88aab7}
+.version-empty{font-size:10px;line-height:1.45;color:#8aa8b4;background:var(--wash);border-radius:7px;padding:9px}
+.version-list{display:flex;flex-direction:column;gap:6px}
+.version-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:8px;background:var(--wash);border:0.5px solid var(--line);border-radius:7px}
+.version-card.active{border-color:#62a8c3;background:#e0f2f8}
+.version-number{width:25px;height:25px;border-radius:6px;display:grid;place-items:center;background:var(--paper);border:0.5px solid var(--line);font-size:9px;font-weight:600;color:var(--blue)}
+.version-name{font-size:10px;font-weight:500;color:#3e6d7f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.version-meta{font-size:8px;color:#8aa8b4;margin-top:2px}
+.version-actions{display:flex;gap:3px}.version-btn{border:0.5px solid var(--line);background:var(--paper);color:#648d9d;border-radius:5px;padding:4px 6px;font-size:9px;cursor:pointer}.version-btn:hover{background:var(--hover);color:var(--ink)}
 .sidebar-footer{padding:12px 16px 16px;border-top:0.5px solid var(--line);background:#edf8fc}
 .sidebar-footer .subsection-title{margin:0 0 8px}.sidebar-footer .control-row{margin-top:8px;font-size:11px}
 .error-toast{position:absolute;top:16px;left:50%;transform:translate(-50%,-8px);background:#fff2f2;color:#a44040;border:0.5px solid #e4abab;border-radius:8px;padding:9px 12px;font-size:12px;box-shadow:0 8px 24px rgba(100,30,30,.1);opacity:0;pointer-events:none;transition:.2s;z-index:6;max-width:calc(100% - 32px);text-align:center}
@@ -110,7 +131,7 @@ button,input{font:inherit}
   .sidebar{border-left:0;border-top:0.5px solid var(--line)}
   .sidebar-model{display:none}.tool-nav{top:0}.sidebar-footer{display:none}
   .topbar{height:54px;padding:0 10px}.divider,.pill{display:none}.home span{display:none}.title{font-size:13px}.top-actions .btn span{display:none}
-  .hint{bottom:12px;left:12px}.mobile-upload{display:inline-flex}
+  .hint{bottom:12px;left:12px}.mobile-upload{display:inline-flex}.view-mode-toggle{top:9px}.view-mode{padding:5px 8px}
 }
 </style>
 <script type="importmap">
@@ -139,9 +160,23 @@ button,input{font:inherit}
   </header>
 
   <main class="workspace">
-    <section class="viewport" id="viewport" aria-label="Interactive 3D model viewer">
-      <canvas id="canvas" tabindex="0"></canvas>
-      <div class="hint">Drag to rotate · Scroll to zoom · Right-drag to pan</div>
+    <section class="viewport view-3d" id="viewport" aria-label="Interactive 3D and UV model viewer">
+      <div class="view-stage">
+        <div class="three-pane" id="three-pane">
+          <canvas id="canvas" tabindex="0"></canvas>
+          <div class="hint">Drag to rotate · Scroll to zoom · Right-drag to pan</div>
+        </div>
+        <div class="uv-pane" id="uv-pane">
+          <canvas id="uv-canvas" aria-label="UV layout preview"></canvas>
+          <div class="uv-label">0–1 UV space</div>
+          <div class="uv-info" id="uv-info">No UV layout yet</div>
+        </div>
+      </div>
+      <div class="view-mode-toggle" aria-label="Viewer mode">
+        <button class="view-mode active" type="button" data-view="3d">3D</button>
+        <button class="view-mode" type="button" data-view="split">Split</button>
+        <button class="view-mode" type="button" data-view="uv">UV</button>
+      </div>
       <div class="drop-overlay" id="drop-overlay">
         <div class="drop-card"><div class="drop-icon">↓</div><div class="drop-title">Drop your model here</div><div class="drop-copy">GLB or OBJ, up to 50 MB</div></div>
       </div>
@@ -242,6 +277,11 @@ button,input{font:inherit}
 
           <button class="tool-action" id="unwrap-btn" type="button">Generate AI UV layout</button>
           <div class="unwrap-status" id="unwrap-status" aria-live="polite"></div>
+
+          <div class="version-block">
+            <div class="version-head"><span class="version-title">UV versions</span><span class="version-badge">This session</span></div>
+            <div class="version-list" id="version-list"><div class="version-empty">Each generated unwrap will be saved here so you can restore an earlier layout.</div></div>
+          </div>
         </section>
       </div>
 
@@ -266,6 +306,10 @@ if(sessionStorage.getItem('jt_unlocked')!=='1') window.location.replace('index.h
 
 const canvas=document.getElementById('canvas');
 const viewport=document.getElementById('viewport');
+const threePane=document.getElementById('three-pane');
+const uvPane=document.getElementById('uv-pane');
+const uvCanvas=document.getElementById('uv-canvas');
+const uvContext=uvCanvas.getContext('2d');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -303,6 +347,9 @@ scene.add(grid);
 let currentModel=null;
 let currentName='Demo knot';
 let hasGeneratedUVs=false;
+let uvVersions=[];
+let activeVersionId=null;
+let versionCounter=0;
 
 function createDemo(){
   const geometry=new THREE.TorusKnotGeometry(1,.32,160,24);
@@ -331,8 +378,12 @@ function setModel(object,name){
   currentModel=object;
   currentName=name;
   hasGeneratedUVs=false;
+  uvVersions=[];
+  activeVersionId=null;
+  versionCounter=0;
   document.getElementById('download-btn').disabled=true;
   setUnwrapStatus('');
+  renderVersionHistory();
   object.traverse(child=>{
     if(child.isMesh){child.castShadow=true;child.receiveShadow=true;}
   });
@@ -340,6 +391,7 @@ function setModel(object,name){
   document.getElementById('wire-toggle').checked=false;
   updateStats();
   fitView();
+  requestAnimationFrame(drawUVPreview);
 }
 
 function updateStats(){
@@ -355,6 +407,134 @@ function updateStats(){
   document.getElementById('vertices').textContent=Math.round(vertices).toLocaleString();
   document.getElementById('triangles').textContent=Math.round(triangles).toLocaleString();
   document.getElementById('objects').textContent=objects.toLocaleString();
+}
+
+function drawUVPreview(){
+  const width=Math.floor(uvPane.clientWidth);
+  const height=Math.floor(uvPane.clientHeight);
+  if(width<2||height<2)return;
+  const pixelRatio=Math.min(window.devicePixelRatio||1,2);
+  uvCanvas.width=Math.floor(width*pixelRatio);
+  uvCanvas.height=Math.floor(height*pixelRatio);
+  uvContext.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+  uvContext.clearRect(0,0,width,height);
+  uvContext.fillStyle='#10242e';uvContext.fillRect(0,0,width,height);
+
+  const padding=28;
+  const size=Math.max(20,Math.min(width,height)-padding*2);
+  const left=(width-size)/2;
+  const top=(height-size)/2;
+  uvContext.fillStyle='#17313c';uvContext.fillRect(left,top,size,size);
+  uvContext.strokeStyle='#315160';uvContext.lineWidth=1;
+  for(let i=0;i<=10;i++){
+    const position=i/10*size;
+    uvContext.beginPath();uvContext.moveTo(left+position,top);uvContext.lineTo(left+position,top+size);uvContext.stroke();
+    uvContext.beginPath();uvContext.moveTo(left,top+position);uvContext.lineTo(left+size,top+position);uvContext.stroke();
+  }
+  uvContext.strokeStyle='#83b8ca';uvContext.strokeRect(left,top,size,size);
+  uvContext.save();
+  uvContext.beginPath();uvContext.rect(left,top,size,size);uvContext.clip();
+
+  let uvTriangles=0;
+  let drawnTriangles=0;
+  let meshIndex=0;
+  const palette=['#70d3ef','#9fe3bb','#ffc978','#ceabff','#ff9fa9'];
+  currentModel?.traverse(mesh=>{
+    const geometry=mesh.isMesh?mesh.geometry:null;
+    const uv=geometry?.attributes?.uv;
+    if(!uv)return;
+    const index=geometry.index;
+    const triangleCount=Math.floor((index?index.count:uv.count)/3);
+    uvTriangles+=triangleCount;
+    const step=Math.max(1,Math.ceil(triangleCount/50000));
+    uvContext.strokeStyle=palette[meshIndex++%palette.length];
+    uvContext.globalAlpha=.72;
+    uvContext.lineWidth=.6;
+    uvContext.beginPath();
+    for(let triangle=0;triangle<triangleCount;triangle+=step){
+      const offset=triangle*3;
+      const indices=index?[index.getX(offset),index.getX(offset+1),index.getX(offset+2)]:[offset,offset+1,offset+2];
+      const points=indices.map(i=>[left+uv.getX(i)*size,top+(1-uv.getY(i))*size]);
+      if(points.some(point=>!Number.isFinite(point[0])||!Number.isFinite(point[1])))continue;
+      uvContext.moveTo(points[0][0],points[0][1]);
+      uvContext.lineTo(points[1][0],points[1][1]);
+      uvContext.lineTo(points[2][0],points[2][1]);
+      uvContext.closePath();drawnTriangles++;
+    }
+    uvContext.stroke();
+  });
+  uvContext.restore();
+  uvContext.globalAlpha=1;
+  const active=uvVersions.find(version=>version.id===activeVersionId);
+  document.getElementById('uv-info').textContent=uvTriangles?`${uvTriangles.toLocaleString()} UV triangles${active?' · '+active.name:''}${drawnTriangles<uvTriangles?' · preview simplified':''}`:'No UV layout found';
+}
+
+function captureUVVersion(plan,triangleCount){
+  const meshes=[];
+  currentModel?.traverse(mesh=>{
+    const uv=mesh.isMesh?mesh.geometry?.attributes?.uv:null;
+    if(uv)meshes.push({uuid:mesh.uuid,values:new Float32Array(uv.array)});
+  });
+  if(!meshes.length)return;
+  const id=++versionCounter;
+  const version={
+    id,
+    name:`Version ${id}`,
+    createdAt:new Date(),
+    plan:{strategy:plan.strategy,padding:plan.padding,textureSize:plan.textureSize},
+    triangleCount,
+    meshes
+  };
+  uvVersions.unshift(version);
+  if(uvVersions.length>8)uvVersions.pop();
+  activeVersionId=id;
+  renderVersionHistory();
+  drawUVPreview();
+}
+
+function restoreUVVersion(id){
+  const version=uvVersions.find(item=>item.id===id);
+  if(!version)return;
+  let restored=0;
+  currentModel?.traverse(mesh=>{
+    if(!mesh.isMesh)return;
+    const saved=version.meshes.find(item=>item.uuid===mesh.uuid);
+    if(!saved||saved.values.length!==mesh.geometry.attributes.position.count*2)return;
+    mesh.geometry.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(saved.values),2));
+    mesh.geometry.attributes.uv.needsUpdate=true;restored++;
+  });
+  if(!restored){setUnwrapStatus('This version no longer matches the loaded model.','error');return;}
+  activeVersionId=id;hasGeneratedUVs=true;
+  document.getElementById('download-btn').disabled=false;
+  renderVersionHistory();drawUVPreview();setViewMode('split');
+  setUnwrapStatus(`${version.name} restored. You can now preview or download it.`,'success');
+}
+
+function deleteUVVersion(id){
+  uvVersions=uvVersions.filter(version=>version.id!==id);
+  if(activeVersionId===id)activeVersionId=null;
+  renderVersionHistory();drawUVPreview();
+}
+
+function renderVersionHistory(){
+  const list=document.getElementById('version-list');
+  if(!list)return;
+  if(!uvVersions.length){list.innerHTML='<div class="version-empty">Each generated unwrap will be saved here so you can restore an earlier layout.</div>';return;}
+  list.innerHTML=uvVersions.map(version=>{
+    const time=version.createdAt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    return `<div class="version-card${version.id===activeVersionId?' active':''}">
+      <div class="version-number">v${version.id}</div>
+      <div><div class="version-name">${version.name}</div><div class="version-meta">${time} · ${version.plan.strategy} · ${version.plan.textureSize}px</div></div>
+      <div class="version-actions"><button class="version-btn" type="button" data-version-action="restore" data-version-id="${version.id}">Restore</button><button class="version-btn" type="button" data-version-action="delete" data-version-id="${version.id}" aria-label="Delete ${version.name}">×</button></div>
+    </div>`;
+  }).join('');
+}
+
+function setViewMode(mode){
+  viewport.classList.remove('view-3d','view-split','view-uv');
+  viewport.classList.add('view-'+mode);
+  document.querySelectorAll('.view-mode').forEach(button=>button.classList.toggle('active',button.dataset.view===mode));
+  requestAnimationFrame(()=>{resize();drawUVPreview();});
 }
 
 function setUnwrapStatus(message,type=''){
@@ -526,6 +706,8 @@ async function runUVUnwrap(){
     const triangleCount=applyTriangleAtlas(plan);
     hasGeneratedUVs=true;
     document.getElementById('download-btn').disabled=false;
+    captureUVVersion(plan,triangleCount);
+    setViewMode('split');
     const tokens=response?.usage?.total_tokens;
     setUnwrapStatus(`${plan.summary} ${triangleCount.toLocaleString()} triangles packed.${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}`,'success');
   }catch(error){
@@ -613,12 +795,14 @@ async function loadFile(file){
 }
 
 function resize(){
-  const width=viewport.clientWidth;
-  const height=viewport.clientHeight;
-  if(!width||!height)return;
-  renderer.setSize(width,height,false);
-  camera.aspect=width/height;
-  camera.updateProjectionMatrix();
+  const width=threePane.clientWidth;
+  const height=threePane.clientHeight;
+  if(width&&height){
+    renderer.setSize(width,height,false);
+    camera.aspect=width/height;
+    camera.updateProjectionMatrix();
+  }
+  drawUVPreview();
 }
 
 document.getElementById('file-input').addEventListener('change',event=>loadFile(event.target.files[0]));
@@ -655,6 +839,15 @@ document.getElementById('save-endpoint').addEventListener('click',()=>{
   setUnwrapStatus(value?'AI endpoint saved. Your API key remains on the server.':'AI endpoint removed.',value?'success':'');
 });
 updateEndpointUI();
+
+document.querySelectorAll('.view-mode').forEach(button=>button.addEventListener('click',()=>setViewMode(button.dataset.view)));
+document.getElementById('version-list').addEventListener('click',event=>{
+  const button=event.target.closest('[data-version-action]');
+  if(!button)return;
+  const id=Number(button.dataset.versionId);
+  if(button.dataset.versionAction==='restore')restoreUVVersion(id);
+  else if(button.dataset.versionAction==='delete')deleteUVVersion(id);
+});
 
 document.querySelectorAll('.tool-tab').forEach(button=>{
   button.addEventListener('click',()=>{
