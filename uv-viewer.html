@@ -140,7 +140,8 @@ button,input{font:inherit}
 {
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/",
+    "xatlas-three": "https://cdn.jsdelivr.net/npm/xatlas-three@0.2.1/public/build/index.js"
   }
 }
 </script>
@@ -251,7 +252,7 @@ button,input{font:inherit}
           <div class="ai-connect">
             <div class="ai-connect-head"><span class="ai-connect-title"><span class="status-dot" id="ai-status-dot"></span>OpenAI service</span><span class="ai-connect-state" id="ai-connect-state">Not connected</span></div>
             <div class="endpoint-row"><input class="input" id="ai-endpoint" type="url" placeholder="Paste your secure Worker URL"><button class="endpoint-save" id="save-endpoint" type="button">Save</button></div>
-            <div class="ai-note">Paste the Worker URL—not your API key. Your key stays protected on the server.</div>
+            <div class="ai-note">AI selects the settings; the production xatlas geometry engine creates the actual UVs. Paste the Worker URL—not your API key.</div>
           </div>
 
           <div class="field">
@@ -278,11 +279,11 @@ button,input{font:inherit}
           <div class="control-row"><span>Fix overlaps</span><label class="switch"><input id="fix-overlaps" type="checkbox" checked><span class="slider"></span></label></div>
           <div class="control-row"><span>Preserve existing seams</span><label class="switch"><input id="preserve-seams" type="checkbox"><span class="slider"></span></label></div>
 
-          <button class="tool-action" id="unwrap-btn" type="button">Generate AI UV layout</button>
+          <button class="tool-action" id="unwrap-btn" type="button">Generate production UV layout</button>
           <div class="unwrap-status" id="unwrap-status" aria-live="polite"></div>
 
           <div class="version-block">
-            <div class="version-head"><span class="version-title">UV versions</span><span class="version-badge">This session</span></div>
+            <div class="version-head"><span class="version-title">UV versions</span><span class="version-badge">Autosaved</span></div>
             <div class="version-list" id="version-list"><div class="version-empty">Each generated unwrap will be saved here so you can restore an earlier layout.</div></div>
           </div>
         </section>
@@ -304,6 +305,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+import { UVUnwrapper } from 'xatlas-three';
 
 if(sessionStorage.getItem('jt_unlocked')!=='1') window.location.replace('index.html');
 
@@ -353,6 +356,8 @@ let hasGeneratedUVs=false;
 let uvVersions=[];
 let activeVersionId=null;
 let versionCounter=0;
+let uvUnwrapper=null;
+let uvLibraryPromise=null;
 const WORKSPACE_DB='jacks-tools-uv-studio';
 const WORKSPACE_STORE='workspace';
 const SETTINGS_KEY='jt_uv_studio_settings';
@@ -821,73 +826,145 @@ async function requestAIUnwrapPlan(profile,preferences){
   return data;
 }
 
-function applyTriangleAtlas(plan){
-  const meshEntries=[];
+async function getUVUnwrapper(plan,preferences,totalTriangles){
+  if(!uvUnwrapper){
+    uvUnwrapper=new UVUnwrapper({BufferAttribute:THREE.BufferAttribute});
+    uvLibraryPromise=uvUnwrapper.loadLibrary(
+      (mode,progress)=>{
+        const value=Number(progress);
+        const percent=value<=1?value*100:value;
+        const suffix=Number.isFinite(percent)?` ${Math.round(percent)}%`:'';
+        setUnwrapStatus(`Loading production UV engine${suffix}…`);
+      },
+      'https://cdn.jsdelivr.net/npm/xatlasjs@0.2.0/dist/xatlas.wasm',
+      'https://cdn.jsdelivr.net/npm/xatlasjs@0.2.0/dist/xatlas.js'
+    );
+  }
+  try{await uvLibraryPromise;}
+  catch(error){
+    uvUnwrapper=null;
+    uvLibraryPromise=null;
+    throw new Error('The production UV engine could not load. Check your connection and try again.');
+  }
+
+  const seamMode=preferences.seamStrategy.toLowerCase();
+  const normalBias=seamMode.includes('minimal')?1.5:seamMode.includes('angle')?6:4;
+  const thresholdBias=THREE.MathUtils.mapLinear(THREE.MathUtils.clamp(plan.angleThreshold,1,180),1,180,8,.75);
+  uvUnwrapper.chartOptions={
+    fixWinding:true,
+    maxBoundaryLength:0,
+    maxChartArea:0,
+    maxCost:plan.strategy==='detail'?1.5:plan.strategy==='compact'?3:2,
+    maxIterations:plan.strategy==='detail'?4:2,
+    normalDeviationWeight:thresholdBias,
+    normalSeamWeight:normalBias,
+    roundnessWeight:.01,
+    straightnessWeight:6,
+    textureSeamWeight:preferences.preserveSeams?8:.5,
+    useInputMeshUvs:preferences.preserveSeams
+  };
+  uvUnwrapper.packOptions={
+    bilinear:true,
+    blockAlign:false,
+    bruteForce:plan.strategy==='detail'&&totalTriangles<=100000,
+    createImage:false,
+    maxChartSize:0,
+    padding:plan.padding,
+    resolution:plan.textureSize,
+    rotateCharts:plan.rotateIslands,
+    rotateChartsToAxis:plan.rotateIslands,
+    texelsPerUnit:0
+  };
+  uvUnwrapper.useNormals=false;
+  uvUnwrapper.timeUnwrap=false;
+  uvUnwrapper.logProgress=false;
+  return uvUnwrapper;
+}
+
+async function applyProductionAtlas(plan,preferences){
+  const entries=[];
   let totalTriangles=0;
+  let oversizedMeshCount=0;
+  currentModel.updateMatrixWorld(true);
+
   currentModel.traverse(mesh=>{
     if(!mesh.isMesh||!mesh.geometry?.attributes?.position)return;
-    const geometry=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
-    const triangleCount=Math.floor(geometry.attributes.position.count/3);
-    if(!triangleCount){geometry.dispose();return;}
-    meshEntries.push({mesh,geometry,triangleCount});
+    const source=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
+    const triangleCount=Math.floor(source.attributes.position.count/3);
+    if(!triangleCount){source.dispose();return;}
+
+    // xatlas gets a position-welded proxy so flat normals do not split every face.
+    // The generated UVs are then transferred back to the untouched render attributes.
+    const proxy=new THREE.BufferGeometry();
+    proxy.setAttribute('position',source.attributes.position.clone());
+    if(preferences.preserveSeams&&source.attributes.uv)proxy.setAttribute('uv',source.attributes.uv.clone());
+    const welded=mergeVertices(proxy,1e-6);
+    proxy.dispose();
+    if(welded.attributes.position.count>65535){
+      source.dispose();
+      welded.dispose();
+      oversizedMeshCount++;
+      return;
+    }
+    welded.userData.worldScale=mesh.getWorldScale(new THREE.Vector3()).toArray();
+    entries.push({mesh,source,proxy:welded,triangleCount});
     totalTriangles+=triangleCount;
   });
-  if(!totalTriangles)throw new Error('This model does not contain any triangles to unwrap.');
-  if(totalTriangles>150000)throw new Error('This first version supports models up to 150,000 triangles.');
 
-  const density=plan.strategy==='detail'?1.15:plan.strategy==='compact'?0.9:1;
-  const columns=Math.max(1,Math.ceil(Math.sqrt(totalTriangles*density)));
-  const rows=Math.max(1,Math.ceil(totalTriangles/columns));
-  const cellWidth=1/columns;
-  const cellHeight=1/rows;
-  const globalPadding=plan.padding/plan.textureSize;
-  const padX=THREE.MathUtils.clamp(globalPadding/cellWidth,.015,.22);
-  const padY=THREE.MathUtils.clamp(globalPadding/cellHeight,.015,.22);
-  const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3();
-  const edgeA=new THREE.Vector3(),edgeB=new THREE.Vector3(),normal=new THREE.Vector3();
-  let atlasIndex=0;
-
-  for(const entry of meshEntries){
-    const positions=entry.geometry.attributes.position;
-    const uv=new Float32Array(positions.count*2);
-    for(let triangle=0;triangle<entry.triangleCount;triangle++,atlasIndex++){
-      const offset=triangle*3;
-      a.fromBufferAttribute(positions,offset);
-      b.fromBufferAttribute(positions,offset+1);
-      c.fromBufferAttribute(positions,offset+2);
-      edgeA.subVectors(b,a);edgeB.subVectors(c,a);normal.crossVectors(edgeA,edgeB).normalize();
-      const ax=Math.abs(normal.x),ay=Math.abs(normal.y),az=Math.abs(normal.z);
-      let projected;
-      if(ax>=ay&&ax>=az)projected=[[a.y,a.z],[b.y,b.z],[c.y,c.z]];
-      else if(ay>=az)projected=[[a.x,a.z],[b.x,b.z],[c.x,c.z]];
-      else projected=[[a.x,a.y],[b.x,b.y],[c.x,c.y]];
-
-      if(plan.rotateIslands){
-        const width=Math.max(...projected.map(p=>p[0]))-Math.min(...projected.map(p=>p[0]));
-        const height=Math.max(...projected.map(p=>p[1]))-Math.min(...projected.map(p=>p[1]));
-        if((cellWidth<cellHeight&&width>height)||(cellWidth>cellHeight&&height>width))projected=projected.map(p=>[p[1],p[0]]);
-      }
-
-      const minX=Math.min(...projected.map(p=>p[0])),maxX=Math.max(...projected.map(p=>p[0]));
-      const minY=Math.min(...projected.map(p=>p[1])),maxY=Math.max(...projected.map(p=>p[1]));
-      const width=Math.max(maxX-minX,1e-8),height=Math.max(maxY-minY,1e-8);
-      const usableX=1-padX*2,usableY=1-padY*2;
-      const scale=Math.min(usableX/width,usableY/height);
-      const drawnWidth=width*scale,drawnHeight=height*scale;
-      const insetX=padX+(usableX-drawnWidth)/2,insetY=padY+(usableY-drawnHeight)/2;
-      const cellX=atlasIndex%columns,cellY=Math.floor(atlasIndex/columns);
-      projected.forEach((point,index)=>{
-        uv[(offset+index)*2]=(cellX+insetX+(point[0]-minX)*scale)*cellWidth;
-        uv[(offset+index)*2+1]=1-(cellY+insetY+(point[1]-minY)*scale)*cellHeight;
-      });
-    }
-    entry.geometry.setAttribute('uv',new THREE.BufferAttribute(uv,2));
-    entry.geometry.attributes.uv.needsUpdate=true;
-    const oldGeometry=entry.mesh.geometry;
-    entry.mesh.geometry=entry.geometry;
-    oldGeometry.dispose();
+  if(oversizedMeshCount){
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy.dispose();});
+    throw new Error('One mesh exceeds 65,535 welded vertices. Split that mesh into smaller objects, then unwrap again.');
   }
-  return totalTriangles;
+  if(!totalTriangles)throw new Error('This model does not contain any triangles to unwrap.');
+  if(totalTriangles>500000){
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy.dispose();});
+    throw new Error('This browser build supports models up to 500,000 triangles per unwrap.');
+  }
+
+  let unwrapper;
+  try{unwrapper=await getUVUnwrapper(plan,preferences,totalTriangles);}
+  catch(error){
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy.dispose();});
+    throw error;
+  }
+  let atlas;
+  try{
+    setUnwrapStatus('Creating connected UV charts and minimizing stretch…');
+    atlas=await unwrapper.packAtlas(entries.map(entry=>entry.proxy),'uv','uv');
+  }catch(error){
+    console.error(error);
+    uvUnwrapper=null;
+    uvLibraryPromise=null;
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy.dispose();});
+    throw new Error('The mesh could not be parameterized. Check for invalid or zero-area faces, then try again.');
+  }
+
+  for(const entry of entries){
+    const atlasUV=entry.proxy.attributes.uv;
+    const atlasIndex=entry.proxy.index;
+    if(!atlasUV||!atlasIndex||atlasIndex.count!==entry.source.attributes.position.count){
+      entries.forEach(item=>{item.source.dispose();item.proxy.dispose();});
+      throw new Error('The UV engine returned an incomplete atlas for this mesh.');
+    }
+    const uv=new Float32Array(atlasIndex.count*2);
+    for(let corner=0;corner<atlasIndex.count;corner++){
+      const atlasVertex=atlasIndex.getX(corner);
+      uv[corner*2]=atlasUV.getX(atlasVertex);
+      uv[corner*2+1]=atlasUV.getY(atlasVertex);
+    }
+    entry.source.setAttribute('uv',new THREE.BufferAttribute(uv,2));
+    entry.source.attributes.uv.needsUpdate=true;
+    entry.source.computeBoundingBox();
+    entry.source.computeBoundingSphere();
+  }
+
+  for(const entry of entries){
+    const oldGeometry=entry.mesh.geometry;
+    entry.mesh.geometry=entry.source;
+    oldGeometry.dispose();
+    entry.proxy.dispose();
+  }
+  return {triangleCount:totalTriangles,atlas};
 }
 
 async function runUVUnwrap(){
@@ -908,8 +985,8 @@ async function runUVUnwrap(){
     const sizeOption=[...document.getElementById('texture-size').options].find(option=>Number.parseInt(option.value,10)===plan.textureSize);
     if(sizeOption)document.getElementById('texture-size').value=sizeOption.value;
     document.getElementById('rotate-islands').checked=plan.rotateIslands;
-    button.textContent='Building UV atlas…';
-    const triangleCount=applyTriangleAtlas(plan);
+    button.textContent='Building production UV atlas…';
+    const {triangleCount,atlas}=await applyProductionAtlas(plan,preferences);
     hasGeneratedUVs=true;
     document.getElementById('download-btn').disabled=false;
     captureUVVersion(plan,triangleCount);
@@ -919,13 +996,14 @@ async function runUVUnwrap(){
     try{await persistWorkingModel();}
     catch(error){console.error(error);setAutosaveState('Model could not be saved','error');}
     const tokens=response?.usage?.total_tokens;
-    setUnwrapStatus(`${plan.summary} ${triangleCount.toLocaleString()} triangles packed.${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}`,'success');
+    const atlasLabel=atlas?.atlasCount===1?'one atlas':`${atlas?.atlasCount||1} atlases`;
+    setUnwrapStatus(`Production xatlas unwrap complete: ${triangleCount.toLocaleString()} triangles packed into ${atlasLabel} with ${plan.padding}px padding.${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}`,'success');
   }catch(error){
     console.error(error);
     setUnwrapStatus(error.message||'The UV layout could not be generated.','error');
   }finally{
     button.disabled=false;
-    button.textContent='Generate AI UV layout';
+    button.textContent='Generate production UV layout';
   }
 }
 
