@@ -7,13 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1a3a4a;--muted:#5a8a9a;--blue:#2a7fa5;--line:#b0d4e3;--paper:#f0faff;--wash:#e8f4f8;--hover:#dff0f8}
+:root{--ink:#163746;--muted:#5a8a9a;--blue:#2a7fa5;--line:rgba(151,201,220,.68);--paper:rgba(241,251,255,.68);--wash:rgba(222,242,250,.54);--hover:rgba(207,235,247,.74);--glass-shadow:0 18px 50px rgba(24,83,106,.12);--glass-highlight:inset 0 1px 0 rgba(255,255,255,.78)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
-body{font-family:'DM Sans',sans-serif;background:var(--wash);color:var(--ink)}
+body{font-family:'DM Sans',sans-serif;background:radial-gradient(circle at 18% 12%,#f8fdff 0,transparent 34%),radial-gradient(circle at 78% 88%,#cdeaf5 0,transparent 38%),linear-gradient(135deg,#dceff6,#edf9fd 54%,#cfe8f2);color:var(--ink)}
 button,input{font:inherit}
 .app{height:100%;display:flex;flex-direction:column}
-.topbar{height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 18px;background:var(--paper);border-bottom:0.5px solid var(--line);flex-shrink:0}
+.topbar{height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 18px;background:rgba(244,252,255,.66);border-bottom:0.5px solid var(--line);backdrop-filter:blur(24px) saturate(145%);box-shadow:var(--glass-highlight);flex-shrink:0;z-index:10}
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
 .home{display:inline-flex;align-items:center;gap:7px;color:var(--blue);text-decoration:none;font-size:13px;font-weight:500;padding:7px 9px;border-radius:6px}
 .home:hover{background:var(--hover)}
@@ -29,14 +29,15 @@ button,input{font:inherit}
 .btn.primary{background:var(--blue);color:white;border-color:var(--blue)}
 .btn.primary:hover{background:#1a6a8a}
 .workspace{min-height:0;flex:1;display:grid;grid-template-columns:minmax(0,1fr) 330px}
-.viewport{position:relative;min-width:0;background:#d9edf5;overflow:hidden}
+.viewport{position:relative;min-width:0;background:linear-gradient(145deg,rgba(214,237,246,.76),rgba(239,250,254,.62));overflow:hidden}
 .view-stage{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1fr)}
-.three-pane{position:relative;min-width:0;min-height:0;overflow:hidden}
-.uv-pane{position:relative;min-width:0;min-height:0;display:none;background:#10242e;border-left:0.5px solid #4d7484;overflow:hidden}
+.three-pane{position:relative;min-width:0;min-height:0;overflow:hidden;background:radial-gradient(circle at 48% 38%,rgba(245,252,255,.84),rgba(197,226,238,.7))}
+.uv-pane{position:relative;min-width:0;min-height:0;display:none;background:linear-gradient(145deg,rgba(10,38,50,.95),rgba(19,55,68,.94));border-left:0.5px solid rgba(139,200,221,.42);overflow:hidden;box-shadow:inset 14px 0 36px rgba(0,18,27,.16)}
 .viewport.view-split .view-stage{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 .viewport.view-split .uv-pane,.viewport.view-uv .uv-pane{display:block}
 .viewport.view-uv .three-pane{display:none}
-#canvas,#uv-canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+#canvas,#uv-canvas,#uv-hover-canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+#uv-hover-canvas{position:absolute;inset:0;z-index:2;cursor:crosshair}
 .view-mode-toggle{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:3;display:flex;padding:3px;background:rgba(240,250,255,.9);backdrop-filter:blur(8px);border:0.5px solid var(--line);border-radius:8px;box-shadow:0 3px 12px rgba(20,70,90,.08)}
 .view-mode{border:0;background:transparent;color:#648d9d;border-radius:5px;padding:6px 10px;font-size:10px;cursor:pointer}
 .view-mode:hover{color:var(--ink);background:#e4f3f8}.view-mode.active{background:var(--blue);color:#fff}
@@ -55,7 +56,7 @@ button,input{font:inherit}
 .spinner{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
-.sidebar{background:var(--paper);border-left:0.5px solid var(--line);overflow-y:auto;display:flex;flex-direction:column;min-height:0}
+.sidebar{background:rgba(240,250,255,.62);border-left:0.5px solid var(--line);backdrop-filter:blur(28px) saturate(150%);box-shadow:-12px 0 34px rgba(32,96,119,.09),var(--glass-highlight);overflow-y:auto;display:flex;flex-direction:column;min-height:0}
 .sidebar-model{padding:14px;border-bottom:0.5px solid var(--line)}
 .upload{width:100%;border:1px dashed #8fc3d6;background:var(--wash);border-radius:9px;padding:11px 12px;text-align:left;cursor:pointer;color:var(--blue);display:flex;align-items:center;gap:10px;transition:.15s ease}
 .upload:hover{background:var(--hover);border-color:var(--blue)}
@@ -68,7 +69,7 @@ button,input{font:inherit}
 .stat-list{display:flex;align-items:center;gap:9px;font-size:10px;color:#7aaab8}
 .stat-item{white-space:nowrap}.stat-value{color:#3a6a7a;font-variant-numeric:tabular-nums;font-weight:500}
 .autosave-state{display:flex;align-items:center;gap:6px;margin-top:9px;font-size:9px;color:#7da0ad}.autosave-dot{width:6px;height:6px;border-radius:50%;background:#48a977}.autosave-state.busy .autosave-dot{background:#d39a52;animation:pulse 1s infinite}.autosave-state.error{color:#aa5b5b}.autosave-state.error .autosave-dot{background:#c96363}
-.tool-nav{display:grid;grid-template-columns:1fr 1fr;padding:10px 12px;gap:7px;border-bottom:0.5px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:2}
+.tool-nav{display:grid;grid-template-columns:1fr 1fr;padding:10px 12px;gap:7px;border-bottom:0.5px solid var(--line);position:sticky;top:0;background:rgba(242,251,255,.72);backdrop-filter:blur(20px) saturate(150%);z-index:2}
 .tool-tab{border:0.5px solid var(--line);background:var(--wash);border-radius:8px;padding:9px 7px;color:#5f8c9d;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
 .tool-tab:hover{background:var(--hover);color:var(--ink)}
 .tool-tab.active{background:#cce8f4;border-color:var(--blue);color:#1a5a7a;box-shadow:inset 0 0 0 .5px var(--blue)}
@@ -85,7 +86,7 @@ button,input{font:inherit}
 .field-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
 .field label,.field-label{font-size:11px;font-weight:500;color:#456f80}
 .field-value{font-size:10px;color:#7aaab8;font-variant-numeric:tabular-nums}
-.input,.select{width:100%;border:0.5px solid var(--line);background:var(--wash);color:var(--ink);border-radius:7px;padding:8px 9px;font-size:11px;outline:none}
+.input,.select{width:100%;border:0.5px solid var(--line);background:rgba(228,244,251,.58);color:var(--ink);border-radius:9px;padding:8px 9px;font-size:11px;outline:none;box-shadow:var(--glass-highlight);backdrop-filter:blur(12px)}
 .input:focus,.select:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(42,127,165,.1)}
 .range{width:100%;height:4px;accent-color:var(--blue);cursor:pointer}
 .choice-row{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
@@ -102,7 +103,7 @@ button,input{font:inherit}
 .switch input:focus-visible + .slider{outline:2px solid var(--blue);outline-offset:2px}
 .tool-action{width:100%;margin-top:18px;padding:10px 12px;border-radius:7px;border:0.5px solid var(--blue);background:var(--blue);color:#fff;font-size:11px;font-weight:600;cursor:pointer;transition:.15s}
 .tool-action:hover{background:#1a6a8a}.tool-action:disabled{border-color:#9fc8d8;background:#dbeef5;color:#6f9baa;cursor:not-allowed}
-.ai-connect{background:var(--wash);border:0.5px solid var(--line);border-radius:8px;padding:10px;margin-bottom:16px}
+.ai-connect{background:linear-gradient(145deg,rgba(226,244,251,.72),rgba(244,252,255,.48));border:0.5px solid var(--line);border-radius:12px;padding:11px;margin-bottom:16px;box-shadow:var(--glass-highlight),0 8px 24px rgba(41,103,126,.06);backdrop-filter:blur(16px)}
 .ai-connect-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
 .ai-connect-title{font-size:10px;font-weight:600;color:#456f80;display:flex;align-items:center;gap:6px}
 .status-dot{width:7px;height:7px;border-radius:50%;background:#d0964a;box-shadow:0 0 0 3px rgba(208,150,74,.12)}
@@ -123,7 +124,7 @@ button,input{font:inherit}
 .version-number{width:25px;height:25px;border-radius:6px;display:grid;place-items:center;background:var(--paper);border:0.5px solid var(--line);font-size:9px;font-weight:600;color:var(--blue)}
 .version-name{font-size:10px;font-weight:500;color:#3e6d7f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.version-meta{font-size:8px;color:#8aa8b4;margin-top:2px}
 .version-actions{display:flex;gap:3px}.version-btn{border:0.5px solid var(--line);background:var(--paper);color:#648d9d;border-radius:5px;padding:4px 6px;font-size:9px;cursor:pointer}.version-btn:hover{background:var(--hover);color:var(--ink)}
-.sidebar-footer{padding:12px 16px 16px;border-top:0.5px solid var(--line);background:#edf8fc}
+.sidebar-footer{padding:12px 16px 16px;border-top:0.5px solid var(--line);background:rgba(237,248,252,.68);backdrop-filter:blur(18px);box-shadow:0 -10px 28px rgba(35,92,115,.05),var(--glass-highlight)}
 .sidebar-footer .subsection-title{margin:0 0 8px}.sidebar-footer .control-row{margin-top:8px;font-size:11px}
 .error-toast{position:absolute;top:16px;left:50%;transform:translate(-50%,-8px);background:#fff2f2;color:#a44040;border:0.5px solid #e4abab;border-radius:8px;padding:9px 12px;font-size:12px;box-shadow:0 8px 24px rgba(100,30,30,.1);opacity:0;pointer-events:none;transition:.2s;z-index:6;max-width:calc(100% - 32px);text-align:center}
 .error-toast.show{opacity:1;transform:translate(-50%,0)}
@@ -171,6 +172,7 @@ button,input{font:inherit}
         </div>
         <div class="uv-pane" id="uv-pane">
           <canvas id="uv-canvas" aria-label="UV layout preview"></canvas>
+          <canvas id="uv-hover-canvas" aria-label="Hover UV faces to locate them on the 3D model"></canvas>
           <div class="uv-label">0–1 UV space</div>
           <div class="uv-info" id="uv-info">No UV layout yet</div>
         </div>
@@ -252,7 +254,7 @@ button,input{font:inherit}
           <div class="ai-connect">
             <div class="ai-connect-head"><span class="ai-connect-title"><span class="status-dot" id="ai-status-dot"></span>OpenAI service</span><span class="ai-connect-state" id="ai-connect-state">Not connected</span></div>
             <div class="endpoint-row"><input class="input" id="ai-endpoint" type="url" placeholder="Paste your secure Worker URL"><button class="endpoint-save" id="save-endpoint" type="button">Save</button></div>
-            <div class="ai-note">AI selects the settings; the production xatlas geometry engine creates the actual UVs. Paste the Worker URL—not your API key.</div>
+            <div class="ai-note">With the Blender service, AI studies six views and plans seams before a production unwrap. Without it, the browser safely falls back to xatlas. Paste the Worker URL—not your API key.</div>
           </div>
 
           <div class="field">
@@ -293,6 +295,7 @@ button,input{font:inherit}
         <div class="subsection-title">Viewer display</div>
         <div class="control-row"><span>Show grid</span><label class="switch"><input id="grid-toggle" type="checkbox" checked><span class="slider"></span></label></div>
         <div class="control-row"><span>Wireframe</span><label class="switch"><input id="wire-toggle" type="checkbox"><span class="slider"></span></label></div>
+        <div class="control-row"><span>UV checker</span><label class="switch"><input id="checker-toggle" type="checkbox"><span class="slider"></span></label></div>
         <div class="control-row"><span>Auto rotate</span><label class="switch"><input id="rotate-toggle" type="checkbox"><span class="slider"></span></label></div>
       </div>
     </aside>
@@ -316,7 +319,9 @@ const threePane=document.getElementById('three-pane');
 const uvPane=document.getElementById('uv-pane');
 const uvCanvas=document.getElementById('uv-canvas');
 const uvContext=uvCanvas.getContext('2d');
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+const uvHoverCanvas=document.getElementById('uv-hover-canvas');
+const uvHoverContext=uvHoverCanvas.getContext('2d');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -325,7 +330,7 @@ renderer.shadowMap.enabled=true;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 
 const scene=new THREE.Scene();
-scene.background=new THREE.Color(0xd9edf5);
+scene.background=null;
 const camera=new THREE.PerspectiveCamera(38,1,0.01,10000);
 camera.position.set(4,2.6,5);
 
@@ -349,6 +354,44 @@ const grid=new THREE.GridHelper(20,20,0x78b4c9,0xb7d6e1);
 grid.material.transparent=true;
 grid.material.opacity=.6;
 scene.add(grid);
+
+const hoverFaceGeometry=new THREE.BufferGeometry();
+hoverFaceGeometry.setAttribute('position',new THREE.BufferAttribute(new Float32Array(9),3));
+const hoverFace=new THREE.Mesh(hoverFaceGeometry,new THREE.MeshBasicMaterial({color:0x58d7ff,transparent:true,opacity:.82,side:THREE.DoubleSide,depthTest:false,depthWrite:false}));
+hoverFace.visible=false;
+hoverFace.renderOrder=1000;
+scene.add(hoverFace);
+
+function createCheckerTexture(){
+  const surface=document.createElement('canvas');
+  surface.width=surface.height=512;
+  const context=surface.getContext('2d');
+  const cells=16;
+  const cell=surface.width/cells;
+  for(let y=0;y<cells;y++)for(let x=0;x<cells;x++){
+    context.fillStyle=(x+y)%2?'#1e6685':'#d9f2fb';
+    context.fillRect(x*cell,y*cell,cell,cell);
+  }
+  context.strokeStyle='rgba(31,105,135,.45)';
+  context.lineWidth=2;
+  for(let i=0;i<=cells;i++){
+    context.beginPath();context.moveTo(i*cell,0);context.lineTo(i*cell,512);context.stroke();
+    context.beginPath();context.moveTo(0,i*cell);context.lineTo(512,i*cell);context.stroke();
+  }
+  const texture=new THREE.CanvasTexture(surface);
+  texture.colorSpace=THREE.SRGBColorSpace;
+  texture.wrapS=texture.wrapT=THREE.RepeatWrapping;
+  texture.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);
+  return texture;
+}
+
+const checkerTexture=createCheckerTexture();
+const checkerMaterialStates=new WeakMap();
+const UV_HIT_GRID=48;
+let uvHitCells=[];
+let uvHitWidth=0;
+let uvHitHeight=0;
+let hoveredUVFace=null;
 
 let currentModel=null;
 let currentName='Demo knot';
@@ -434,6 +477,7 @@ function collectSavedSettings(){
     preserveSeams:document.getElementById('preserve-seams').checked,
     showGrid:document.getElementById('grid-toggle').checked,
     wireframe:document.getElementById('wire-toggle').checked,
+    checker:document.getElementById('checker-toggle').checked,
     autoRotate:document.getElementById('rotate-toggle').checked,
     activeTool:document.querySelector('.tool-tab.active')?.dataset.tool||'retopology',
     viewMode:document.querySelector('.view-mode.active')?.dataset.view||'3d'
@@ -454,10 +498,36 @@ function restoreSavedSettings(){
   setValue('seam-strategy',settings.seamStrategy);setValue('angle-threshold',settings.angleThreshold);setValue('island-padding',settings.islandPadding);setValue('texture-size',settings.textureSize);
   setChecked('preserve-boundaries',settings.preserveBoundaries);setChecked('preserve-sharp',settings.preserveSharp);setChecked('preserve-symmetry',settings.preserveSymmetry);setChecked('preserve-materials',settings.preserveMaterials);
   setChecked('normalize-texel',settings.normalizeTexel);setChecked('pack-islands',settings.packIslands);setChecked('rotate-islands',settings.rotateIslands);setChecked('fix-overlaps',settings.fixOverlaps);setChecked('preserve-seams',settings.preserveSeams);
-  setChecked('grid-toggle',settings.showGrid);setChecked('wire-toggle',settings.wireframe);setChecked('rotate-toggle',settings.autoRotate);
+  setChecked('grid-toggle',settings.showGrid);setChecked('wire-toggle',settings.wireframe);setChecked('checker-toggle',settings.checker);setChecked('rotate-toggle',settings.autoRotate);
   document.querySelectorAll('.choice').forEach(button=>button.classList.toggle('active',button.dataset.topology===(settings.topology||'quads')));
   if(settings.activeTool)activateToolPanel(settings.activeTool,false);
   if(settings.viewMode)setViewMode(settings.viewMode,false);
+}
+
+function setCheckerForModel(enabled,model=currentModel){
+  model?.traverse(child=>{
+    if(!child.isMesh||!child.material)return;
+    const materials=Array.isArray(child.material)?child.material:[child.material];
+    materials.forEach(material=>{
+      if(!('map' in material))return;
+      if(enabled){
+        if(!checkerMaterialStates.has(material))checkerMaterialStates.set(material,{map:material.map,color:material.color?.clone(),roughness:material.roughness,metalness:material.metalness});
+        material.map=checkerTexture;
+        if(material.color)material.color.set(0xffffff);
+        if('roughness' in material)material.roughness=.72;
+        if('metalness' in material)material.metalness=0;
+      }else{
+        const original=checkerMaterialStates.get(material);
+        if(!original)return;
+        material.map=original.map;
+        if(material.color&&original.color)material.color.copy(original.color);
+        if('roughness' in material&&original.roughness!==undefined)material.roughness=original.roughness;
+        if('metalness' in material&&original.metalness!==undefined)material.metalness=original.metalness;
+        checkerMaterialStates.delete(material);
+      }
+      material.needsUpdate=true;
+    });
+  });
 }
 
 function applyDisplaySettings(){
@@ -469,6 +539,7 @@ function applyDisplaySettings(){
     const materials=Array.isArray(child.material)?child.material:[child.material];
     materials.forEach(material=>{if('wireframe' in material){material.wireframe=wireframe;material.needsUpdate=true;}});
   });
+  setCheckerForModel(document.getElementById('checker-toggle').checked);
 }
 
 function createDemo(){
@@ -486,7 +557,7 @@ function disposeModel(object){
     if(child.material){
       const materials=Array.isArray(child.material)?child.material:[child.material];
       materials.forEach(material=>{
-        Object.values(material).forEach(value=>{if(value&&value.isTexture)value.dispose();});
+        Object.values(material).forEach(value=>{if(value&&value.isTexture&&value!==checkerTexture)value.dispose();});
         material.dispose();
       });
     }
@@ -494,7 +565,8 @@ function disposeModel(object){
 }
 
 function setModel(object,name){
-  if(currentModel){scene.remove(currentModel);disposeModel(currentModel);}
+  setHoveredUVFace(null);
+  if(currentModel){setCheckerForModel(false,currentModel);scene.remove(currentModel);disposeModel(currentModel);}
   currentModel=object;
   currentName=name;
   hasGeneratedUVs=false;
@@ -529,13 +601,79 @@ function updateStats(){
   document.getElementById('objects').textContent=objects.toLocaleString();
 }
 
+function resetUVHitMap(width,height){
+  uvHitWidth=width;
+  uvHitHeight=height;
+  uvHitCells=Array.from({length:UV_HIT_GRID*UV_HIT_GRID},()=>[]);
+}
+
+function registerUVHit(hit){
+  const xs=hit.points.map(point=>point[0]);
+  const ys=hit.points.map(point=>point[1]);
+  const minX=THREE.MathUtils.clamp(Math.floor(Math.min(...xs)/uvHitWidth*UV_HIT_GRID),0,UV_HIT_GRID-1);
+  const maxX=THREE.MathUtils.clamp(Math.floor(Math.max(...xs)/uvHitWidth*UV_HIT_GRID),0,UV_HIT_GRID-1);
+  const minY=THREE.MathUtils.clamp(Math.floor(Math.min(...ys)/uvHitHeight*UV_HIT_GRID),0,UV_HIT_GRID-1);
+  const maxY=THREE.MathUtils.clamp(Math.floor(Math.max(...ys)/uvHitHeight*UV_HIT_GRID),0,UV_HIT_GRID-1);
+  for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++)uvHitCells[y*UV_HIT_GRID+x].push(hit);
+}
+
+function pointInUVTriangle(x,y,points){
+  const [a,b,c]=points;
+  const cross=(p,q)=>(x-q[0])*(p[1]-q[1])-(p[0]-q[0])*(y-q[1]);
+  const d1=cross(a,b),d2=cross(b,c),d3=cross(c,a);
+  const hasNegative=d1<0||d2<0||d3<0;
+  const hasPositive=d1>0||d2>0||d3>0;
+  return !(hasNegative&&hasPositive);
+}
+
+function drawUVHoverOverlay(){
+  if(!uvHitWidth||!uvHitHeight)return;
+  const pixelRatio=Math.min(window.devicePixelRatio||1,2);
+  uvHoverContext.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+  uvHoverContext.clearRect(0,0,uvHitWidth,uvHitHeight);
+  if(!hoveredUVFace)return;
+  const points=hoveredUVFace.points;
+  uvHoverContext.beginPath();
+  uvHoverContext.moveTo(points[0][0],points[0][1]);
+  uvHoverContext.lineTo(points[1][0],points[1][1]);
+  uvHoverContext.lineTo(points[2][0],points[2][1]);
+  uvHoverContext.closePath();
+  uvHoverContext.fillStyle='rgba(88,215,255,.58)';
+  uvHoverContext.fill();
+  uvHoverContext.strokeStyle='#eaffff';
+  uvHoverContext.lineWidth=2;
+  uvHoverContext.stroke();
+}
+
+function setHoveredUVFace(hit){
+  if(hit===hoveredUVFace)return;
+  hoveredUVFace=hit;
+  drawUVHoverOverlay();
+  if(!hit){hoverFace.visible=false;return;}
+  const positions=hoverFaceGeometry.attributes.position;
+  const vertex=new THREE.Vector3();
+  hit.mesh.updateWorldMatrix(true,false);
+  hit.indices.forEach((index,corner)=>{
+    if(typeof hit.mesh.getVertexPosition==='function')hit.mesh.getVertexPosition(index,vertex);
+    else vertex.fromBufferAttribute(hit.mesh.geometry.attributes.position,index);
+    vertex.applyMatrix4(hit.mesh.matrixWorld);
+    positions.setXYZ(corner,vertex.x,vertex.y,vertex.z);
+  });
+  positions.needsUpdate=true;
+  hoverFaceGeometry.computeBoundingSphere();
+  hoverFace.visible=true;
+}
+
 function drawUVPreview(){
   const width=Math.floor(uvPane.clientWidth);
   const height=Math.floor(uvPane.clientHeight);
   if(width<2||height<2)return;
   const pixelRatio=Math.min(window.devicePixelRatio||1,2);
-  uvCanvas.width=Math.floor(width*pixelRatio);
-  uvCanvas.height=Math.floor(height*pixelRatio);
+  uvCanvas.width=uvHoverCanvas.width=Math.floor(width*pixelRatio);
+  uvCanvas.height=uvHoverCanvas.height=Math.floor(height*pixelRatio);
+  resetUVHitMap(width,height);
+  hoveredUVFace=null;
+  hoverFace.visible=false;
   uvContext.setTransform(pixelRatio,0,0,pixelRatio,0,0);
   uvContext.clearRect(0,0,width,height);
   uvContext.fillStyle='#10242e';uvContext.fillRect(0,0,width,height);
@@ -581,14 +719,17 @@ function drawUVPreview(){
       uvContext.moveTo(points[0][0],points[0][1]);
       uvContext.lineTo(points[1][0],points[1][1]);
       uvContext.lineTo(points[2][0],points[2][1]);
-      uvContext.closePath();drawnTriangles++;
+      uvContext.closePath();
+      registerUVHit({mesh,triangle,indices,points});
+      drawnTriangles++;
     }
     uvContext.stroke();
   });
   uvContext.restore();
   uvContext.globalAlpha=1;
+  drawUVHoverOverlay();
   const active=uvVersions.find(version=>version.id===activeVersionId);
-  document.getElementById('uv-info').textContent=uvTriangles?`${uvTriangles.toLocaleString()} UV triangles${active?' · '+active.name:''}${drawnTriangles<uvTriangles?' · preview simplified':''}`:'No UV layout found';
+  document.getElementById('uv-info').textContent=uvTriangles?`${uvTriangles.toLocaleString()} UV triangles${active?' · '+active.name:''}${drawnTriangles<uvTriangles?' · preview simplified':''} · hover to locate faces`:'No UV layout found';
 }
 
 function captureUVVersion(plan,triangleCount){
@@ -665,11 +806,15 @@ async function persistVersionState(){
   setAutosaveState('Saved locally');
 }
 
-function exportCurrentModel(){
-  return new Promise((resolve,reject)=>{
-    if(!currentModel){reject(new Error('No model is loaded.'));return;}
-    new GLTFExporter().parse(currentModel,resolve,reject,{binary:true,onlyVisible:false});
-  });
+async function exportCurrentModel(){
+  if(!currentModel)throw new Error('No model is loaded.');
+  const checkerEnabled=document.getElementById('checker-toggle').checked;
+  if(checkerEnabled)setCheckerForModel(false);
+  try{
+    return await new Promise((resolve,reject)=>new GLTFExporter().parse(currentModel,resolve,reject,{binary:true,onlyVisible:false}));
+  }finally{
+    if(checkerEnabled)setCheckerForModel(true);
+  }
 }
 
 async function persistWorkingModel(){
@@ -743,6 +888,7 @@ function activateToolPanel(tool,shouldSave=true){
 }
 
 function setViewMode(mode,shouldSave=true){
+  setHoveredUVFace(null);
   viewport.classList.remove('view-3d','view-split','view-uv');
   viewport.classList.add('view-'+mode);
   document.querySelectorAll('.view-mode').forEach(button=>button.classList.toggle('active',button.dataset.view===mode));
@@ -813,6 +959,35 @@ function normalizePlan(plan,preferences){
     rotateIslands:typeof plan?.rotateIslands==='boolean'?plan.rotateIslands:preferences.rotateIslands,
     summary:String(plan?.summary||'The AI selected a balanced unwrap plan.').slice(0,240)
   };
+}
+
+function endpointFor(path){
+  const endpoint=localStorage.getItem('jt_ai_unwrap_endpoint')||'';
+  if(!endpoint)return '';
+  const url=new URL(endpoint,window.location.href);
+  url.pathname=url.pathname.replace(/\/(?:unwrap|unwrap-model)\/?$/,'').replace(/\/$/,'')+path;
+  return url.toString();
+}
+
+async function requestBlenderUnwrap(preferences){
+  const endpoint=endpointFor('/unwrap-model');
+  if(!endpoint)return null;
+  const source=await exportCurrentModel();
+  const response=await fetch(endpoint,{
+    method:'POST',
+    headers:{'Content-Type':'model/gltf-binary','X-UV-Preferences':encodeURIComponent(JSON.stringify(preferences))},
+    body:source
+  });
+  if([404,405,501,503].includes(response.status))return null;
+  if(!response.ok){
+    const data=await response.json().catch(()=>({}));
+    throw new Error(data.error||'The AI seam-analysis service could not unwrap this model.');
+  }
+  const contentType=response.headers.get('content-type')||'';
+  if(!contentType.includes('model/gltf-binary')&&!contentType.includes('application/octet-stream'))throw new Error('The AI seam-analysis service returned an invalid model.');
+  const data=await response.arrayBuffer();
+  const gltf=await new Promise((resolve,reject)=>new GLTFLoader().parse(data,'',resolve,reject));
+  return {model:gltf.scene,engine:response.headers.get('x-uv-engine')||'AI + Blender'};
 }
 
 async function requestAIUnwrapPlan(profile,preferences){
@@ -1074,6 +1249,36 @@ async function runUVUnwrap(){
   const preferences=getUnwrapPreferences();
   const profile=collectMeshProfile();
   try{
+    let productionResult=null;
+    if(localStorage.getItem('jt_ai_unwrap_endpoint')){
+      button.textContent='AI seam analysis in progress…';
+      setUnwrapStatus('Analysing six views of the shape, planning seams and validating the Blender unwrap. Complex models can take several minutes…');
+      try{productionResult=await requestBlenderUnwrap(preferences);}
+      catch(error){console.error(error);setUnwrapStatus(error.message+' Falling back to the browser UV engine.','error');}
+    }
+    if(productionResult){
+      const originalName=currentName;
+      setModel(productionResult.model,originalName);
+      hasGeneratedUVs=true;
+      document.getElementById('download-btn').disabled=false;
+      const plan={
+        strategy:'AI + Blender',
+        angleThreshold:preferences.angleThreshold,
+        padding:preferences.padding,
+        textureSize:preferences.textureSize,
+        rotateIslands:preferences.rotateIslands,
+        summary:'AI planned semantic seams from multiple rendered views; Blender unwrapped, relaxed and packed the islands.'
+      };
+      const resultProfile=collectMeshProfile();
+      captureUVVersion(plan,resultProfile.triangles);
+      setViewMode('split');
+      saveSettings();
+      button.textContent='Saving workspace…';
+      try{await persistWorkingModel();}
+      catch(error){console.error(error);setAutosaveState('Model could not be saved','error');}
+      setUnwrapStatus(`${productionResult.engine} unwrap complete: ${resultProfile.triangles.toLocaleString()} triangles analysed, cut, relaxed and packed. Hover the UV preview to inspect the matching model faces.`,'success');
+      return;
+    }
     let response=null;
     try{response=await requestAIUnwrapPlan(profile,preferences);}
     catch(error){setUnwrapStatus(error.message+' Falling back to the local settings.','error');}
@@ -1213,6 +1418,7 @@ document.getElementById('wire-toggle').addEventListener('change',event=>{
   });
   saveSettings();
 });
+document.getElementById('checker-toggle').addEventListener('change',event=>{setCheckerForModel(event.target.checked);saveSettings();});
 document.getElementById('rotate-toggle').addEventListener('change',event=>{controls.autoRotate=event.target.checked;saveSettings();});
 document.getElementById('unwrap-btn').addEventListener('click',runUVUnwrap);
 document.getElementById('download-btn').addEventListener('click',downloadUnwrappedGLB);
@@ -1256,6 +1462,20 @@ document.getElementById('version-list').addEventListener('click',event=>{
   if(button.dataset.versionAction==='restore')restoreUVVersion(id);
   else if(button.dataset.versionAction==='delete')deleteUVVersion(id);
 });
+
+uvHoverCanvas.addEventListener('pointermove',event=>{
+  if(!uvHitCells.length)return;
+  const bounds=uvHoverCanvas.getBoundingClientRect();
+  const x=(event.clientX-bounds.left)*uvHitWidth/bounds.width;
+  const y=(event.clientY-bounds.top)*uvHitHeight/bounds.height;
+  const gridX=THREE.MathUtils.clamp(Math.floor(x/uvHitWidth*UV_HIT_GRID),0,UV_HIT_GRID-1);
+  const gridY=THREE.MathUtils.clamp(Math.floor(y/uvHitHeight*UV_HIT_GRID),0,UV_HIT_GRID-1);
+  const candidates=uvHitCells[gridY*UV_HIT_GRID+gridX]||[];
+  let hit=null;
+  for(let index=candidates.length-1;index>=0;index--)if(pointInUVTriangle(x,y,candidates[index].points)){hit=candidates[index];break;}
+  setHoveredUVFace(hit);
+});
+uvHoverCanvas.addEventListener('pointerleave',()=>setHoveredUVFace(null));
 
 document.querySelectorAll('.tool-tab').forEach(button=>button.addEventListener('click',()=>activateToolPanel(button.dataset.tool)));
 
