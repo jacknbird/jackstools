@@ -254,7 +254,7 @@ button,input{font:inherit}
           <div class="ai-connect">
             <div class="ai-connect-head"><span class="ai-connect-title"><span class="status-dot" id="ai-status-dot"></span>OpenAI service</span><span class="ai-connect-state" id="ai-connect-state">Not connected</span></div>
             <div class="endpoint-row"><input class="input" id="ai-endpoint" type="url" placeholder="Paste your secure Worker URL"><button class="endpoint-save" id="save-endpoint" type="button">Save</button></div>
-            <div class="ai-note">With the Blender service, AI studies six views and plans seams before a production unwrap. Without it, the browser safely falls back to xatlas. Paste the Worker URL—not your API key.</div>
+            <div class="ai-note">With the Blender service, AI studies six views and Blender validates several production unwraps. Without it, xatlas is clearly treated as a browser preview. Paste the Worker URL—not your API key.</div>
           </div>
 
           <div class="field">
@@ -281,7 +281,7 @@ button,input{font:inherit}
           <div class="control-row"><span>Fix overlaps</span><label class="switch"><input id="fix-overlaps" type="checkbox" checked><span class="slider"></span></label></div>
           <div class="control-row"><span>Preserve existing seams</span><label class="switch"><input id="preserve-seams" type="checkbox"><span class="slider"></span></label></div>
 
-          <button class="tool-action" id="unwrap-btn" type="button">Generate production UV layout</button>
+          <button class="tool-action" id="unwrap-btn" type="button">Generate validated UV layout</button>
           <div class="unwrap-status" id="unwrap-status" aria-live="polite"></div>
 
           <div class="version-block">
@@ -747,7 +747,7 @@ function captureUVVersion(plan,triangleCount){
     id,
     name:`Version ${id}`,
     createdAt:new Date(),
-    plan:{strategy:plan.strategy,padding:plan.padding,textureSize:plan.textureSize},
+    plan:{strategy:plan.strategy,padding:plan.padding,textureSize:plan.textureSize,qualityGrade:plan.qualityGrade||null},
     triangleCount,
     meshes
   };
@@ -795,7 +795,7 @@ function renderVersionHistory(){
     const time=version.createdAt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
     return `<div class="version-card${version.id===activeVersionId?' active':''}">
       <div class="version-number">v${version.id}</div>
-      <div><div class="version-name">${version.name}</div><div class="version-meta">${time} · ${version.plan.strategy} · ${version.plan.textureSize}px</div></div>
+      <div><div class="version-name">${version.name}</div><div class="version-meta">${time} · ${version.plan.strategy}${version.plan.qualityGrade?' · Grade '+version.plan.qualityGrade:''} · ${version.plan.textureSize}px</div></div>
       <div class="version-actions"><button class="version-btn" type="button" data-version-action="restore" data-version-id="${version.id}">Restore</button><button class="version-btn" type="button" data-version-action="delete" data-version-id="${version.id}" aria-label="Delete ${version.name}">×</button></div>
     </div>`;
   }).join('');
@@ -987,7 +987,12 @@ async function requestBlenderUnwrap(preferences){
   if(!contentType.includes('model/gltf-binary')&&!contentType.includes('application/octet-stream'))throw new Error('The AI seam-analysis service returned an invalid model.');
   const data=await response.arrayBuffer();
   const gltf=await new Promise((resolve,reject)=>new GLTFLoader().parse(data,'',resolve,reject));
-  return {model:gltf.scene,engine:response.headers.get('x-uv-engine')||'AI + Blender'};
+  let quality=null;
+  try{
+    const encoded=response.headers.get('x-uv-quality');
+    if(encoded)quality=JSON.parse(decodeURIComponent(encoded));
+  }catch{}
+  return {model:gltf.scene,engine:response.headers.get('x-uv-engine')||'AI + Blender',quality};
 }
 
 async function requestAIUnwrapPlan(profile,preferences){
@@ -1011,7 +1016,7 @@ async function getUVUnwrapper(plan,preferences,totalTriangles){
         const value=Number(progress);
         const percent=value<=1?value*100:value;
         const suffix=Number.isFinite(percent)?` ${Math.round(percent)}%`:'';
-        setUnwrapStatus(`Loading production UV engine${suffix}…`);
+        setUnwrapStatus(`Loading browser preview UV engine${suffix}…`);
       },
       'https://cdn.jsdelivr.net/npm/xatlasjs@0.2.0/dist/xatlas.wasm',
       'https://cdn.jsdelivr.net/npm/xatlasjs@0.2.0/dist/xatlas.js'
@@ -1021,7 +1026,7 @@ async function getUVUnwrapper(plan,preferences,totalTriangles){
   catch(error){
     uvUnwrapper=null;
     uvLibraryPromise=null;
-    throw new Error('The production UV engine could not load. Check your connection and try again.');
+    throw new Error('The browser preview UV engine could not load. Check your connection and try again.');
   }
 
   const seamMode=preferences.seamStrategy.toLowerCase();
@@ -1058,14 +1063,14 @@ async function getUVUnwrapper(plan,preferences,totalTriangles){
   return uvUnwrapper;
 }
 
-function buildCleanUVProxy(source,preserveSeams,filterSlivers){
+function buildCleanUVProxy(source,preserveSeams){
   const position=source.attributes.position;
   const existingUV=source.attributes.uv;
   source.computeBoundingBox();
   const boundsSize=source.boundingBox.getSize(new THREE.Vector3());
   const modelScale=Math.max(boundsSize.x,boundsSize.y,boundsSize.z,1e-9);
   const minimumDoubleArea=modelScale*modelScale*1e-12;
-  const minimumQuality=filterSlivers?1e-4:0;
+  const minimumQuality=1e-5;
   const positions=[];
   const inputUVs=[];
   const validCorners=[];
@@ -1104,26 +1109,24 @@ function buildCleanUVProxy(source,preserveSeams,filterSlivers){
   return {proxy:welded,validCorners,filteredTriangles};
 }
 
-function neutralizeUVSlivers(uv,triangleCount){
-  let neutralized=0;
+function auditUVBuffer(uv,triangleCount){
+  let invalidCoordinates=0;
+  let collapsedTriangles=0;
+  let worstQuality=1;
   for(let triangle=0;triangle<triangleCount;triangle++){
     const first=triangle*6;
     const ax=uv[first],ay=uv[first+1];
     const bx=uv[first+2],by=uv[first+3];
     const cx=uv[first+4],cy=uv[first+5];
+    if(![ax,ay,bx,by,cx,cy].every(Number.isFinite)){invalidCoordinates++;continue;}
     const abx=bx-ax,aby=by-ay,acx=cx-ax,acy=cy-ay,bcx=cx-bx,bcy=cy-by;
     const doubleArea=Math.abs(abx*acy-aby*acx);
     const edgeEnergy=abx*abx+aby*aby+acx*acx+acy*acy+bcx*bcx+bcy*bcy;
     const quality=edgeEnergy>0?(2*Math.sqrt(3)*doubleArea)/edgeEnergy:0;
-    if(edgeEnergy<=1e-12||quality>=1e-4)continue;
-    const centerU=(ax+bx+cx)/3,centerV=(ay+by+cy)/3;
-    for(let corner=0;corner<3;corner++){
-      uv[first+corner*2]=centerU;
-      uv[first+corner*2+1]=centerV;
-    }
-    neutralized++;
+    worstQuality=Math.min(worstQuality,quality);
+    if(edgeEnergy<=1e-16||doubleArea<=1e-12)collapsedTriangles++;
   }
-  return neutralized;
+  return {invalidCoordinates,collapsedTriangles,worstQuality};
 }
 
 async function applyProductionAtlas(plan,preferences){
@@ -1132,6 +1135,8 @@ async function applyProductionAtlas(plan,preferences){
   let filteredTriangles=0;
   let oversizedMeshCount=0;
   let clampedCoordinates=0;
+  let invalidUVCoordinates=0;
+  let collapsedUVTriangles=0;
   currentModel.updateMatrixWorld(true);
 
   currentModel.traverse(mesh=>{
@@ -1142,14 +1147,10 @@ async function applyProductionAtlas(plan,preferences){
 
     // xatlas gets a position-welded proxy so flat normals do not split every face.
     // The generated UVs are then transferred back to the untouched render attributes.
-    const cleaned=buildCleanUVProxy(source,preferences.preserveSeams,preferences.fixOverlaps);
+    const cleaned=buildCleanUVProxy(source,preferences.preserveSeams);
     filteredTriangles+=cleaned.filteredTriangles;
     if(!cleaned.proxy){
-      const collapsedUV=new Float32Array(source.attributes.position.count*2);
-      collapsedUV.fill(.5);
-      source.setAttribute('uv',new THREE.BufferAttribute(collapsedUV,2));
-      entries.push({mesh,source,proxy:null,validCorners:[],triangleCount});
-      totalTriangles+=triangleCount;
+      source.dispose();
       return;
     }
     if(cleaned.proxy.attributes.position.count>65535){
@@ -1163,6 +1164,10 @@ async function applyProductionAtlas(plan,preferences){
     totalTriangles+=triangleCount;
   });
 
+  if(filteredTriangles){
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
+    throw new Error(`${filteredTriangles.toLocaleString()} zero-area or needle-thin mesh faces were found. The unwrap was stopped instead of collapsing their UVs. Repair or retopologize those faces, then try again.`);
+  }
   if(oversizedMeshCount){
     entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
     throw new Error('One mesh exceeds 65,535 welded vertices. Split that mesh into smaller objects, then unwrap again.');
@@ -1224,11 +1229,18 @@ async function applyProductionAtlas(plan,preferences){
       uv[sourceCorner*2]=u;
       uv[sourceCorner*2+1]=v;
     }
-    if(preferences.fixOverlaps)filteredTriangles+=neutralizeUVSlivers(uv,entry.triangleCount);
+    const audit=auditUVBuffer(uv,entry.triangleCount);
+    invalidUVCoordinates+=audit.invalidCoordinates;
+    collapsedUVTriangles+=audit.collapsedTriangles;
     entry.source.setAttribute('uv',new THREE.BufferAttribute(uv,2));
     entry.source.attributes.uv.needsUpdate=true;
     entry.source.computeBoundingBox();
     entry.source.computeBoundingSphere();
+  }
+
+  if(invalidUVCoordinates||collapsedUVTriangles){
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
+    throw new Error(`UV validation rejected this atlas: ${invalidUVCoordinates.toLocaleString()} invalid coordinates and ${collapsedUVTriangles.toLocaleString()} collapsed UV faces. The original model was left unchanged.`);
   }
 
   for(const entry of entries){
@@ -1237,7 +1249,7 @@ async function applyProductionAtlas(plan,preferences){
     oldGeometry.dispose();
     entry.proxy?.dispose();
   }
-  return {triangleCount:totalTriangles,atlas,filteredTriangles,clampedCoordinates};
+  return {triangleCount:totalTriangles,atlas,filteredTriangles,clampedCoordinates,invalidUVCoordinates,collapsedUVTriangles};
 }
 
 async function runUVUnwrap(){
@@ -1261,13 +1273,15 @@ async function runUVUnwrap(){
       setModel(productionResult.model,originalName);
       hasGeneratedUVs=true;
       document.getElementById('download-btn').disabled=false;
+      const quality=productionResult.quality;
       const plan={
         strategy:'AI + Blender',
         angleThreshold:preferences.angleThreshold,
         padding:preferences.padding,
         textureSize:preferences.textureSize,
         rotateIslands:preferences.rotateIslands,
-        summary:'AI planned semantic seams from multiple rendered views; Blender unwrapped, relaxed and packed the islands.'
+        summary:'AI planned semantic seams; Blender relaxed, packed and quality-scored three candidate unwrap strategies.',
+        qualityGrade:quality?.grade||null
       };
       const resultProfile=collectMeshProfile();
       captureUVVersion(plan,resultProfile.triangles);
@@ -1276,7 +1290,9 @@ async function runUVUnwrap(){
       button.textContent='Saving workspace…';
       try{await persistWorkingModel();}
       catch(error){console.error(error);setAutosaveState('Model could not be saved','error');}
-      setUnwrapStatus(`${productionResult.engine} unwrap complete: ${resultProfile.triangles.toLocaleString()} triangles analysed, cut, relaxed and packed. Hover the UV preview to inspect the matching model faces.`,'success');
+      const qualityLabel=quality?` Quality ${quality.grade}; ${quality.overlaps} overlaps, ${quality.collapsed} collapsed faces, ${quality.p95Stretch}× p95 stretch.`:'';
+      const qualityType=!quality||quality.accepted?'success':'error';
+      setUnwrapStatus(`${productionResult.engine} unwrap complete: ${resultProfile.triangles.toLocaleString()} triangles analysed, cut, relaxed and packed.${qualityLabel}${quality&&!quality.accepted?' This layout needs artist review before production.':''} Hover the UV preview to inspect matching model faces.`,qualityType);
       return;
     }
     let response=null;
@@ -1288,11 +1304,12 @@ async function runUVUnwrap(){
     const sizeOption=[...document.getElementById('texture-size').options].find(option=>Number.parseInt(option.value,10)===plan.textureSize);
     if(sizeOption)document.getElementById('texture-size').value=sizeOption.value;
     document.getElementById('rotate-islands').checked=plan.rotateIslands;
-    button.textContent='Building production UV atlas…';
-    const {triangleCount,atlas,filteredTriangles,clampedCoordinates}=await applyProductionAtlas(plan,preferences);
+    button.textContent='Building validated browser preview…';
+    const {triangleCount,atlas,clampedCoordinates}=await applyProductionAtlas(plan,preferences);
     hasGeneratedUVs=true;
     document.getElementById('download-btn').disabled=false;
-    captureUVVersion(plan,triangleCount);
+    const previewPlan={...plan,strategy:'Browser preview'};
+    captureUVVersion(previewPlan,triangleCount);
     setViewMode('split');
     saveSettings();
     button.textContent='Saving workspace…';
@@ -1301,15 +1318,14 @@ async function runUVUnwrap(){
     const tokens=response?.usage?.total_tokens;
     const atlasLabel=atlas?.atlasCount===1?'one atlas':`${atlas?.atlasCount||1} atlases`;
     const cleanup=[];
-    if(filteredTriangles)cleanup.push(`${filteredTriangles.toLocaleString()} degenerate/sliver faces neutralized`);
     if(clampedCoordinates)cleanup.push(`${clampedCoordinates.toLocaleString()} boundary coordinates corrected`);
-    setUnwrapStatus(`Production xatlas unwrap complete: ${triangleCount.toLocaleString()} triangles packed into ${atlasLabel} with ${plan.padding}px padding.${cleanup.length?' '+cleanup.join(' · ')+'.':''}${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}`,'success');
+    setUnwrapStatus(`Validated xatlas preview complete: ${triangleCount.toLocaleString()} triangles packed into ${atlasLabel} with no collapsed UV faces.${cleanup.length?' '+cleanup.join(' · ')+'.':''}${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''} Studio-quality semantic seams require the Blender service.`,'success');
   }catch(error){
     console.error(error);
     setUnwrapStatus(error.message||'The UV layout could not be generated.','error');
   }finally{
     button.disabled=false;
-    button.textContent='Generate production UV layout';
+    button.textContent='Generate validated UV layout';
   }
 }
 
