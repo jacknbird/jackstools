@@ -54,6 +54,7 @@ button,input{font:inherit}
 .loading-card{display:flex;align-items:center;gap:10px;background:var(--paper);border:0.5px solid var(--line);padding:11px 14px;border-radius:9px;color:var(--muted);font-size:12px;box-shadow:0 8px 24px rgba(20,70,90,.09)}
 .spinner{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
 .sidebar{background:var(--paper);border-left:0.5px solid var(--line);overflow-y:auto;display:flex;flex-direction:column;min-height:0}
 .sidebar-model{padding:14px;border-bottom:0.5px solid var(--line)}
 .upload{width:100%;border:1px dashed #8fc3d6;background:var(--wash);border-radius:9px;padding:11px 12px;text-align:left;cursor:pointer;color:var(--blue);display:flex;align-items:center;gap:10px;transition:.15s ease}
@@ -66,6 +67,7 @@ button,input{font:inherit}
 .model-name{font-size:12px;font-weight:500;word-break:break-word;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
 .stat-list{display:flex;align-items:center;gap:9px;font-size:10px;color:#7aaab8}
 .stat-item{white-space:nowrap}.stat-value{color:#3a6a7a;font-variant-numeric:tabular-nums;font-weight:500}
+.autosave-state{display:flex;align-items:center;gap:6px;margin-top:9px;font-size:9px;color:#7da0ad}.autosave-dot{width:6px;height:6px;border-radius:50%;background:#48a977}.autosave-state.busy .autosave-dot{background:#d39a52;animation:pulse 1s infinite}.autosave-state.error{color:#aa5b5b}.autosave-state.error .autosave-dot{background:#c96363}
 .tool-nav{display:grid;grid-template-columns:1fr 1fr;padding:10px 12px;gap:7px;border-bottom:0.5px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:2}
 .tool-tab{border:0.5px solid var(--line);background:var(--wash);border-radius:8px;padding:9px 7px;color:#5f8c9d;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
 .tool-tab:hover{background:var(--hover);color:var(--ink)}
@@ -87,7 +89,7 @@ button,input{font:inherit}
 .input:focus,.select:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(42,127,165,.1)}
 .range{width:100%;height:4px;accent-color:var(--blue);cursor:pointer}
 .choice-row{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.choice{border:0.5px solid var(--line);background:var(--wash);color:#678f9f;border-radius:6px;padding:7px 4px;font-size:10px;cursor:default}
+.choice{border:0.5px solid var(--line);background:var(--wash);color:#678f9f;border-radius:6px;padding:7px 4px;font-size:10px;cursor:pointer}
 .choice.active{background:#dff0f8;border-color:#7abcd4;color:#1a5a7a;font-weight:500}
 .subsection-title{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#91b1bd;font-weight:600;margin:18px 0 8px}
 .control-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:11px;font-size:12px;color:#3a6a7a}
@@ -199,6 +201,7 @@ button,input{font:inherit}
             <span class="stat-item"><span class="stat-value" id="objects">—</span> objects</span>
           </div>
         </div>
+        <div class="autosave-state" id="autosave-state"><span class="autosave-dot"></span><span id="autosave-text">Saved locally</span></div>
       </div>
 
       <nav class="tool-nav" aria-label="Mesh tools">
@@ -215,7 +218,7 @@ button,input{font:inherit}
 
           <div class="field">
             <div class="field-head"><span class="field-label">Topology type</span></div>
-            <div class="choice-row"><button class="choice active" type="button">Quads</button><button class="choice" type="button">Tris</button><button class="choice" type="button">Adaptive</button></div>
+            <div class="choice-row"><button class="choice active" type="button" data-topology="quads">Quads</button><button class="choice" type="button" data-topology="tris">Tris</button><button class="choice" type="button" data-topology="adaptive">Adaptive</button></div>
           </div>
           <div class="field">
             <div class="field-head"><label for="target-faces">Target face count</label></div>
@@ -231,10 +234,10 @@ button,input{font:inherit}
           </div>
 
           <div class="subsection-title">Preserve</div>
-          <div class="control-row"><span>Open boundaries</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-          <div class="control-row"><span>Sharp edges</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-          <div class="control-row"><span>Mesh symmetry</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-          <div class="control-row"><span>Material borders</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="control-row"><span>Open boundaries</span><label class="switch"><input id="preserve-boundaries" type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="control-row"><span>Sharp edges</span><label class="switch"><input id="preserve-sharp" type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="control-row"><span>Mesh symmetry</span><label class="switch"><input id="preserve-symmetry" type="checkbox"><span class="slider"></span></label></div>
+          <div class="control-row"><span>Material borders</span><label class="switch"><input id="preserve-materials" type="checkbox" checked><span class="slider"></span></label></div>
 
           <button class="tool-action" type="button" disabled>Generate retopology · Coming soon</button>
         </section>
@@ -350,6 +353,118 @@ let hasGeneratedUVs=false;
 let uvVersions=[];
 let activeVersionId=null;
 let versionCounter=0;
+const WORKSPACE_DB='jacks-tools-uv-studio';
+const WORKSPACE_STORE='workspace';
+const SETTINGS_KEY='jt_uv_studio_settings';
+let databasePromise=null;
+
+function setAutosaveState(message,type=''){
+  const state=document.getElementById('autosave-state');
+  if(!state)return;
+  state.className='autosave-state'+(type?' '+type:'');
+  document.getElementById('autosave-text').textContent=message;
+}
+
+function openWorkspaceDatabase(){
+  if(databasePromise)return databasePromise;
+  databasePromise=new Promise((resolve,reject)=>{
+    const request=indexedDB.open(WORKSPACE_DB,1);
+    request.onupgradeneeded=()=>{
+      const database=request.result;
+      if(!database.objectStoreNames.contains(WORKSPACE_STORE))database.createObjectStore(WORKSPACE_STORE);
+    };
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error);
+  });
+  return databasePromise;
+}
+
+async function databaseGet(key){
+  const database=await openWorkspaceDatabase();
+  return new Promise((resolve,reject)=>{
+    const request=database.transaction(WORKSPACE_STORE,'readonly').objectStore(WORKSPACE_STORE).get(key);
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error);
+  });
+}
+
+async function databaseSet(key,value){
+  const database=await openWorkspaceDatabase();
+  return new Promise((resolve,reject)=>{
+    const transaction=database.transaction(WORKSPACE_STORE,'readwrite');
+    transaction.objectStore(WORKSPACE_STORE).put(value,key);
+    transaction.oncomplete=()=>resolve();
+    transaction.onerror=()=>reject(transaction.error);
+  });
+}
+
+async function databaseDelete(key){
+  const database=await openWorkspaceDatabase();
+  return new Promise((resolve,reject)=>{
+    const transaction=database.transaction(WORKSPACE_STORE,'readwrite');
+    transaction.objectStore(WORKSPACE_STORE).delete(key);
+    transaction.oncomplete=()=>resolve();
+    transaction.onerror=()=>reject(transaction.error);
+  });
+}
+
+function collectSavedSettings(){
+  return {
+    topology:document.querySelector('.choice.active')?.dataset.topology||'quads',
+    targetFaces:document.getElementById('target-faces').value,
+    surfaceDetail:document.getElementById('surface-detail').value,
+    edgeFlow:document.getElementById('edge-flow').value,
+    preserveBoundaries:document.getElementById('preserve-boundaries').checked,
+    preserveSharp:document.getElementById('preserve-sharp').checked,
+    preserveSymmetry:document.getElementById('preserve-symmetry').checked,
+    preserveMaterials:document.getElementById('preserve-materials').checked,
+    seamStrategy:document.getElementById('seam-strategy').value,
+    angleThreshold:document.getElementById('angle-threshold').value,
+    islandPadding:document.getElementById('island-padding').value,
+    textureSize:document.getElementById('texture-size').value,
+    normalizeTexel:document.getElementById('normalize-texel').checked,
+    packIslands:document.getElementById('pack-islands').checked,
+    rotateIslands:document.getElementById('rotate-islands').checked,
+    fixOverlaps:document.getElementById('fix-overlaps').checked,
+    preserveSeams:document.getElementById('preserve-seams').checked,
+    showGrid:document.getElementById('grid-toggle').checked,
+    wireframe:document.getElementById('wire-toggle').checked,
+    autoRotate:document.getElementById('rotate-toggle').checked,
+    activeTool:document.querySelector('.tool-tab.active')?.dataset.tool||'retopology',
+    viewMode:document.querySelector('.view-mode.active')?.dataset.view||'3d'
+  };
+}
+
+function saveSettings(){
+  try{localStorage.setItem(SETTINGS_KEY,JSON.stringify(collectSavedSettings()));}catch{}
+}
+
+function restoreSavedSettings(){
+  let settings;
+  try{settings=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'null');}catch{return;}
+  if(!settings)return;
+  const setValue=(id,value)=>{if(value!==undefined&&document.getElementById(id))document.getElementById(id).value=value;};
+  const setChecked=(id,value)=>{if(typeof value==='boolean'&&document.getElementById(id))document.getElementById(id).checked=value;};
+  setValue('target-faces',settings.targetFaces);setValue('surface-detail',settings.surfaceDetail);setValue('edge-flow',settings.edgeFlow);
+  setValue('seam-strategy',settings.seamStrategy);setValue('angle-threshold',settings.angleThreshold);setValue('island-padding',settings.islandPadding);setValue('texture-size',settings.textureSize);
+  setChecked('preserve-boundaries',settings.preserveBoundaries);setChecked('preserve-sharp',settings.preserveSharp);setChecked('preserve-symmetry',settings.preserveSymmetry);setChecked('preserve-materials',settings.preserveMaterials);
+  setChecked('normalize-texel',settings.normalizeTexel);setChecked('pack-islands',settings.packIslands);setChecked('rotate-islands',settings.rotateIslands);setChecked('fix-overlaps',settings.fixOverlaps);setChecked('preserve-seams',settings.preserveSeams);
+  setChecked('grid-toggle',settings.showGrid);setChecked('wire-toggle',settings.wireframe);setChecked('rotate-toggle',settings.autoRotate);
+  document.querySelectorAll('.choice').forEach(button=>button.classList.toggle('active',button.dataset.topology===(settings.topology||'quads')));
+  if(settings.activeTool)activateToolPanel(settings.activeTool,false);
+  if(settings.viewMode)setViewMode(settings.viewMode,false);
+}
+
+function applyDisplaySettings(){
+  grid.visible=document.getElementById('grid-toggle').checked;
+  controls.autoRotate=document.getElementById('rotate-toggle').checked;
+  const wireframe=document.getElementById('wire-toggle').checked;
+  currentModel?.traverse(child=>{
+    if(!child.isMesh||!child.material)return;
+    const materials=Array.isArray(child.material)?child.material:[child.material];
+    materials.forEach(material=>{if('wireframe' in material){material.wireframe=wireframe;material.needsUpdate=true;}});
+  });
+}
 
 function createDemo(){
   const geometry=new THREE.TorusKnotGeometry(1,.32,160,24);
@@ -388,8 +503,8 @@ function setModel(object,name){
     if(child.isMesh){child.castShadow=true;child.receiveShadow=true;}
   });
   scene.add(object);
-  document.getElementById('wire-toggle').checked=false;
   updateStats();
+  applyDisplaySettings();
   fitView();
   requestAnimationFrame(drawUVPreview);
 }
@@ -471,9 +586,12 @@ function drawUVPreview(){
 
 function captureUVVersion(plan,triangleCount){
   const meshes=[];
+  let meshIndex=0;
   currentModel?.traverse(mesh=>{
-    const uv=mesh.isMesh?mesh.geometry?.attributes?.uv:null;
-    if(uv)meshes.push({uuid:mesh.uuid,values:new Float32Array(uv.array)});
+    if(!mesh.isMesh)return;
+    const currentIndex=meshIndex++;
+    const uv=mesh.geometry?.attributes?.uv;
+    if(uv)meshes.push({meshIndex:currentIndex,values:new Float32Array(uv.array)});
   });
   if(!meshes.length)return;
   const id=++versionCounter;
@@ -490,15 +608,17 @@ function captureUVVersion(plan,triangleCount){
   activeVersionId=id;
   renderVersionHistory();
   drawUVPreview();
+  persistVersionState().catch(()=>setAutosaveState('Version could not be saved','error'));
 }
 
 function restoreUVVersion(id){
   const version=uvVersions.find(item=>item.id===id);
   if(!version)return;
   let restored=0;
+  let meshIndex=0;
   currentModel?.traverse(mesh=>{
     if(!mesh.isMesh)return;
-    const saved=version.meshes.find(item=>item.uuid===mesh.uuid);
+    const saved=version.meshes.find(item=>item.meshIndex===meshIndex++);
     if(!saved||saved.values.length!==mesh.geometry.attributes.position.count*2)return;
     mesh.geometry.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(saved.values),2));
     mesh.geometry.attributes.uv.needsUpdate=true;restored++;
@@ -508,12 +628,15 @@ function restoreUVVersion(id){
   document.getElementById('download-btn').disabled=false;
   renderVersionHistory();drawUVPreview();setViewMode('split');
   setUnwrapStatus(`${version.name} restored. You can now preview or download it.`,'success');
+  persistVersionState().catch(()=>setAutosaveState('Version could not be saved','error'));
+  persistWorkingModel().catch(()=>setAutosaveState('Model could not be saved','error'));
 }
 
 function deleteUVVersion(id){
   uvVersions=uvVersions.filter(version=>version.id!==id);
   if(activeVersionId===id)activeVersionId=null;
   renderVersionHistory();drawUVPreview();
+  persistVersionState().catch(()=>setAutosaveState('Version could not be saved','error'));
 }
 
 function renderVersionHistory(){
@@ -530,10 +653,93 @@ function renderVersionHistory(){
   }).join('');
 }
 
-function setViewMode(mode){
+async function persistVersionState(){
+  await databaseSet('versions',{uvVersions,activeVersionId,versionCounter});
+  setAutosaveState('Saved locally');
+}
+
+function exportCurrentModel(){
+  return new Promise((resolve,reject)=>{
+    if(!currentModel){reject(new Error('No model is loaded.'));return;}
+    new GLTFExporter().parse(currentModel,resolve,reject,{binary:true,onlyVisible:false});
+  });
+}
+
+async function persistWorkingModel(){
+  setAutosaveState('Saving model…','busy');
+  const data=await exportCurrentModel();
+  await databaseSet('workingModel',{name:currentName.replace(/\.[^.]+$/,'')+'-autosave.glb',type:'model/gltf-binary',lastModified:Date.now(),data});
+  setAutosaveState('Saved locally');
+}
+
+async function persistSourceFile(file){
+  setAutosaveState('Saving upload…','busy');
+  const data=await file.arrayBuffer();
+  await databaseSet('sourceFile',{name:file.name,type:file.type||'application/octet-stream',lastModified:file.lastModified||Date.now(),data});
+  await databaseDelete('workingModel');
+  await databaseDelete('versions');
+  setAutosaveState('Saved locally');
+}
+
+async function clearSavedWorkspace(){
+  await Promise.all([databaseDelete('sourceFile'),databaseDelete('workingModel'),databaseDelete('versions')]);
+}
+
+async function initializeWorkspace(){
+  restoreSavedSettings();
+  setModel(createDemo(),'Demo knot');
+  applyDisplaySettings();
+  resize();
+  try{
+    setAutosaveState('Checking saved workspace…','busy');
+    const workingModel=await databaseGet('workingModel');
+    const sourceFile=workingModel?null:await databaseGet('sourceFile');
+    const savedModel=workingModel||sourceFile;
+    if(!savedModel){setAutosaveState('Saved locally');return;}
+    setAutosaveState('Restoring model…','busy');
+    const restoredFile=new File([savedModel.data],savedModel.name,{type:savedModel.type,lastModified:savedModel.lastModified});
+    await loadFile(restoredFile,{persist:false});
+    const versionState=await databaseGet('versions');
+    if(versionState?.uvVersions?.length){
+      uvVersions=versionState.uvVersions.map(version=>({...version,createdAt:new Date(version.createdAt)}));
+      activeVersionId=versionState.activeVersionId||null;
+      versionCounter=versionState.versionCounter||uvVersions.length;
+      renderVersionHistory();
+    }
+    if(workingModel){
+      hasGeneratedUVs=true;
+      document.getElementById('download-btn').disabled=false;
+    }
+    applyDisplaySettings();drawUVPreview();
+    setAutosaveState('Workspace restored');
+  }catch(error){
+    console.error(error);
+    setAutosaveState('Local restore unavailable','error');
+  }
+}
+
+async function resetWorkspace(){
+  try{await clearSavedWorkspace();}catch{}
+  setModel(createDemo(),'Demo knot');
+  applyDisplaySettings();setViewMode('3d');
+  setAutosaveState('Workspace cleared');
+}
+
+function activateToolPanel(tool,shouldSave=true){
+  document.querySelectorAll('.tool-tab').forEach(tab=>{
+    const selected=tab.dataset.tool===tool;
+    tab.classList.toggle('active',selected);
+    tab.setAttribute('aria-selected',String(selected));
+  });
+  document.querySelectorAll('.tool-panel').forEach(panel=>panel.classList.toggle('active',panel.id===tool+'-panel'));
+  if(shouldSave)saveSettings();
+}
+
+function setViewMode(mode,shouldSave=true){
   viewport.classList.remove('view-3d','view-split','view-uv');
   viewport.classList.add('view-'+mode);
   document.querySelectorAll('.view-mode').forEach(button=>button.classList.toggle('active',button.dataset.view===mode));
+  if(shouldSave)saveSettings();
   requestAnimationFrame(()=>{resize();drawUVPreview();});
 }
 
@@ -708,6 +914,10 @@ async function runUVUnwrap(){
     document.getElementById('download-btn').disabled=false;
     captureUVVersion(plan,triangleCount);
     setViewMode('split');
+    saveSettings();
+    button.textContent='Saving workspace…';
+    try{await persistWorkingModel();}
+    catch(error){console.error(error);setAutosaveState('Model could not be saved','error');}
     const tokens=response?.usage?.total_tokens;
     setUnwrapStatus(`${plan.summary} ${triangleCount.toLocaleString()} triangles packed.${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}`,'success');
   }catch(error){
@@ -719,21 +929,21 @@ async function runUVUnwrap(){
   }
 }
 
-function downloadUnwrappedGLB(){
+async function downloadUnwrappedGLB(){
   if(!currentModel||!hasGeneratedUVs)return;
   const button=document.getElementById('download-btn');
   button.disabled=true;
-  new GLTFExporter().parse(currentModel,result=>{
+  try{
+    const result=await exportCurrentModel();
     const blob=new Blob([result],{type:'model/gltf-binary'});
     const url=URL.createObjectURL(blob);
     const link=document.createElement('a');
     const base=currentName.replace(/\.[^.]+$/,'').replace(/[^a-z0-9_-]+/gi,'-')||'model';
     link.href=url;link.download=base+'-unwrapped.glb';link.click();
     setTimeout(()=>URL.revokeObjectURL(url),1000);
-    button.disabled=false;
-  },error=>{
-    console.error(error);button.disabled=false;setUnwrapStatus('The GLB export failed.','error');
-  },{binary:true,onlyVisible:false});
+  }catch(error){
+    console.error(error);setUnwrapStatus('The GLB export failed.','error');
+  }finally{button.disabled=false;}
 }
 
 function fitView(){
@@ -765,11 +975,11 @@ function showError(message){
   showError.timer=setTimeout(()=>toast.classList.remove('show'),3500);
 }
 
-async function loadFile(file){
-  if(!file)return;
+async function loadFile(file,{persist=true}={}){
+  if(!file)return false;
   const extension=file.name.split('.').pop().toLowerCase();
-  if(!['glb','obj'].includes(extension)){showError('Please choose a GLB or OBJ file.');return;}
-  if(file.size>50*1024*1024){showError('That file is larger than the 50 MB limit.');return;}
+  if(!['glb','obj'].includes(extension)){showError('Please choose a GLB or OBJ file.');return false;}
+  if(persist&&file.size>50*1024*1024){showError('That file is larger than the 50 MB limit.');return false;}
   document.getElementById('loading').classList.add('show');
   try{
     let object;
@@ -785,9 +995,15 @@ async function loadFile(file){
       });
     }
     setModel(object,file.name);
+    if(persist){
+      try{await persistSourceFile(file);}
+      catch(error){console.error(error);setAutosaveState('Upload is too large to autosave','error');}
+    }
+    return true;
   }catch(error){
     console.error(error);
     showError('This model could not be opened. Check that the file is valid.');
+    return false;
   }finally{
     document.getElementById('loading').classList.remove('show');
     document.getElementById('file-input').value='';
@@ -808,16 +1024,17 @@ function resize(){
 document.getElementById('file-input').addEventListener('change',event=>loadFile(event.target.files[0]));
 document.getElementById('mobile-upload-btn').addEventListener('click',()=>document.getElementById('file-input').click());
 document.getElementById('fit-btn').addEventListener('click',fitView);
-document.getElementById('reset-btn').addEventListener('click',()=>setModel(createDemo(),'Demo knot'));
-document.getElementById('grid-toggle').addEventListener('change',event=>grid.visible=event.target.checked);
+document.getElementById('reset-btn').addEventListener('click',resetWorkspace);
+document.getElementById('grid-toggle').addEventListener('change',event=>{grid.visible=event.target.checked;saveSettings();});
 document.getElementById('wire-toggle').addEventListener('change',event=>{
   currentModel?.traverse(child=>{
     if(!child.isMesh||!child.material)return;
     const materials=Array.isArray(child.material)?child.material:[child.material];
     materials.forEach(material=>{if('wireframe' in material){material.wireframe=event.target.checked;material.needsUpdate=true;}});
   });
+  saveSettings();
 });
-document.getElementById('rotate-toggle').addEventListener('change',event=>controls.autoRotate=event.target.checked);
+document.getElementById('rotate-toggle').addEventListener('change',event=>{controls.autoRotate=event.target.checked;saveSettings();});
 document.getElementById('unwrap-btn').addEventListener('click',runUVUnwrap);
 document.getElementById('download-btn').addEventListener('click',downloadUnwrappedGLB);
 
@@ -841,6 +1058,18 @@ document.getElementById('save-endpoint').addEventListener('click',()=>{
 updateEndpointUI();
 
 document.querySelectorAll('.view-mode').forEach(button=>button.addEventListener('click',()=>setViewMode(button.dataset.view)));
+document.querySelectorAll('.choice[data-topology]').forEach(button=>button.addEventListener('click',()=>{
+  document.querySelectorAll('.choice[data-topology]').forEach(choice=>choice.classList.toggle('active',choice===button));
+  saveSettings();
+}));
+[
+  'target-faces','surface-detail','edge-flow','preserve-boundaries','preserve-sharp','preserve-symmetry','preserve-materials',
+  'seam-strategy','angle-threshold','island-padding','texture-size','normalize-texel','pack-islands','rotate-islands','fix-overlaps','preserve-seams'
+].forEach(id=>{
+  const control=document.getElementById(id);
+  control.addEventListener('input',saveSettings);
+  control.addEventListener('change',saveSettings);
+});
 document.getElementById('version-list').addEventListener('click',event=>{
   const button=event.target.closest('[data-version-action]');
   if(!button)return;
@@ -849,17 +1078,7 @@ document.getElementById('version-list').addEventListener('click',event=>{
   else if(button.dataset.versionAction==='delete')deleteUVVersion(id);
 });
 
-document.querySelectorAll('.tool-tab').forEach(button=>{
-  button.addEventListener('click',()=>{
-    document.querySelectorAll('.tool-tab').forEach(tab=>{
-      const selected=tab===button;
-      tab.classList.toggle('active',selected);
-      tab.setAttribute('aria-selected',String(selected));
-    });
-    document.querySelectorAll('.tool-panel').forEach(panel=>panel.classList.remove('active'));
-    document.getElementById(button.dataset.tool+'-panel').classList.add('active');
-  });
-});
+document.querySelectorAll('.tool-tab').forEach(button=>button.addEventListener('click',()=>activateToolPanel(button.dataset.tool)));
 
 let dragDepth=0;
 viewport.addEventListener('dragenter',event=>{event.preventDefault();dragDepth++;document.getElementById('drop-overlay').classList.add('show');});
@@ -871,8 +1090,7 @@ viewport.addEventListener('drop',event=>{
 });
 
 new ResizeObserver(resize).observe(viewport);
-setModel(createDemo(),'Demo knot');
-resize();
+initializeWorkspace();
 
 function animate(){
   requestAnimationFrame(animate);
