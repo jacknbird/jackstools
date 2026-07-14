@@ -576,6 +576,8 @@ function drawUVPreview(){
       const indices=index?[index.getX(offset),index.getX(offset+1),index.getX(offset+2)]:[offset,offset+1,offset+2];
       const points=indices.map(i=>[left+uv.getX(i)*size,top+(1-uv.getY(i))*size]);
       if(points.some(point=>!Number.isFinite(point[0])||!Number.isFinite(point[1])))continue;
+      const signedArea=(points[1][0]-points[0][0])*(points[2][1]-points[0][1])-(points[2][0]-points[0][0])*(points[1][1]-points[0][1]);
+      if(Math.abs(signedArea)<.02)continue;
       uvContext.moveTo(points[0][0],points[0][1]);
       uvContext.lineTo(points[1][0],points[1][1]);
       uvContext.lineTo(points[2][0],points[2][1]);
@@ -881,10 +883,80 @@ async function getUVUnwrapper(plan,preferences,totalTriangles){
   return uvUnwrapper;
 }
 
+function buildCleanUVProxy(source,preserveSeams,filterSlivers){
+  const position=source.attributes.position;
+  const existingUV=source.attributes.uv;
+  source.computeBoundingBox();
+  const boundsSize=source.boundingBox.getSize(new THREE.Vector3());
+  const modelScale=Math.max(boundsSize.x,boundsSize.y,boundsSize.z,1e-9);
+  const minimumDoubleArea=modelScale*modelScale*1e-12;
+  const minimumQuality=filterSlivers?1e-4:0;
+  const positions=[];
+  const inputUVs=[];
+  const validCorners=[];
+  let filteredTriangles=0;
+  const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3();
+  const ab=new THREE.Vector3(),ac=new THREE.Vector3(),bc=new THREE.Vector3(),cross=new THREE.Vector3();
+
+  for(let triangle=0;triangle<Math.floor(position.count/3);triangle++){
+    const first=triangle*3;
+    a.fromBufferAttribute(position,first);
+    b.fromBufferAttribute(position,first+1);
+    c.fromBufferAttribute(position,first+2);
+    ab.subVectors(b,a);
+    ac.subVectors(c,a);
+    bc.subVectors(c,b);
+    const doubleArea=cross.crossVectors(ab,ac).length();
+    const edgeEnergy=ab.lengthSq()+ac.lengthSq()+bc.lengthSq();
+    const quality=edgeEnergy>0?(2*Math.sqrt(3)*doubleArea)/edgeEnergy:0;
+    const invalid=!Number.isFinite(doubleArea)||doubleArea<=minimumDoubleArea||quality<minimumQuality;
+    if(invalid){filteredTriangles++;continue;}
+
+    for(let corner=0;corner<3;corner++){
+      const sourceCorner=first+corner;
+      positions.push(position.getX(sourceCorner),position.getY(sourceCorner),position.getZ(sourceCorner));
+      if(preserveSeams&&existingUV)inputUVs.push(existingUV.getX(sourceCorner),existingUV.getY(sourceCorner));
+      validCorners.push(sourceCorner);
+    }
+  }
+
+  if(!validCorners.length)return {proxy:null,validCorners,filteredTriangles};
+  const proxy=new THREE.BufferGeometry();
+  proxy.setAttribute('position',new THREE.BufferAttribute(new Float32Array(positions),3));
+  if(preserveSeams&&existingUV)proxy.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(inputUVs),2));
+  const welded=mergeVertices(proxy,1e-6);
+  proxy.dispose();
+  return {proxy:welded,validCorners,filteredTriangles};
+}
+
+function neutralizeUVSlivers(uv,triangleCount){
+  let neutralized=0;
+  for(let triangle=0;triangle<triangleCount;triangle++){
+    const first=triangle*6;
+    const ax=uv[first],ay=uv[first+1];
+    const bx=uv[first+2],by=uv[first+3];
+    const cx=uv[first+4],cy=uv[first+5];
+    const abx=bx-ax,aby=by-ay,acx=cx-ax,acy=cy-ay,bcx=cx-bx,bcy=cy-by;
+    const doubleArea=Math.abs(abx*acy-aby*acx);
+    const edgeEnergy=abx*abx+aby*aby+acx*acx+acy*acy+bcx*bcx+bcy*bcy;
+    const quality=edgeEnergy>0?(2*Math.sqrt(3)*doubleArea)/edgeEnergy:0;
+    if(edgeEnergy<=1e-12||quality>=1e-4)continue;
+    const centerU=(ax+bx+cx)/3,centerV=(ay+by+cy)/3;
+    for(let corner=0;corner<3;corner++){
+      uv[first+corner*2]=centerU;
+      uv[first+corner*2+1]=centerV;
+    }
+    neutralized++;
+  }
+  return neutralized;
+}
+
 async function applyProductionAtlas(plan,preferences){
   const entries=[];
   let totalTriangles=0;
+  let filteredTriangles=0;
   let oversizedMeshCount=0;
+  let clampedCoordinates=0;
   currentModel.updateMatrixWorld(true);
 
   currentModel.traverse(mesh=>{
@@ -895,63 +967,89 @@ async function applyProductionAtlas(plan,preferences){
 
     // xatlas gets a position-welded proxy so flat normals do not split every face.
     // The generated UVs are then transferred back to the untouched render attributes.
-    const proxy=new THREE.BufferGeometry();
-    proxy.setAttribute('position',source.attributes.position.clone());
-    if(preferences.preserveSeams&&source.attributes.uv)proxy.setAttribute('uv',source.attributes.uv.clone());
-    const welded=mergeVertices(proxy,1e-6);
-    proxy.dispose();
-    if(welded.attributes.position.count>65535){
+    const cleaned=buildCleanUVProxy(source,preferences.preserveSeams,preferences.fixOverlaps);
+    filteredTriangles+=cleaned.filteredTriangles;
+    if(!cleaned.proxy){
+      const collapsedUV=new Float32Array(source.attributes.position.count*2);
+      collapsedUV.fill(.5);
+      source.setAttribute('uv',new THREE.BufferAttribute(collapsedUV,2));
+      entries.push({mesh,source,proxy:null,validCorners:[],triangleCount});
+      totalTriangles+=triangleCount;
+      return;
+    }
+    if(cleaned.proxy.attributes.position.count>65535){
       source.dispose();
-      welded.dispose();
+      cleaned.proxy.dispose();
       oversizedMeshCount++;
       return;
     }
-    welded.userData.worldScale=mesh.getWorldScale(new THREE.Vector3()).toArray();
-    entries.push({mesh,source,proxy:welded,triangleCount});
+    cleaned.proxy.userData.worldScale=mesh.getWorldScale(new THREE.Vector3()).toArray();
+    entries.push({mesh,source,proxy:cleaned.proxy,validCorners:cleaned.validCorners,triangleCount});
     totalTriangles+=triangleCount;
   });
 
   if(oversizedMeshCount){
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy.dispose();});
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
     throw new Error('One mesh exceeds 65,535 welded vertices. Split that mesh into smaller objects, then unwrap again.');
   }
   if(!totalTriangles)throw new Error('This model does not contain any triangles to unwrap.');
+  if(!entries.length)throw new Error('Every face in this model is degenerate or too thin to unwrap safely.');
+  if(!entries.some(entry=>entry.proxy)){
+    entries.forEach(entry=>entry.source.dispose());
+    throw new Error('Every face in this model is degenerate or too thin to unwrap safely.');
+  }
   if(totalTriangles>500000){
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy.dispose();});
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
     throw new Error('This browser build supports models up to 500,000 triangles per unwrap.');
   }
 
   let unwrapper;
   try{unwrapper=await getUVUnwrapper(plan,preferences,totalTriangles);}
   catch(error){
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy.dispose();});
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
     throw error;
   }
   let atlas;
   try{
     setUnwrapStatus('Creating connected UV charts and minimizing stretch…');
-    atlas=await unwrapper.packAtlas(entries.map(entry=>entry.proxy),'uv','uv');
+    atlas=await unwrapper.packAtlas(entries.filter(entry=>entry.proxy).map(entry=>entry.proxy),'uv','uv');
   }catch(error){
     console.error(error);
     uvUnwrapper=null;
     uvLibraryPromise=null;
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy.dispose();});
+    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
     throw new Error('The mesh could not be parameterized. Check for invalid or zero-area faces, then try again.');
   }
 
   for(const entry of entries){
+    if(!entry.proxy)continue;
     const atlasUV=entry.proxy.attributes.uv;
     const atlasIndex=entry.proxy.index;
-    if(!atlasUV||!atlasIndex||atlasIndex.count!==entry.source.attributes.position.count){
-      entries.forEach(item=>{item.source.dispose();item.proxy.dispose();});
+    if(!atlasUV||!atlasIndex||atlasIndex.count!==entry.validCorners.length){
+      entries.forEach(item=>{item.source.dispose();item.proxy?.dispose();});
       throw new Error('The UV engine returned an incomplete atlas for this mesh.');
     }
-    const uv=new Float32Array(atlasIndex.count*2);
+    const uv=new Float32Array(entry.source.attributes.position.count*2);
+    const safeInset=Math.max(.5/plan.textureSize,1e-6);
+    const firstAtlasVertex=atlasIndex.getX(0);
+    const fallbackU=THREE.MathUtils.clamp(atlasUV.getX(firstAtlasVertex),safeInset,1-safeInset);
+    const fallbackV=THREE.MathUtils.clamp(atlasUV.getY(firstAtlasVertex),safeInset,1-safeInset);
+    for(let corner=0;corner<entry.source.attributes.position.count;corner++){
+      uv[corner*2]=fallbackU;
+      uv[corner*2+1]=fallbackV;
+    }
     for(let corner=0;corner<atlasIndex.count;corner++){
       const atlasVertex=atlasIndex.getX(corner);
-      uv[corner*2]=atlasUV.getX(atlasVertex);
-      uv[corner*2+1]=atlasUV.getY(atlasVertex);
+      const sourceCorner=entry.validCorners[corner];
+      const rawU=atlasUV.getX(atlasVertex);
+      const rawV=atlasUV.getY(atlasVertex);
+      const u=THREE.MathUtils.clamp(Number.isFinite(rawU)?rawU:fallbackU,safeInset,1-safeInset);
+      const v=THREE.MathUtils.clamp(Number.isFinite(rawV)?rawV:fallbackV,safeInset,1-safeInset);
+      if(u!==rawU||v!==rawV)clampedCoordinates++;
+      uv[sourceCorner*2]=u;
+      uv[sourceCorner*2+1]=v;
     }
+    if(preferences.fixOverlaps)filteredTriangles+=neutralizeUVSlivers(uv,entry.triangleCount);
     entry.source.setAttribute('uv',new THREE.BufferAttribute(uv,2));
     entry.source.attributes.uv.needsUpdate=true;
     entry.source.computeBoundingBox();
@@ -962,9 +1060,9 @@ async function applyProductionAtlas(plan,preferences){
     const oldGeometry=entry.mesh.geometry;
     entry.mesh.geometry=entry.source;
     oldGeometry.dispose();
-    entry.proxy.dispose();
+    entry.proxy?.dispose();
   }
-  return {triangleCount:totalTriangles,atlas};
+  return {triangleCount:totalTriangles,atlas,filteredTriangles,clampedCoordinates};
 }
 
 async function runUVUnwrap(){
@@ -986,7 +1084,7 @@ async function runUVUnwrap(){
     if(sizeOption)document.getElementById('texture-size').value=sizeOption.value;
     document.getElementById('rotate-islands').checked=plan.rotateIslands;
     button.textContent='Building production UV atlas…';
-    const {triangleCount,atlas}=await applyProductionAtlas(plan,preferences);
+    const {triangleCount,atlas,filteredTriangles,clampedCoordinates}=await applyProductionAtlas(plan,preferences);
     hasGeneratedUVs=true;
     document.getElementById('download-btn').disabled=false;
     captureUVVersion(plan,triangleCount);
@@ -997,7 +1095,10 @@ async function runUVUnwrap(){
     catch(error){console.error(error);setAutosaveState('Model could not be saved','error');}
     const tokens=response?.usage?.total_tokens;
     const atlasLabel=atlas?.atlasCount===1?'one atlas':`${atlas?.atlasCount||1} atlases`;
-    setUnwrapStatus(`Production xatlas unwrap complete: ${triangleCount.toLocaleString()} triangles packed into ${atlasLabel} with ${plan.padding}px padding.${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}`,'success');
+    const cleanup=[];
+    if(filteredTriangles)cleanup.push(`${filteredTriangles.toLocaleString()} degenerate/sliver faces neutralized`);
+    if(clampedCoordinates)cleanup.push(`${clampedCoordinates.toLocaleString()} boundary coordinates corrected`);
+    setUnwrapStatus(`Production xatlas unwrap complete: ${triangleCount.toLocaleString()} triangles packed into ${atlasLabel} with ${plan.padding}px padding.${cleanup.length?' '+cleanup.join(' · ')+'.':''}${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}`,'success');
   }catch(error){
     console.error(error);
     setUnwrapStatus(error.message||'The UV layout could not be generated.','error');
