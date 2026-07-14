@@ -259,7 +259,7 @@ button,input{font:inherit}
 
           <div class="field">
             <div class="field-head"><label for="seam-strategy">Seam strategy</label></div>
-            <select class="select" id="seam-strategy"><option>AI assisted</option><option>Angle based</option><option>Minimal seams</option><option>Use existing seams</option></select>
+            <select class="select" id="seam-strategy"><option selected>Auto / topology aware</option><option>Garment / open surface</option><option>AI assisted</option><option>Angle based</option><option>Minimal seams</option><option>Use existing seams</option></select>
           </div>
           <div class="field">
             <div class="field-head"><label for="angle-threshold">Angle threshold</label><span class="field-value">66°</span></div>
@@ -497,7 +497,8 @@ function restoreSavedSettings(){
   const setValue=(id,value)=>{if(value!==undefined&&document.getElementById(id))document.getElementById(id).value=value;};
   const setChecked=(id,value)=>{if(typeof value==='boolean'&&document.getElementById(id))document.getElementById(id).checked=value;};
   setValue('target-faces',settings.targetFaces);setValue('surface-detail',settings.surfaceDetail);setValue('edge-flow',settings.edgeFlow);
-  setValue('seam-strategy',settings.seamStrategy);setValue('angle-threshold',settings.angleThreshold);setValue('island-padding',settings.islandPadding);setValue('texture-size',settings.textureSize);
+  const savedSeamStrategy=settings.seamStrategy==='AI assisted'?'Auto / topology aware':settings.seamStrategy;
+  setValue('seam-strategy',savedSeamStrategy);setValue('angle-threshold',settings.angleThreshold);setValue('island-padding',settings.islandPadding);setValue('texture-size',settings.textureSize);
   setChecked('preserve-boundaries',settings.preserveBoundaries);setChecked('preserve-sharp',settings.preserveSharp);setChecked('preserve-symmetry',settings.preserveSymmetry);setChecked('preserve-materials',settings.preserveMaterials);
   setChecked('normalize-texel',settings.normalizeTexel);setChecked('pack-islands',settings.packIslands);setChecked('rotate-islands',settings.rotateIslands);setChecked('fix-overlaps',settings.fixOverlaps);setChecked('preserve-seams',settings.preserveSeams);
   setChecked('grid-toggle',settings.showGrid);setChecked('wire-toggle',settings.wireframe);setChecked('checker-toggle',settings.checker);setChecked('rotate-toggle',settings.autoRotate);
@@ -566,6 +567,11 @@ function disposeModel(object){
   });
 }
 
+function setDownloadLabel(label){
+  const text=document.querySelector('#download-btn span:last-child');
+  if(text)text.textContent=label;
+}
+
 function setModel(object,name){
   setHoveredUVFace(null);
   if(currentModel){setCheckerForModel(false,currentModel);scene.remove(currentModel);disposeModel(currentModel);}
@@ -576,6 +582,7 @@ function setModel(object,name){
   activeVersionId=null;
   versionCounter=0;
   document.getElementById('download-btn').disabled=true;
+  setDownloadLabel('Download GLB');
   setUnwrapStatus('');
   renderVersionHistory();
   object.traverse(child=>{
@@ -1062,7 +1069,30 @@ async function requestAIUnwrapPlan(profile,preferences){
   return data;
 }
 
-async function getUVUnwrapper(plan,preferences,totalTriangles){
+function analyseProxyTopology(entries){
+  let meshCount=0,openMeshCount=0,boundaryEdges=0,totalEdges=0,nonManifoldEdges=0;
+  entries.forEach(entry=>{
+    const geometry=entry.proxy;
+    const index=geometry?.index;
+    if(!geometry||!index)return;
+    meshCount++;
+    const edges=new Map();
+    for(let corner=0;corner<index.count;corner+=3){
+      const triangle=[index.getX(corner),index.getX(corner+1),index.getX(corner+2)];
+      [[triangle[0],triangle[1]],[triangle[1],triangle[2]],[triangle[2],triangle[0]]].forEach(([a,b])=>{
+        const key=a<b?`${a}:${b}`:`${b}:${a}`;
+        edges.set(key,(edges.get(key)||0)+1);
+      });
+    }
+    let meshBoundary=0;
+    edges.forEach(count=>{totalEdges++;if(count===1){boundaryEdges++;meshBoundary++;}else if(count>2)nonManifoldEdges++;});
+    if(meshBoundary)openMeshCount++;
+  });
+  const openSurface=meshCount>0&&openMeshCount===meshCount&&nonManifoldEdges===0;
+  return {openSurface,meshCount,openMeshCount,boundaryEdges,totalEdges,nonManifoldEdges,boundaryRatio:totalEdges?boundaryEdges/totalEdges:0};
+}
+
+async function getUVUnwrapper(plan,preferences,totalTriangles,topology){
   if(!uvUnwrapper){
     uvUnwrapper=new UVUnwrapper({BufferAttribute:THREE.BufferAttribute});
     uvLibraryPromise=uvUnwrapper.loadLibrary(
@@ -1084,18 +1114,19 @@ async function getUVUnwrapper(plan,preferences,totalTriangles){
   }
 
   const seamMode=preferences.seamStrategy.toLowerCase();
+  const garmentMode=seamMode.includes('garment')||(seamMode.includes('auto')&&topology.openSurface);
   const normalBias=seamMode.includes('minimal')?1.5:seamMode.includes('angle')?6:4;
   const thresholdBias=THREE.MathUtils.mapLinear(THREE.MathUtils.clamp(plan.angleThreshold,1,180),1,180,8,.75);
   uvUnwrapper.chartOptions={
     fixWinding:true,
     maxBoundaryLength:0,
     maxChartArea:0,
-    maxCost:plan.strategy==='detail'?1.5:plan.strategy==='compact'?3:2,
-    maxIterations:plan.strategy==='detail'?4:2,
-    normalDeviationWeight:thresholdBias,
-    normalSeamWeight:normalBias,
-    roundnessWeight:.01,
-    straightnessWeight:6,
+    maxCost:garmentMode?100:plan.strategy==='detail'?1.5:plan.strategy==='compact'?3:2,
+    maxIterations:garmentMode?8:plan.strategy==='detail'?4:2,
+    normalDeviationWeight:garmentMode ? .01 : thresholdBias,
+    normalSeamWeight:garmentMode ? .01 : normalBias,
+    roundnessWeight:garmentMode?0:.01,
+    straightnessWeight:garmentMode ? .01 : 6,
     textureSeamWeight:preferences.preserveSeams?8:.5,
     useInputMeshUvs:preferences.preserveSeams
   };
@@ -1114,6 +1145,7 @@ async function getUVUnwrapper(plan,preferences,totalTriangles){
   uvUnwrapper.useNormals=false;
   uvUnwrapper.timeUnwrap=false;
   uvUnwrapper.logProgress=false;
+  uvUnwrapper.userData={garmentMode,topology};
   return uvUnwrapper;
 }
 
@@ -1237,15 +1269,16 @@ async function applyProductionAtlas(plan,preferences){
     throw new Error('This browser build supports models up to 500,000 triangles per unwrap.');
   }
 
+  const topology=analyseProxyTopology(entries);
   let unwrapper;
-  try{unwrapper=await getUVUnwrapper(plan,preferences,totalTriangles);}
+  try{unwrapper=await getUVUnwrapper(plan,preferences,totalTriangles,topology);}
   catch(error){
     entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
     throw error;
   }
   let atlas;
   try{
-    setUnwrapStatus('Creating connected UV charts and minimizing stretch…');
+    setUnwrapStatus(topology.openSurface?'Flattening the connected open surface into coherent garment-style panels…':'Creating connected UV charts and minimizing stretch…');
     atlas=await unwrapper.packAtlas(entries.filter(entry=>entry.proxy).map(entry=>entry.proxy),'uv','uv');
   }catch(error){
     console.error(error);
@@ -1303,7 +1336,7 @@ async function applyProductionAtlas(plan,preferences){
     oldGeometry.dispose();
     entry.proxy?.dispose();
   }
-  return {triangleCount:totalTriangles,atlas,filteredTriangles,clampedCoordinates,invalidUVCoordinates,collapsedUVTriangles};
+  return {triangleCount:totalTriangles,atlas,filteredTriangles,clampedCoordinates,invalidUVCoordinates,collapsedUVTriangles,topology};
 }
 
 async function runUVUnwrap(){
@@ -1316,17 +1349,29 @@ async function runUVUnwrap(){
   const profile=collectMeshProfile();
   try{
     let productionResult=null;
-    if(localStorage.getItem('jt_ai_unwrap_endpoint')){
+    const hasEndpoint=Boolean(localStorage.getItem('jt_ai_unwrap_endpoint'));
+    const localFileMode=window.location.protocol==='file:';
+    let fallbackNote='';
+    let remoteUnavailable=false;
+    if(hasEndpoint&&localFileMode){
+      fallbackNote=' Local file mode uses the browser preview; open the deployed HTTPS website to use the Blender service.';
+      setUnwrapStatus('Local preview detected. Building safely in the browser without contacting the secure Blender service…');
+    }else if(hasEndpoint){
       button.textContent='AI seam analysis in progress…';
       setUnwrapStatus('Analysing six views of the shape, planning seams and validating the Blender unwrap. Complex models can take several minutes…');
       try{productionResult=await requestBlenderUnwrap(preferences);}
-      catch(error){console.error(error);setUnwrapStatus(error.message+' Falling back to the browser UV engine.','error');}
+      catch(error){
+        console.error(error);
+        remoteUnavailable=true;
+        fallbackNote=' The secure Blender service could not be reached, so this result uses the browser preview.';
+      }
     }
     if(productionResult){
       const originalName=currentName;
       setModel(productionResult.model,originalName);
       hasGeneratedUVs=true;
       document.getElementById('download-btn').disabled=false;
+      setDownloadLabel('Download Production GLB');
       const quality=productionResult.quality;
       const plan={
         strategy:'AI + Blender',
@@ -1334,7 +1379,7 @@ async function runUVUnwrap(){
         padding:preferences.padding,
         textureSize:preferences.textureSize,
         rotateIslands:preferences.rotateIslands,
-        summary:'AI planned semantic seams; Blender relaxed, packed and quality-scored three candidate unwrap strategies.',
+        summary:'Blender detected the topology, tested garment-aware and semantic candidates, then relaxed, packed and quality-scored the result.',
         qualityGrade:quality?.grade||null
       };
       const resultProfile=collectMeshProfile();
@@ -1350,8 +1395,10 @@ async function runUVUnwrap(){
       return;
     }
     let response=null;
-    try{response=await requestAIUnwrapPlan(profile,preferences);}
-    catch(error){setUnwrapStatus(error.message+' Falling back to the local settings.','error');}
+    if(hasEndpoint&&!localFileMode&&!remoteUnavailable){
+      try{response=await requestAIUnwrapPlan(profile,preferences);}
+      catch(error){console.error(error);fallbackNote=' The AI planner was unavailable, so your local settings were used.';}
+    }
     const plan=normalizePlan(response?.plan||localUnwrapPlan(preferences),preferences);
     document.getElementById('angle-threshold').value=plan.angleThreshold;
     document.getElementById('island-padding').value=plan.padding;
@@ -1359,10 +1406,12 @@ async function runUVUnwrap(){
     if(sizeOption)document.getElementById('texture-size').value=sizeOption.value;
     document.getElementById('rotate-islands').checked=plan.rotateIslands;
     button.textContent='Building validated browser preview…';
-    const {triangleCount,atlas,clampedCoordinates}=await applyProductionAtlas(plan,preferences);
+    const {triangleCount,atlas,clampedCoordinates,topology}=await applyProductionAtlas(plan,preferences);
     hasGeneratedUVs=true;
     document.getElementById('download-btn').disabled=false;
-    const previewPlan={...plan,strategy:'Browser preview'};
+    setDownloadLabel('Download Preview GLB');
+    const openSurfacePreview=Boolean(topology?.openSurface);
+    const previewPlan={...plan,strategy:openSurfacePreview?'Topology-aware open-surface preview':'Browser preview'};
     captureUVVersion(previewPlan,triangleCount);
     setViewMode('split');
     saveSettings();
@@ -1373,7 +1422,9 @@ async function runUVUnwrap(){
     const atlasLabel=atlas?.atlasCount===1?'one atlas':`${atlas?.atlasCount||1} atlases`;
     const cleanup=[];
     if(clampedCoordinates)cleanup.push(`${clampedCoordinates.toLocaleString()} boundary coordinates corrected`);
-    setUnwrapStatus(`Validated xatlas preview complete: ${triangleCount.toLocaleString()} triangles packed into ${atlasLabel} with no collapsed UV faces.${cleanup.length?' '+cleanup.join(' · ')+'.':''}${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''} Studio-quality semantic seams require the Blender service.`,'success');
+    const previewName=openSurfacePreview?'Topology-aware open-surface preview':'Validated xatlas preview';
+    const topologyNote=openSurfacePreview?' Fold-driven cuts were suppressed so connected garment panels stay together.':'';
+    setUnwrapStatus(`${previewName} complete: ${triangleCount.toLocaleString()} triangles packed into ${atlasLabel} with no collapsed UV faces.${topologyNote}${cleanup.length?' '+cleanup.join(' · ')+'.':''}${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}${fallbackNote||' Final production validation still requires the Blender service.'}`,'success');
   }catch(error){
     console.error(error);
     setUnwrapStatus(error.message||'The UV layout could not be generated.','error');
@@ -1497,7 +1548,7 @@ function updateEndpointUI(){
   const endpoint=localStorage.getItem('jt_ai_unwrap_endpoint')||'';
   document.getElementById('ai-endpoint').value=endpoint;
   document.getElementById('ai-status-dot').classList.toggle('connected',Boolean(endpoint));
-  document.getElementById('ai-connect-state').textContent=endpoint?'Connected':'Not connected';
+  document.getElementById('ai-connect-state').textContent=endpoint?(window.location.protocol==='file:'?'Saved · HTTPS only':'Connected'):'Not connected';
 }
 document.getElementById('save-endpoint').addEventListener('click',()=>{
   const input=document.getElementById('ai-endpoint');
