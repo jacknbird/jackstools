@@ -1,4 +1,8 @@
 const DEFAULT_ORIGINS=['https://jacktools.online','https://www.jacktools.online'];
+const PROMPT_LAB_REQUEST_LIMIT=1000000;
+const STANDARD_REQUEST_LIMIT=20000;
+const MAX_SOURCE_PROMPT_CHARACTERS=300000;
+const MAX_CONVERSATION_CHARACTERS=300000;
 
 function allowedOrigins(env){
   return String(env.ALLOWED_ORIGIN||DEFAULT_ORIGINS.join(','))
@@ -84,9 +88,12 @@ function applyPromptChanges(prompt,changes){
 }
 
 function validPromptLabPayload(payload){
-  if(!payload||!['suggest','refine'].includes(payload.action)||typeof payload.sourcePrompt!=='string'||!payload.sourcePrompt.trim()||payload.sourcePrompt.length>50000||!Array.isArray(payload.messages)||!Array.isArray(payload.review))return false;
-  if(payload.messages.length<2||payload.messages.length>100||payload.review.length<1||payload.review.length>20)return false;
-  return payload.messages.every((message,index)=>message&&message.index===index&&['HUMAN','CONTACT','AI'].includes(message.role)&&typeof message.text==='string'&&typeof message.timestamp==='string');
+  if(!payload||!['suggest','refine'].includes(payload.action)||typeof payload.sourcePrompt!=='string'||!payload.sourcePrompt.trim()||payload.sourcePrompt.length>MAX_SOURCE_PROMPT_CHARACTERS||!Array.isArray(payload.messages)||!Array.isArray(payload.review))return false;
+  if(payload.messages.length<2||payload.messages.length>300||payload.review.length<1||payload.review.length>20)return false;
+  const messagesAreValid=payload.messages.every((message,index)=>message&&message.index===index&&['HUMAN','CONTACT','AI'].includes(message.role)&&typeof message.text==='string'&&message.text.length<=50000&&typeof message.timestamp==='string'&&message.timestamp.length<=1000);
+  const conversationCharacters=payload.messages.reduce((total,message)=>total+String(message?.text||'').length+String(message?.timestamp||'').length,0);
+  const reviewIsValid=payload.review.every(item=>item&&typeof item.topic==='string'&&item.topic.length<=500&&Number.isFinite(item.score)&&item.score>=1&&item.score<=5&&typeof item.explanation==='string'&&item.explanation.length<=20000);
+  return messagesAreValid&&conversationCharacters<=MAX_CONVERSATION_CHARACTERS&&reviewIsValid;
 }
 
 function sanitisePlan(plan,sourcePrompt){
@@ -164,10 +171,11 @@ export default {
     if(request.method!=='POST'||!['/','/unwrap','/prompt-lab'].includes(path))return json({error:'Not found.'},404,origin,env);
     if(!allowedOrigins(env).includes(origin))return json({error:'Origin not allowed.'},403,origin,env);
     if(!env.OPENAI_API_KEY)return json({error:'OPENAI_API_KEY has not been configured.'},503,origin,env);
-    const limit=path==='/prompt-lab'?75000:20000;const length=Number(request.headers.get('Content-Length')||0);
-    if(length>limit)return json({error:'Request is too large.'},413,origin,env);
+    const limit=path==='/prompt-lab'?PROMPT_LAB_REQUEST_LIMIT:STANDARD_REQUEST_LIMIT;const length=Number(request.headers.get('Content-Length')||0);
+    if(length>limit)return json({error:path==='/prompt-lab'?'This review is larger than the 1 MB Prompt Lab limit. Shorten the source prompt, conversation, or older feedback.':'Request is too large.'},413,origin,env);
     let payload;try{payload=await request.json();}catch{return json({error:'Invalid JSON request.'},400,origin,env);}
-    if(JSON.stringify(payload).length>limit)return json({error:'Request is too large.'},413,origin,env);
+    const payloadBytes=new TextEncoder().encode(JSON.stringify(payload)).byteLength;
+    if(payloadBytes>limit)return json({error:path==='/prompt-lab'?'This review is larger than the 1 MB Prompt Lab limit. Shorten the source prompt, conversation, or older feedback.':'Request is too large.'},413,origin,env);
     return path==='/prompt-lab'?handlePromptLab(payload,origin,env):handleUnwrap(payload,origin,env);
   }
 };
