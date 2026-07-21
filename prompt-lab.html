@@ -12,7 +12,7 @@
 *{box-sizing:border-box}html{min-height:100%;background:var(--page)}body{margin:0;min-height:100vh;background:radial-gradient(circle at 12% 4%,#fbfeff 0,transparent 30%),linear-gradient(150deg,#edf9fc,#e1f1f6 60%,#d8edf4);color:var(--ink);font-family:'DM Sans',sans-serif}
 button,textarea,input{font:inherit}.topbar{height:58px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid rgba(157,203,219,.7);background:rgba(245,252,254,.86);backdrop-filter:blur(18px);position:sticky;top:0;z-index:20}.topbar-left,.topbar-right{display:flex;align-items:center;gap:14px}.back,.button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);border-radius:8px;background:#edf8fb;color:#477d92;padding:8px 12px;text-decoration:none;cursor:pointer;transition:.15s ease}.back:hover,.button:hover{background:#dff1f7;color:var(--ink);border-color:#84bfd3}.button.primary{background:var(--blue);border-color:var(--blue);color:#fff}.button.primary:hover{background:var(--blue-dark);border-color:var(--blue-dark);color:#fff}.button.danger{color:var(--red)}.button:disabled{opacity:.48;cursor:not-allowed;transform:none}.button:focus-visible,.star:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid rgba(42,127,165,.24);outline-offset:2px}.brand{font-family:'DM Serif Display',serif;font-size:21px}.brand span{color:var(--blue)}.autosave{font-size:11px;color:var(--faint);display:flex;align-items:center;gap:6px}.autosave::before{content:'';width:7px;height:7px;border-radius:50%;background:#62a993;box-shadow:0 0 0 3px rgba(98,169,147,.12)}
 .page{width:min(1220px,100%);margin:0 auto;padding:34px 28px 54px}.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--blue);font-weight:500;margin-bottom:8px}.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(34px,5vw,50px);line-height:1.02;font-weight:400;letter-spacing:-.02em;margin:0 0 10px}.hero p{margin:0;color:var(--muted);font-size:13px;max-width:670px;line-height:1.55}.hero-actions{display:flex;gap:8px;flex-shrink:0}
-.workspace{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:18px;align-items:start}.panel{background:rgba(247,252,254,.9);border:1px solid rgba(174,215,228,.9);border-radius:14px;box-shadow:0 18px 46px rgba(35,91,111,.08),inset 0 1px 0 rgba(255,255,255,.9);overflow:hidden}.panel-head{padding:17px 18px 14px;border-bottom:1px solid var(--line-soft);display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.panel-title{font-size:15px;font-weight:500;margin:0}.panel-sub{font-size:11px;color:var(--faint);margin-top:4px;line-height:1.45}.step{width:25px;height:25px;border-radius:50%;background:#d8edf5;color:var(--blue);display:grid;place-items:center;font-size:11px;font-weight:500;flex:0 0 auto}.head-copy{display:flex;gap:10px;align-items:flex-start}.transcript-body{padding:18px}.transcript-input{width:100%;min-height:310px;resize:vertical;padding:15px 16px;border:1px solid var(--line);border-radius:10px;background:#edf7fa;color:var(--ink);font-size:13px;line-height:1.65;outline:none}.transcript-input::placeholder{color:#91b0bc}.transcript-input:focus{border-color:var(--blue);background:#f3fbfd}.input-meta{display:flex;justify-content:space-between;gap:12px;color:var(--faint);font-size:11px;margin:9px 1px 14px}.input-actions{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}.status{font-size:11px;color:var(--muted);min-height:17px}.status.success{color:var(--green)}.status.error{color:var(--red)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:18px;align-items:start}.input-column{display:flex;flex-direction:column;gap:18px}.panel{background:rgba(247,252,254,.9);border:1px solid rgba(174,215,228,.9);border-radius:14px;box-shadow:0 18px 46px rgba(35,91,111,.08),inset 0 1px 0 rgba(255,255,255,.9);overflow:hidden}.panel-head{padding:17px 18px 14px;border-bottom:1px solid var(--line-soft);display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.panel-title{font-size:15px;font-weight:500;margin:0}.panel-sub{font-size:11px;color:var(--faint);margin-top:4px;line-height:1.45}.step{width:25px;height:25px;border-radius:50%;background:#d8edf5;color:var(--blue);display:grid;place-items:center;font-size:11px;font-weight:500;flex:0 0 auto}.head-copy{display:flex;gap:10px;align-items:flex-start}.transcript-body,.prompt-body{padding:18px}.transcript-input,.prompt-input{width:100%;resize:vertical;padding:15px 16px;border:1px solid var(--line);border-radius:10px;background:#edf7fa;color:var(--ink);font-size:13px;line-height:1.65;outline:none}.transcript-input{min-height:310px}.prompt-input{min-height:240px;font-family:ui-monospace,'SFMono-Regular',Consolas,monospace;font-size:12px}.transcript-input::placeholder,.prompt-input::placeholder{color:#91b0bc}.transcript-input:focus,.prompt-input:focus{border-color:var(--blue);background:#f3fbfd}.input-meta{display:flex;justify-content:space-between;gap:12px;color:var(--faint);font-size:11px;margin:9px 1px 14px}.input-actions{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}.status{font-size:11px;color:var(--muted);min-height:17px}.status.success{color:var(--green)}.status.error{color:var(--red)}
 .preview-wrap{border-top:1px solid var(--line-soft);padding:18px}.preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.preview-head h2{font-size:12px;margin:0;font-weight:500}.message-counts{font-size:10px;color:var(--faint)}.preview{display:flex;flex-direction:column;gap:9px;max-height:410px;overflow:auto;padding-right:4px}.preview-empty{border:1px dashed var(--line);border-radius:10px;color:var(--faint);text-align:center;padding:30px 18px;font-size:12px;line-height:1.55}.message{border:1px solid var(--line-soft);border-left:3px solid var(--line);border-radius:8px;padding:10px 12px;background:#f7fcfd}.message.human{border-left-color:#4b8eb0}.message.contact{border-left-color:#7995a1}.message.ai{border-left-color:#9d77ba}.message-label{font-size:9px;letter-spacing:.12em;font-weight:500;color:var(--faint);margin-bottom:5px}.message.human .message-label{color:#397c9d}.message.ai .message-label{color:#80589d}.message-text{font-size:12px;line-height:1.55;color:#335767;white-space:pre-wrap;overflow-wrap:anywhere}
 .review-panel{position:sticky;top:76px}.review-summary{padding:16px 18px;border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:auto 1fr;gap:13px;align-items:center}.score-ring{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--blue) var(--score-progress,0%),#dceef4 0);position:relative}.score-ring::before{content:'';position:absolute;inset:6px;background:#f7fcfd;border-radius:50%}.score-ring strong{position:relative;font-size:17px;font-weight:500}.score-ring strong span{font-size:10px;color:var(--faint)}.summary-title{font-size:13px;font-weight:500}.summary-sub{font-size:11px;color:var(--faint);margin-top:4px}.progress{height:5px;border-radius:999px;background:#dceef4;overflow:hidden;margin-top:9px}.progress span{display:block;height:100%;width:0;background:var(--blue);border-radius:inherit;transition:width .2s}.criteria{padding:0 18px;max-height:calc(100vh - 260px);overflow:auto}.criterion{padding:16px 1px;border-bottom:1px solid var(--line-soft)}.criterion:last-child{border-bottom:0}.criterion-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.criterion-name{font-size:13px;font-weight:500}.criterion-help{font-size:10px;line-height:1.4;color:var(--faint);margin-top:3px;max-width:300px}.stars{display:flex;gap:1px;flex-shrink:0}.star{border:0;background:transparent;color:#c5dbe3;font-size:22px;line-height:1;padding:0 1px;cursor:pointer;transition:color .12s,transform .12s}.star:hover{transform:translateY(-1px)}.star.active{color:var(--gold)}.explanation{width:100%;min-height:54px;resize:vertical;margin-top:11px;padding:9px 10px;border:1px solid var(--line-soft);border-radius:7px;background:#edf7fa;color:var(--ink);font-size:11px;line-height:1.45;outline:none}.explanation:focus{border-color:#75b5cd;background:#f5fcfe}.explanation::placeholder{color:#9cb7c2}.panel-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:14px 18px;border-top:1px solid var(--line-soft);background:rgba(236,248,251,.65)}.foot-note{font-size:10px;color:var(--faint)}.button.small{font-size:11px;padding:7px 10px}
 .toast{position:fixed;right:22px;bottom:22px;background:var(--ink);color:#fff;padding:10px 14px;border-radius:8px;font-size:11px;box-shadow:0 12px 30px rgba(19,58,73,.2);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateY(0)}
@@ -29,12 +29,21 @@ button,textarea,input{font:inherit}.topbar{height:58px;padding:0 28px;display:fl
 </header>
 <main class="page">
   <section class="hero">
-    <div><div class="eyebrow">Conversation quality review</div><h1>Rate it. Refine it.<br>Make it better.</h1><p>Paste a sales conversation, score its quality, then review exactly what the AI would change and why. Refine the plan until you are happy before applying any wording.</p></div>
+    <div><div class="eyebrow">Prompt quality review</div><h1>Use real chats to<br>improve the prompt.</h1><p>Paste the source prompt and a conversation it produced. Your ratings show the AI what went wrong, so it can propose targeted prompt edits without changing the original skeleton.</p></div>
     <div class="hero-actions"><button class="button" id="example-btn"><i class="ti ti-file-smile"></i> Load example</button><button class="button danger" id="clear-btn"><i class="ti ti-trash"></i> Clear review</button></div>
   </section>
   <div class="workspace">
+    <div class="input-column">
+    <section class="panel prompt-panel">
+      <div class="panel-head"><div class="head-copy"><span class="step">1</span><div><h2 class="panel-title">Paste the source prompt</h2><div class="panel-sub">This is the prompt Prompt Lab will improve. Its headings, variables, placeholders and line structure are protected.</div></div></div></div>
+      <div class="prompt-body">
+        <label for="source-prompt" class="panel-title" style="position:absolute;left:-9999px">Source prompt</label>
+        <textarea id="source-prompt" class="prompt-input" spellcheck="true" placeholder="Role: You are a helpful sales assistant.&#10;&#10;Goal: Help customers understand the service and move towards a quote.&#10;&#10;Rules:&#10;- Answer the customer’s question directly.&#10;- Keep replies concise.&#10;- Respect requests for no calls or visits."></textarea>
+        <div class="input-meta"><span>The revised version keeps the same prompt skeleton.</span><span id="prompt-char-count">0 characters</span></div>
+      </div>
+    </section>
     <section class="panel transcript-panel">
-      <div class="panel-head"><div class="head-copy"><span class="step">1</span><div><h2 class="panel-title">Paste the conversation</h2><div class="panel-sub">Use the labels [HUMAN], [CONTACT] and [AI]. Timestamps can stay exactly where they are.</div></div></div></div>
+      <div class="panel-head"><div class="head-copy"><span class="step">2</span><div><h2 class="panel-title">Paste the conversation</h2><div class="panel-sub">Use the labels [HUMAN], [CONTACT] and [AI]. This chat is evidence of how the source prompt performed.</div></div></div></div>
       <div class="transcript-body">
         <label for="transcript" class="panel-title" style="position:absolute;left:-9999px">Conversation transcript</label>
         <textarea id="transcript" class="transcript-input" spellcheck="true" placeholder="[HUMAN] Hi, would you like a free quote?&#10;[CONTACT] How much does it cost?&#10;[AI] I can help with that. Could I ask one quick question?"></textarea>
@@ -46,8 +55,9 @@ button,textarea,input{font:inherit}.topbar{height:58px;padding:0 28px;display:fl
         <div class="preview" id="preview"><div class="preview-empty">Your formatted conversation will appear here.<br>The original order and wording remain unchanged.</div></div>
       </div>
     </section>
+    </div>
     <section class="panel review-panel">
-      <div class="panel-head"><div class="head-copy"><span class="step">2</span><div><h2 class="panel-title">Rate the conversation</h2><div class="panel-sub">Choose one to five stars. Every explanation is optional.</div></div></div></div>
+      <div class="panel-head"><div class="head-copy"><span class="step">3</span><div><h2 class="panel-title">Rate the conversation</h2><div class="panel-sub">Choose one to five stars. Every explanation is optional.</div></div></div></div>
       <div class="review-summary">
         <div class="score-ring" id="score-ring"><strong id="average-score">—<span>/5</span></strong></div>
         <div><div class="summary-title" id="summary-title">No ratings yet</div><div class="summary-sub" id="summary-sub">Rate each topic to complete the review.</div><div class="progress"><span id="rating-progress"></span></div></div>
@@ -57,23 +67,23 @@ button,textarea,input{font:inherit}.topbar{height:58px;padding:0 28px;display:fl
     </section>
   </div>
   <section class="panel ai-panel" id="ai-panel" hidden>
-    <div class="panel-head"><div class="head-copy"><span class="step">3</span><div><h2 class="panel-title">Review the AI suggestion</h2><div class="panel-sub">Nothing changes yet. Read the overview, inspect every proposed edit, and ask for revisions if needed.</div></div></div><span class="ai-status-badge" id="ai-status-badge">Structure protected</span></div>
-    <div class="ai-loading" id="ai-loading" hidden><div class="spinner"></div><div><strong>Reviewing the conversation…</strong><br><span id="ai-loading-copy">Using your ratings and explanations to prepare a change plan.</span></div></div>
+    <div class="panel-head"><div class="head-copy"><span class="step">4</span><div><h2 class="panel-title">Review the prompt changes</h2><div class="panel-sub">Nothing changes yet. Read the overview, inspect each proposed prompt edit, and ask for revisions if needed.</div></div></div><span class="ai-status-badge" id="ai-status-badge">Skeleton protected</span></div>
+    <div class="ai-loading" id="ai-loading" hidden><div class="spinner"></div><div><strong>Reviewing the prompt and conversation…</strong><br><span id="ai-loading-copy">Using your ratings and explanations to prepare a prompt change plan.</span></div></div>
     <div class="ai-body" id="ai-content" hidden>
       <div class="overview-card"><div class="label">Overview of the proposed changes</div><p id="plan-overview"></p></div>
-      <h3 class="section-title">Message-by-message changes</h3>
+      <h3 class="section-title">Proposed prompt edits</h3>
       <div class="changes-list" id="changes-list"></div>
       <div class="refine-section">
-        <h3 class="section-title">Not happy with the plan?</h3><p>Tell the AI what to keep, remove or approach differently. It will return a revised plan for you to approve.</p>
+        <h3 class="section-title">Not happy with the plan?</h3><p>Tell the AI what prompt wording to keep, remove or approach differently. It will return a revised plan for you to approve.</p>
         <div class="feedback-thread" id="feedback-thread"></div>
-        <div class="feedback-compose"><textarea class="feedback-input" id="feedback-input" placeholder="For example: Keep the first AI reply shorter and do not remove the price range…"></textarea><button class="button" id="refine-btn"><i class="ti ti-send"></i> Send feedback</button></div>
+        <div class="feedback-compose"><textarea class="feedback-input" id="feedback-input" placeholder="For example: Make future first replies shorter, but keep the instruction about price ranges…"></textarea><button class="button" id="refine-btn"><i class="ti ti-send"></i> Send feedback</button></div>
       </div>
-      <div class="approval-strip"><div class="approval-copy"><strong>Ready to apply these changes?</strong><span>Only HUMAN and AI wording will change. CONTACT messages, speaker order, labels and timestamps stay fixed.</span></div><button class="button primary" id="apply-btn"><i class="ti ti-wand"></i> Approve &amp; make changes</button></div>
+      <div class="approval-strip"><div class="approval-copy"><strong>Ready to update the prompt?</strong><span>Only approved wording changes are applied. Headings, placeholders, protected tokens and line structure stay fixed.</span></div><button class="button primary" id="apply-btn"><i class="ti ti-wand"></i> Approve &amp; update prompt</button></div>
     </div>
   </section>
   <section class="panel final-panel" id="final-panel" hidden>
-    <div class="panel-head"><div class="head-copy"><span class="step">4</span><div><h2 class="panel-title">Revised conversation</h2><div class="panel-sub" id="final-summary">The approved wording has been applied without changing the conversation skeleton.</div></div></div></div>
-    <div class="final-body"><textarea class="final-output" id="final-output" readonly aria-label="Revised conversation"></textarea><div class="final-actions"><button class="button" id="back-to-plan-btn"><i class="ti ti-arrow-up"></i> Back to plan</button><button class="button primary" id="copy-final-btn"><i class="ti ti-copy"></i> Copy revised chat</button></div></div>
+    <div class="panel-head"><div class="head-copy"><span class="step">5</span><div><h2 class="panel-title">Revised prompt</h2><div class="panel-sub" id="final-summary">The approved wording has been applied without changing the prompt skeleton.</div></div></div></div>
+    <div class="final-body"><textarea class="final-output" id="final-output" readonly aria-label="Revised prompt"></textarea><div class="final-actions"><button class="button" id="back-to-plan-btn"><i class="ti ti-arrow-up"></i> Back to plan</button><button class="button primary" id="copy-final-btn"><i class="ti ti-copy"></i> Copy revised prompt</button></div></div>
   </section>
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -88,7 +98,7 @@ button,textarea,input{font:inherit}.topbar{height:58px;padding:0 28px;display:fl
 <script>
 if(sessionStorage.getItem('jt_unlocked')!=='1')window.location.href='index.html';
 
-const STORAGE_KEY='jt_prompt_lab_review_v2';
+const STORAGE_KEY='jt_prompt_lab_review_v3';
 const ENDPOINT_KEY='jt_prompt_lab_endpoint';
 const CRITERIA=[
   {id:'human',name:'Human-sounding',help:'Natural, believable language without robotic or scripted phrasing.'},
@@ -100,8 +110,10 @@ const CRITERIA=[
   {id:'boundaries',name:'Respecting boundaries',help:'Honours requests such as no calls, no visits or stopping contact.'},
   {id:'overall',name:'Overall quality',help:'Your overall judgement of the complete conversation and outcome.'}
 ];
-const EXAMPLE=`[HUMAN] Hi Sam, we helped with your gutters before. Would you like a free roof-cleaning quote?\n[CONTACT] How much would it cost?\n[AI] I can help with that. The price depends on the roof size and condition. If you share your postcode and property type, I can narrow it down for you.\n[CONTACT] I only want a rough price, no phone call please.\n[AI] Of course — we will not call. I can give you a rough range here once I know whether it is a terraced, semi-detached or detached property.`;
+const EXAMPLE_PROMPT=`Role: You are a helpful SMS sales assistant for Ben's Gutters.\n\nGoal: Help customers understand our services and arrange a quote.\n\nRules:\n- Keep replies friendly and concise.\n- When a customer asks about price, arrange a call with the team.\n- Share useful service information and videos when relevant.\n- End politely if the customer cancels.`;
+const EXAMPLE_CHAT=`[HUMAN] Hi Sam, we helped with your gutters before. Would you like a free roof-cleaning quote?\n[CONTACT] How much would it cost?\n[AI] Great stuff! I will get one of the team to call you and sort out a quote.\n[CONTACT] I only want a rough price, no phone call please.\n[AI] The team will need to chat with you to give an accurate quote.\n[CONTACT] Ok cancel everything.\n[AI] No worries at all. Have a good one!`;
 
+const sourcePrompt=document.getElementById('source-prompt');
 const transcript=document.getElementById('transcript');
 const preview=document.getElementById('preview');
 const status=document.getElementById('parse-status');
@@ -109,7 +121,7 @@ let ratings=Object.fromEntries(CRITERIA.map(item=>[item.id,{score:0,explanation:
 let parsedMessages=[];
 let currentPlan=null;
 let feedbackHistory=[];
-let finalTranscript='';
+let finalPrompt='';
 let saveTimer;
 
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));}
@@ -161,76 +173,106 @@ function updateSummary(){
   document.getElementById('score-ring').style.setProperty('--score-progress',`${average/5*100}%`);
   updateSubmitState();
 }
-function updateSubmitState(){const complete=CRITERIA.every(item=>ratings[item.id].score>0);document.getElementById('submit-ratings-btn').disabled=!complete||!parsedMessages.length;}
+function updatePromptCount(){document.getElementById('prompt-char-count').textContent=`${sourcePrompt.value.length.toLocaleString()} characters`;}
+function updateSubmitState(){const complete=CRITERIA.every(item=>ratings[item.id].score>0);document.getElementById('submit-ratings-btn').disabled=!complete||!parsedMessages.length||!sourcePrompt.value.trim();}
 function scheduleSave(){clearTimeout(saveTimer);document.getElementById('autosave-state').textContent='Saving…';saveTimer=setTimeout(saveState,250);}
-function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({transcript:transcript.value,ratings,currentPlan,feedbackHistory,finalTranscript}));document.getElementById('autosave-state').textContent='Saved in this browser';}catch(error){document.getElementById('autosave-state').textContent='Could not save';}}
-function loadState(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||localStorage.getItem('jt_prompt_lab_review_v1')||'null');if(!saved)return;transcript.value=typeof saved.transcript==='string'?saved.transcript:'';CRITERIA.forEach(item=>{if(saved.ratings?.[item.id])ratings[item.id]={score:Number(saved.ratings[item.id].score)||0,explanation:String(saved.ratings[item.id].explanation||'')};});currentPlan=saved.currentPlan&&typeof saved.currentPlan==='object'?saved.currentPlan:null;feedbackHistory=Array.isArray(saved.feedbackHistory)?saved.feedbackHistory:[];finalTranscript=typeof saved.finalTranscript==='string'?saved.finalTranscript:'';}catch(error){localStorage.removeItem(STORAGE_KEY);}}
+function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({sourcePrompt:sourcePrompt.value,transcript:transcript.value,ratings,currentPlan,feedbackHistory,finalPrompt}));document.getElementById('autosave-state').textContent='Saved in this browser';}catch(error){document.getElementById('autosave-state').textContent='Could not save';}}
+function loadState(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||localStorage.getItem('jt_prompt_lab_review_v2')||localStorage.getItem('jt_prompt_lab_review_v1')||'null');if(!saved)return;
+    sourcePrompt.value=typeof saved.sourcePrompt==='string'?saved.sourcePrompt:'';transcript.value=typeof saved.transcript==='string'?saved.transcript:'';
+    CRITERIA.forEach(item=>{if(saved.ratings?.[item.id])ratings[item.id]={score:Number(saved.ratings[item.id].score)||0,explanation:String(saved.ratings[item.id].explanation||'')};});
+    const isPromptPlan=saved.currentPlan&&Array.isArray(saved.currentPlan.changes)&&saved.currentPlan.changes.every(change=>typeof change.originalText==='string');
+    currentPlan=saved.sourcePrompt&&isPromptPlan?saved.currentPlan:null;feedbackHistory=currentPlan&&Array.isArray(saved.feedbackHistory)?saved.feedbackHistory:[];finalPrompt=typeof saved.finalPrompt==='string'?saved.finalPrompt:'';
+  }catch(error){localStorage.removeItem(STORAGE_KEY);}
+}
 function reviewSummary(){
-  const result=parseTranscript(transcript.value);const lines=['PROMPT LAB REVIEW','',`Messages: ${result.messages.length}`];
+  const result=parseTranscript(transcript.value);const lines=['PROMPT LAB REVIEW','','SOURCE PROMPT','',sourcePrompt.value.trim(),'','RATINGS','',`Messages: ${result.messages.length}`];
   const scored=CRITERIA.map(item=>ratings[item.id].score).filter(Boolean);if(scored.length)lines.push(`Average: ${(scored.reduce((a,b)=>a+b,0)/scored.length).toFixed(1)}/5`);lines.push('');
   CRITERIA.forEach(item=>{const value=ratings[item.id];lines.push(`${item.name}: ${value.score?value.score+'/5':'Not rated'}`);if(value.explanation.trim())lines.push(`Reason: ${value.explanation.trim()}`);lines.push('');});
   lines.push('ORIGINAL CHAT','',transcript.value.trim());return lines.join('\n');
 }
 function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.remove('show'),1800);}
-function invalidateAiResults(){if(!currentPlan&&!finalTranscript)return;currentPlan=null;feedbackHistory=[];finalTranscript='';document.getElementById('ai-panel').hidden=true;document.getElementById('final-panel').hidden=true;}
+function invalidateAiResults(){if(!currentPlan&&!finalPrompt)return;currentPlan=null;feedbackHistory=[];finalPrompt='';document.getElementById('ai-panel').hidden=true;document.getElementById('final-panel').hidden=true;}
 function savedEndpoint(){return localStorage.getItem(ENDPOINT_KEY)||localStorage.getItem('jt_ai_unwrap_endpoint')||'';}
 function promptLabUrl(){const value=savedEndpoint().trim().replace(/\/$/,'').replace(/\/unwrap$/i,'');return /\/prompt-lab$/i.test(value)?value:value+'/prompt-lab';}
 function openEndpointModal(){const value=savedEndpoint();document.getElementById('endpoint-input').value=value;document.getElementById('connection-state').textContent=value?'A worker URL is currently saved.':'No worker URL saved.';document.getElementById('endpoint-modal').hidden=false;setTimeout(()=>document.getElementById('endpoint-input').focus(),50);}
 function closeEndpointModal(){document.getElementById('endpoint-modal').hidden=true;}
 function saveEndpoint(){const value=document.getElementById('endpoint-input').value.trim().replace(/\/$/,'');if(value&&!/^https:\/\//i.test(value)&&!/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(value)){document.getElementById('connection-state').textContent='Use a secure HTTPS Worker URL.';return;}if(value)localStorage.setItem(ENDPOINT_KEY,value);else localStorage.removeItem(ENDPOINT_KEY);closeEndpointModal();showToast(value?'AI connection saved':'AI connection removed');}
-function planPayload(action){return{action,messages:parsedMessages.map(item=>({index:item.index,role:item.role,timestamp:item.timestamp,text:item.text})),review:CRITERIA.map(item=>({topic:item.name,score:ratings[item.id].score,explanation:ratings[item.id].explanation.trim()})),previousPlan:action==='refine'?currentPlan:null,feedbackHistory:action==='refine'?feedbackHistory:[]};}
-function setInitialAiLoading(isLoading){document.getElementById('ai-loading').hidden=!isLoading;document.getElementById('ai-content').hidden=isLoading;document.getElementById('submit-ratings-btn').disabled=isLoading||!CRITERIA.every(item=>ratings[item.id].score>0);}
-function cleanReplacement(value,message){let text=String(value||'').trim();text=text.replace(/^\s*\[(HUMAN|AI)\]\s*/i,'');if(message.timestamp&&text.startsWith(message.timestamp))text=text.slice(message.timestamp.length).trimStart();text=text.replace(/\n\s*\[(HUMAN|CONTACT|AI)\]\s*/gi,' ');return text;}
+function planPayload(action){return{action,sourcePrompt:sourcePrompt.value,messages:parsedMessages.map(item=>({index:item.index,role:item.role,timestamp:item.timestamp,text:item.text})),review:CRITERIA.map(item=>({topic:item.name,score:ratings[item.id].score,explanation:ratings[item.id].explanation.trim()})),previousPlan:action==='refine'?currentPlan:null,feedbackHistory:action==='refine'?feedbackHistory:[]};}
+function setInitialAiLoading(isLoading){document.getElementById('ai-loading').hidden=!isLoading;document.getElementById('ai-content').hidden=isLoading;if(isLoading)document.getElementById('submit-ratings-btn').disabled=true;else updateSubmitState();}
+function countOccurrences(value,search){if(!search)return 0;let count=0;let position=0;while((position=value.indexOf(search,position))!==-1){count++;position+=search.length;}return count;}
+function promptSkeletonSignature(value){
+  const text=String(value||'').replace(/\r\n?/g,'\n');const lines=text.split('\n');
+  const headings=lines.filter(line=>/^\s*(?:#{1,6}\s+.+|[A-Za-z][A-Za-z0-9 &/_-]{0,60}:)\s*$/.test(line));
+  const tokens=Array.from(text.matchAll(/\{\{[^{}\n]+\}\}|\$\{[^}\n]+\}|\{[A-Za-z0-9_.-]+\}|<\/?[A-Za-z][^>]*>|\[[A-Z][A-Z0-9 _-]{1,}\]|"[^"\n]+"\s*:/g),match=>match[0]);
+  const linePrefixes=lines.map(line=>(line.match(/^(\s*(?:[-*+] |\d+[.)] )?)/)||['',''])[1]);
+  const blankLines=lines.map((line,index)=>line.trim()?null:index).filter(index=>index!==null);
+  return JSON.stringify({headings,tokens,lineCount:lines.length,linePrefixes,blankLines});
+}
+function applyPromptChanges(prompt,changes){
+  const ranges=changes.map(change=>{const start=prompt.indexOf(change.originalText);if(start<0||countOccurrences(prompt,change.originalText)!==1)throw new Error('A suggested prompt excerpt is no longer unique.');return{...change,start,end:start+change.originalText.length};}).sort((a,b)=>b.start-a.start);
+  for(let index=0;index<ranges.length-1;index++)if(ranges[index+1].end>ranges[index].start)throw new Error('Two suggested prompt changes overlap.');
+  let revised=prompt;ranges.forEach(change=>{revised=revised.slice(0,change.start)+change.replacementText+revised.slice(change.end);});
+  if(promptSkeletonSignature(revised)!==promptSkeletonSignature(prompt))throw new Error('The suggested wording would change the protected prompt skeleton.');
+  return revised;
+}
 function normalisePlan(plan){
   if(!plan||typeof plan!=='object')throw new Error('The AI returned an invalid change plan.');
-  const allowed=new Map(parsedMessages.filter(item=>item.role==='HUMAN'||item.role==='AI').map(item=>[item.index,item]));
-  const seen=new Set();const changes=[];
-  (Array.isArray(plan.changes)?plan.changes:[]).forEach(change=>{const index=Number(change.messageIndex);const message=allowed.get(index);if(!message||seen.has(index))return;const replacementText=cleanReplacement(change.replacementText,message);if(!replacementText||replacementText===message.text.trim())return;seen.add(index);changes.push({messageIndex:index,speaker:message.role,replacementText,whatChanges:String(change.whatChanges||'The wording is adjusted.'),why:String(change.why||'To better match the submitted review.')});});
-  return{overview:String(plan.overview||'The suggested wording responds to the issues raised in the ratings.'),conversationReply:String(plan.conversationReply||'I have prepared a change plan for you to review.'),changes};
+  const prompt=sourcePrompt.value;const changes=[];const ranges=[];
+  (Array.isArray(plan.changes)?plan.changes:[]).forEach(change=>{
+    const originalText=String(change.originalText||'');const replacementText=String(change.replacementText||'');
+    if(!originalText.trim()||!replacementText.trim()||originalText===replacementText||countOccurrences(prompt,originalText)!==1)return;
+    if(promptSkeletonSignature(originalText)!==promptSkeletonSignature(replacementText))return;
+    const start=prompt.indexOf(originalText);const end=start+originalText.length;if(ranges.some(range=>start<range.end&&end>range.start))return;ranges.push({start,end});
+    changes.push({originalText,replacementText,whatChanges:String(change.whatChanges||'The prompt wording is adjusted.'),why:String(change.why||'To address the issues shown by the chat and ratings.')});
+  });
+  if(changes.length)applyPromptChanges(prompt,changes);
+  return{overview:String(plan.overview||'The suggested prompt wording responds to the issues raised in the ratings.'),conversationReply:String(plan.conversationReply||'I have prepared a prompt change plan for you to review.'),changes};
 }
 async function requestPlan(action){
   renderPreview(true);if(!parsedMessages.length)return;
+  if(!sourcePrompt.value.trim()){showToast('Paste the source prompt first');sourcePrompt.focus();return;}
   if(!savedEndpoint()){openEndpointModal();return;}
   const isRefine=action==='refine';const feedback=document.getElementById('feedback-input').value.trim();
   if(isRefine&&!feedback){showToast('Write some feedback first');return;}
   if(isRefine){feedbackHistory.push({role:'user',text:feedback});document.getElementById('feedback-input').value='';renderFeedback();}
   const panel=document.getElementById('ai-panel');panel.hidden=false;
-  if(!isRefine){currentPlan=null;feedbackHistory=[];document.getElementById('ai-loading-copy').textContent='Using your ratings and explanations to prepare a change plan.';setInitialAiLoading(true);panel.scrollIntoView({behavior:'smooth',block:'start'});}
+  if(!isRefine){currentPlan=null;feedbackHistory=[];document.getElementById('ai-loading-copy').textContent='Using the chat and your ratings to prepare safe prompt changes.';setInitialAiLoading(true);panel.scrollIntoView({behavior:'smooth',block:'start'});}
   const refineButton=document.getElementById('refine-btn');refineButton.disabled=true;const oldRefineText=refineButton.innerHTML;if(isRefine)refineButton.innerHTML='<span class="spinner" style="width:14px;height:14px;border-width:2px"></span> Revising';
   try{
     const response=await fetch(promptLabUrl(),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(planPayload(action))});
     const data=await response.json().catch(()=>({error:'The worker returned an unreadable response.'}));if(!response.ok)throw new Error(data.error||`Request failed (${response.status}).`);
-    currentPlan=normalisePlan(data.plan);feedbackHistory.push({role:'assistant',text:currentPlan.conversationReply});finalTranscript='';document.getElementById('final-panel').hidden=true;renderPlan();scheduleSave();
+    currentPlan=normalisePlan(data.plan);feedbackHistory.push({role:'assistant',text:currentPlan.conversationReply});finalPrompt='';document.getElementById('final-panel').hidden=true;renderPlan();scheduleSave();
   }catch(error){if(isRefine&&feedbackHistory.at(-1)?.role==='user')feedbackHistory.pop();if(!isRefine){panel.hidden=true;setInitialAiLoading(false);}renderFeedback();showToast(error.message||'The AI suggestion failed.');}
   finally{refineButton.disabled=false;refineButton.innerHTML=oldRefineText;}
 }
 function renderPlan(){
   if(!currentPlan)return;document.getElementById('ai-panel').hidden=false;setInitialAiLoading(false);document.getElementById('plan-overview').textContent=currentPlan.overview;
   const list=document.getElementById('changes-list');
-  if(!currentPlan.changes.length)list.innerHTML='<div class="no-changes">The AI does not recommend changing any seller messages based on this review.</div>';
-  else list.innerHTML=currentPlan.changes.map(change=>{const message=parsedMessages[change.messageIndex];const original=(message.timestamp?message.timestamp+' ':'')+message.text;const suggested=(message.timestamp?message.timestamp+' ':'')+change.replacementText;return `<article class="change-card"><div class="change-head"><span class="change-message">Message ${change.messageIndex+1}</span><span class="change-role">${change.speaker}</span></div><div class="change-copy"><div><div class="change-label">Original wording</div><div class="change-text">${escapeHtml(original)}</div></div><div><div class="change-label">Suggested wording</div><div class="change-text suggested">${escapeHtml(suggested)}</div></div></div><div class="change-reasons"><div><div class="reason-label">What will change</div><div class="reason-text">${escapeHtml(change.whatChanges)}</div></div><div><div class="reason-label why">Why this change helps</div><div class="reason-text">${escapeHtml(change.why)}</div></div></div></article>`;}).join('');
+  if(!currentPlan.changes.length)list.innerHTML='<div class="no-changes">The AI did not find a safe wording change that preserves this prompt skeleton.</div>';
+  else list.innerHTML=currentPlan.changes.map((change,index)=>`<article class="change-card"><div class="change-head"><span class="change-message">Prompt edit ${index+1}</span><span class="change-role">PROMPT</span></div><div class="change-copy"><div><div class="change-label">Original prompt wording</div><div class="change-text">${escapeHtml(change.originalText)}</div></div><div><div class="change-label">Suggested prompt wording</div><div class="change-text suggested">${escapeHtml(change.replacementText)}</div></div></div><div class="change-reasons"><div><div class="reason-label">What will change</div><div class="reason-text">${escapeHtml(change.whatChanges)}</div></div><div><div class="reason-label why">Why this change helps</div><div class="reason-text">${escapeHtml(change.why)}</div></div></div></article>`).join('');
   document.getElementById('apply-btn').disabled=!currentPlan.changes.length;renderFeedback();
 }
 function renderFeedback(){const thread=document.getElementById('feedback-thread');thread.innerHTML=feedbackHistory.map(item=>`<div class="feedback-bubble ${item.role==='user'?'user':'assistant'}">${escapeHtml(item.text)}</div>`).join('');}
 function applyApprovedChanges(){
-  if(!currentPlan?.changes?.length)return;const replacements=new Map(currentPlan.changes.map(change=>[change.messageIndex,change.replacementText]));
-  const revised=parsedMessages.map(message=>message.prefix+(replacements.has(message.index)?replacements.get(message.index):message.text)).join('\n');const check=parseTranscript(revised).messages;
-  const skeletonSafe=check.length===parsedMessages.length&&check.every((message,index)=>message.role===parsedMessages[index].role&&message.timestamp===parsedMessages[index].timestamp&&(message.role!=='CONTACT'||message.text===parsedMessages[index].text));
-  if(!skeletonSafe){showToast('The structure check failed, so no changes were applied.');return;}
-  finalTranscript=revised;document.getElementById('final-output').value=revised;document.getElementById('final-summary').textContent=`${currentPlan.changes.length} approved change${currentPlan.changes.length===1?'':'s'} applied. Labels, timestamps, order and customer messages were verified unchanged.`;document.getElementById('final-panel').hidden=false;document.getElementById('final-panel').scrollIntoView({behavior:'smooth',block:'start'});scheduleSave();
+  if(!currentPlan?.changes?.length)return;let revised;
+  try{revised=applyPromptChanges(sourcePrompt.value,currentPlan.changes);}catch(error){showToast(error.message||'The prompt structure check failed.');return;}
+  finalPrompt=revised;document.getElementById('final-output').value=revised;document.getElementById('final-summary').textContent=`${currentPlan.changes.length} approved prompt change${currentPlan.changes.length===1?'':'s'} applied. Headings, placeholders, protected tokens and line structure were verified unchanged.`;document.getElementById('final-panel').hidden=false;document.getElementById('final-panel').scrollIntoView({behavior:'smooth',block:'start'});scheduleSave();
 }
 async function copyText(value,success){try{await navigator.clipboard.writeText(value);}catch(error){const area=document.createElement('textarea');area.value=value;document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();}showToast(success);}
 
+sourcePrompt.addEventListener('input',()=>{invalidateAiResults();updatePromptCount();updateSubmitState();scheduleSave();});
 transcript.addEventListener('input',()=>{invalidateAiResults();renderPreview(false);scheduleSave();});
-document.getElementById('review-btn').addEventListener('click',()=>{renderPreview(true);if(parsedMessages.length)document.querySelector('.review-panel').scrollIntoView({behavior:'smooth',block:'start'});});
-document.getElementById('example-btn').addEventListener('click',()=>{if(transcript.value.trim()&&!confirm('Replace the current conversation with the example?'))return;invalidateAiResults();transcript.value=EXAMPLE;renderPreview(true);scheduleSave();});
-document.getElementById('clear-btn').addEventListener('click',()=>{if((transcript.value.trim()||CRITERIA.some(item=>ratings[item.id].score||ratings[item.id].explanation))&&!confirm('Clear this conversation, ratings and AI plan?'))return;transcript.value='';ratings=Object.fromEntries(CRITERIA.map(item=>[item.id,{score:0,explanation:''}]));currentPlan=null;feedbackHistory=[];finalTranscript='';localStorage.removeItem(STORAGE_KEY);document.getElementById('ai-panel').hidden=true;document.getElementById('final-panel').hidden=true;renderCriteria();renderPreview(false);updateSummary();showToast('Review cleared');});
+document.getElementById('review-btn').addEventListener('click',()=>{if(!sourcePrompt.value.trim()){showToast('Paste the source prompt first');sourcePrompt.focus();return;}renderPreview(true);if(parsedMessages.length)document.querySelector('.review-panel').scrollIntoView({behavior:'smooth',block:'start'});});
+document.getElementById('example-btn').addEventListener('click',()=>{if((sourcePrompt.value.trim()||transcript.value.trim())&&!confirm('Replace the current prompt and conversation with the example?'))return;invalidateAiResults();sourcePrompt.value=EXAMPLE_PROMPT;transcript.value=EXAMPLE_CHAT;updatePromptCount();renderPreview(true);scheduleSave();});
+document.getElementById('clear-btn').addEventListener('click',()=>{if((sourcePrompt.value.trim()||transcript.value.trim()||CRITERIA.some(item=>ratings[item.id].score||ratings[item.id].explanation))&&!confirm('Clear this prompt, conversation, ratings and AI plan?'))return;sourcePrompt.value='';transcript.value='';ratings=Object.fromEntries(CRITERIA.map(item=>[item.id,{score:0,explanation:''}]));currentPlan=null;feedbackHistory=[];finalPrompt='';localStorage.removeItem(STORAGE_KEY);document.getElementById('ai-panel').hidden=true;document.getElementById('final-panel').hidden=true;renderCriteria();updatePromptCount();renderPreview(false);updateSummary();showToast('Review cleared');});
 document.getElementById('copy-btn').addEventListener('click',()=>{if(!transcript.value.trim()&&!CRITERIA.some(item=>ratings[item.id].score)){showToast('Nothing to copy yet');return;}copyText(reviewSummary(),'Ratings copied');});
 document.getElementById('submit-ratings-btn').addEventListener('click',()=>requestPlan('suggest'));
 document.getElementById('refine-btn').addEventListener('click',()=>requestPlan('refine'));
 document.getElementById('feedback-input').addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key==='Enter')requestPlan('refine');});
 document.getElementById('apply-btn').addEventListener('click',applyApprovedChanges);
-document.getElementById('copy-final-btn').addEventListener('click',()=>copyText(finalTranscript,'Revised chat copied'));
+document.getElementById('copy-final-btn').addEventListener('click',()=>copyText(finalPrompt,'Revised prompt copied'));
 document.getElementById('back-to-plan-btn').addEventListener('click',()=>document.getElementById('ai-panel').scrollIntoView({behavior:'smooth',block:'start'}));
 document.getElementById('ai-setup-btn').addEventListener('click',openEndpointModal);
 document.getElementById('cancel-endpoint-btn').addEventListener('click',closeEndpointModal);
@@ -238,7 +280,7 @@ document.getElementById('save-endpoint-btn').addEventListener('click',saveEndpoi
 document.getElementById('endpoint-modal').addEventListener('click',event=>{if(event.target===event.currentTarget)closeEndpointModal();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeEndpointModal();});
 
-loadState();renderCriteria();renderPreview(false);updateSummary();if(currentPlan)renderPlan();if(finalTranscript){document.getElementById('final-output').value=finalTranscript;document.getElementById('final-panel').hidden=false;}
+loadState();renderCriteria();updatePromptCount();renderPreview(false);updateSummary();if(currentPlan){try{currentPlan=normalisePlan(currentPlan);renderPlan();}catch(error){currentPlan=null;feedbackHistory=[];}}if(finalPrompt){document.getElementById('final-output').value=finalPrompt;document.getElementById('final-panel').hidden=false;}
 </script>
 </body>
 </html>
