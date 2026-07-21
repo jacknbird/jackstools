@@ -9,118 +9,39 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;background:#e8f4f8;color:#1a3a4a;font-family:'DM Sans',sans-serif}
-body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;text-align:center}
-body{background:radial-gradient(circle at 18% 12%,#fbfeff 0,transparent 34%),radial-gradient(circle at 82% 86%,#c8e8f4 0,transparent 38%),linear-gradient(135deg,#d9edf5,#eefafd 55%,#cce6f1)}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;text-align:center;background:radial-gradient(circle at 18% 12%,#fbfeff 0,transparent 34%),radial-gradient(circle at 82% 86%,#c8e8f4 0,transparent 38%),linear-gradient(135deg,#d9edf5,#eefafd 55%,#cce6f1)}
 .lock{position:fixed;inset:0;background:radial-gradient(circle at 22% 15%,#fbfeff 0,transparent 36%),linear-gradient(145deg,#dceff6,#cce7f2);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;padding:24px}
-.lock h2{font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;margin-bottom:8px}
-.lock p{font-size:13px;color:#5a9ab5;margin-bottom:24px}
-.lock input{font-size:18px;padding:12px 16px;border-radius:12px;border:0.5px solid rgba(146,196,216,.78);background:rgba(244,252,255,.62);backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,.88),0 16px 40px rgba(30,91,114,.11);color:#1a3a4a;text-align:center;letter-spacing:.2em;width:180px;font-family:'DM Sans',sans-serif;outline:none}
-.lock input:focus{border-color:#2a7fa5}
-.lock input.wrong{border-color:#e07070;animation:shake .3s}
-.lock-hint{font-size:11px;color:#e07070;margin-top:10px;height:16px}
+.lock h2{font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;margin-bottom:8px}.lock p{font-size:13px;color:#5a9ab5;margin-bottom:24px}
+.lock input{font-size:18px;padding:12px 16px;border-radius:12px;border:.5px solid rgba(146,196,216,.78);background:rgba(244,252,255,.62);backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,.88),0 16px 40px rgba(30,91,114,.11);color:#1a3a4a;text-align:center;letter-spacing:.2em;width:180px;font-family:'DM Sans',sans-serif;outline:none}.lock input:focus{border-color:#2a7fa5}.lock input.wrong{border-color:#e07070;animation:shake .3s}.lock-hint{font-size:11px;color:#e07070;margin-top:10px;height:16px}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-#main-content{display:none;flex-direction:column;align-items:center;width:100%}
-.badge{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#5a9ab5;border:0.5px solid rgba(151,201,220,.72);border-radius:20px;padding:5px 14px;margin-bottom:26px;display:inline-block;background:rgba(244,252,255,.58);backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.85)}
-h1{font-family:'DM Serif Display',serif;font-size:clamp(48px,10vw,82px);font-weight:400;line-height:1.05;margin-bottom:14px;letter-spacing:-.02em}
-h1 span{color:#2a7fa5}
-.sub{font-size:15px;color:#5a8a9a;margin-bottom:34px}
-.tools{display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px}
-.tool-btn{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(145deg,rgba(248,253,255,.7),rgba(220,241,249,.52));border:0.5px solid rgba(151,201,220,.72);border-radius:14px;padding:15px 18px;text-decoration:none;color:#1a3a4a;backdrop-filter:blur(22px) saturate(145%);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 14px 36px rgba(31,92,116,.09);transition:border-color .15s,background .15s,transform .15s,box-shadow .15s}
-.tool-btn:hover{background:rgba(226,244,251,.82);border-color:#7abcd4;transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.94),0 18px 42px rgba(31,92,116,.14)}
-.tool-btn:focus-visible{outline:2px solid #2a7fa5;outline-offset:3px}
-.tool-left{display:flex;align-items:center;gap:14px;min-width:0}
-.tool-icon{width:36px;height:36px;border-radius:10px;background:rgba(212,238,248,.72);border:0.5px solid rgba(151,201,220,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.tool-info{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
-.tool-name{font-size:14px;font-weight:500}
-.tool-desc{font-size:11px;color:#5a9ab5;text-align:left}
-.arrow{color:#2a7fa5;font-size:16px;margin-left:12px}
-.footer{font-size:11px;color:#9acad8;margin-top:24px}
+#main-content{display:none;flex-direction:column;align-items:center;width:100%}.badge{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#5a9ab5;border:.5px solid rgba(151,201,220,.72);border-radius:20px;padding:5px 14px;margin-bottom:26px;display:inline-block;background:rgba(244,252,255,.58);backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.85)}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(48px,10vw,82px);font-weight:400;line-height:1.05;margin-bottom:14px;letter-spacing:-.02em}h1 span{color:#2a7fa5}.sub{font-size:15px;color:#5a8a9a;margin-bottom:34px}.tools{display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px}
+.tool-btn{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(145deg,rgba(248,253,255,.7),rgba(220,241,249,.52));border:.5px solid rgba(151,201,220,.72);border-radius:14px;padding:15px 18px;text-decoration:none;color:#1a3a4a;backdrop-filter:blur(22px) saturate(145%);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 14px 36px rgba(31,92,116,.09);transition:border-color .15s,background .15s,transform .15s,box-shadow .15s}.tool-btn:hover{background:rgba(226,244,251,.82);border-color:#7abcd4;transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.94),0 18px 42px rgba(31,92,116,.14)}.tool-btn:focus-visible{outline:2px solid #2a7fa5;outline-offset:3px}.tool-left{display:flex;align-items:center;gap:14px;min-width:0}.tool-icon{width:36px;height:36px;border-radius:10px;background:rgba(212,238,248,.72);border:.5px solid rgba(151,201,220,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}.tool-info{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}.tool-name{font-size:14px;font-weight:500}.tool-desc{font-size:11px;color:#5a9ab5;text-align:left}.arrow{color:#2a7fa5;font-size:16px;margin-left:12px}.footer{font-size:11px;color:#9acad8;margin-top:24px}
 </style>
 </head>
 <body>
 <div class="lock" id="lock">
-  <h2>Jack's Tools</h2>
-  <p>Enter password to continue</p>
+  <h2>Jack's Tools</h2><p>Enter password to continue</p>
   <input type="password" id="pw-input" placeholder="••••" maxlength="20" aria-label="Password" onkeydown="if(event.key==='Enter')checkPw()">
   <div class="lock-hint" id="pw-hint" aria-live="polite"></div>
 </div>
 <main id="main-content">
-  <span class="badge">jacktools.online</span>
-  <h1>Jack's<br><span>Tools.</span></h1>
-  <p class="sub">Your personal collection of tools.</p>
+  <span class="badge">jacktools.online</span><h1>Jack's<br><span>Tools.</span></h1><p class="sub">Your personal collection of tools.</p>
   <div class="tools">
-    <a href="uv-viewer.html" class="tool-btn">
-      <div class="tool-left">
-        <div class="tool-icon" aria-hidden="true">🧊</div>
-        <div class="tool-info">
-          <span class="tool-name">3D Viewer</span>
-          <span class="tool-desc">Inspect models, generate UVs and compare layouts</span>
-        </div>
-      </div>
-      <span class="arrow" aria-hidden="true">→</span>
-    </a>
-    <a href="prompts.html" class="tool-btn">
-      <div class="tool-left">
-        <div class="tool-icon" aria-hidden="true">✏️</div>
-        <div class="tool-info">
-          <span class="tool-name">Prompt Editor</span>
-          <span class="tool-desc">Edit, version &amp; diff AI prompts</span>
-        </div>
-      </div>
-      <span class="arrow" aria-hidden="true">→</span>
-    </a>
-    <a href="tickets.html" class="tool-btn">
-      <div class="tool-left">
-        <div class="tool-icon" aria-hidden="true">🎟️</div>
-        <div class="tool-info">
-          <span class="tool-name">Ticket Finder</span>
-          <span class="tool-desc">Find concert tickets &amp; last-minute deals</span>
-        </div>
-      </div>
-      <span class="arrow" aria-hidden="true">→</span>
-    </a>
-    <a href="video.html" class="tool-btn">
-      <div class="tool-left">
-        <div class="tool-icon" aria-hidden="true">🎬</div>
-        <div class="tool-info">
-          <span class="tool-name">Video Generator</span>
-          <span class="tool-desc">Generate cinematic astronomy marketing videos</span>
-        </div>
-      </div>
-      <span class="arrow" aria-hidden="true">→</span>
-    </a>
-    <a href="sales-graph.html" class="tool-btn">
-      <div class="tool-left">
-        <div class="tool-icon" aria-hidden="true">📈</div>
-        <div class="tool-info">
-          <span class="tool-name">Sales Graph Maker</span>
-          <span class="tool-desc">Track company sales and compare weekly performance</span>
-        </div>
-      </div>
-      <span class="arrow" aria-hidden="true">→</span>
-    </a>
+    <a href="uv-viewer.html" class="tool-btn"><div class="tool-left"><div class="tool-icon" aria-hidden="true">🧊</div><div class="tool-info"><span class="tool-name">3D Viewer</span><span class="tool-desc">Inspect models, generate UVs and compare layouts</span></div></div><span class="arrow" aria-hidden="true">→</span></a>
+    <a href="prompts.html" class="tool-btn"><div class="tool-left"><div class="tool-icon" aria-hidden="true">✏️</div><div class="tool-info"><span class="tool-name">Prompt Editor</span><span class="tool-desc">Edit, version &amp; diff AI prompts</span></div></div><span class="arrow" aria-hidden="true">→</span></a>
+    <a href="prompt-lab.html" class="tool-btn"><div class="tool-left"><div class="tool-icon" aria-hidden="true">⭐</div><div class="tool-info"><span class="tool-name">Prompt Lab</span><span class="tool-desc">Review and rate AI sales conversations</span></div></div><span class="arrow" aria-hidden="true">→</span></a>
+    <a href="tickets.html" class="tool-btn"><div class="tool-left"><div class="tool-icon" aria-hidden="true">🎟️</div><div class="tool-info"><span class="tool-name">Ticket Finder</span><span class="tool-desc">Find concert tickets &amp; last-minute deals</span></div></div><span class="arrow" aria-hidden="true">→</span></a>
+    <a href="video.html" class="tool-btn"><div class="tool-left"><div class="tool-icon" aria-hidden="true">🎬</div><div class="tool-info"><span class="tool-name">Video Generator</span><span class="tool-desc">Generate cinematic astronomy marketing videos</span></div></div><span class="arrow" aria-hidden="true">→</span></a>
+    <a href="sales-graph.html" class="tool-btn"><div class="tool-left"><div class="tool-icon" aria-hidden="true">📈</div><div class="tool-info"><span class="tool-name">Sales Graph Maker</span><span class="tool-desc">Track company sales and compare weekly performance</span></div></div><span class="arrow" aria-hidden="true">→</span></a>
   </div>
   <div class="footer" id="footer" style="display:none">More tools coming soon</div>
 </main>
 <script>
-const PASSWORD='1971';
-const SESSION_KEY='jt_unlocked';
-function checkPw(){
-  const val=document.getElementById('pw-input').value;
-  if(val===PASSWORD){sessionStorage.setItem(SESSION_KEY,'1');unlock();}
-  else{
-    const i=document.getElementById('pw-input');i.classList.add('wrong');
-    document.getElementById('pw-hint').textContent='Incorrect password';i.value='';
-    setTimeout(()=>{i.classList.remove('wrong');document.getElementById('pw-hint').textContent='';},1500);
-  }
-}
-function unlock(){
-  document.getElementById('lock').style.display='none';
-  document.getElementById('main-content').style.display='flex';
-  document.getElementById('footer').style.display='';
-}
-if(sessionStorage.getItem(SESSION_KEY)==='1')unlock();
-else setTimeout(()=>document.getElementById('pw-input').focus(),100);
+const PASSWORD='1971',SESSION_KEY='jt_unlocked';
+function checkPw(){const val=document.getElementById('pw-input').value;if(val===PASSWORD){sessionStorage.setItem(SESSION_KEY,'1');unlock();}else{const input=document.getElementById('pw-input');input.classList.add('wrong');document.getElementById('pw-hint').textContent='Incorrect password';input.value='';setTimeout(()=>{input.classList.remove('wrong');document.getElementById('pw-hint').textContent='';},1500);}}
+function unlock(){document.getElementById('lock').style.display='none';document.getElementById('main-content').style.display='flex';document.getElementById('footer').style.display='';}
+if(sessionStorage.getItem(SESSION_KEY)==='1')unlock();else setTimeout(()=>document.getElementById('pw-input').focus(),100);
 </script>
 </body>
 </html>

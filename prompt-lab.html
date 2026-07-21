@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Lab — Jacks Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/tabler-icons.min.css">
+<style>
+:root{--ink:#1a3a4a;--muted:#668f9f;--faint:#89afbd;--blue:#2a7fa5;--blue-dark:#1d6685;--line:#b9dbe7;--line-soft:#d5eaf1;--panel:#f5fbfd;--page:#e8f4f8;--gold:#eead3c;--red:#b14c4c;--green:#327a68}
+*{box-sizing:border-box}html{min-height:100%;background:var(--page)}body{margin:0;min-height:100vh;background:radial-gradient(circle at 12% 4%,#fbfeff 0,transparent 30%),linear-gradient(150deg,#edf9fc,#e1f1f6 60%,#d8edf4);color:var(--ink);font-family:'DM Sans',sans-serif}
+button,textarea{font:inherit}.topbar{height:58px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid rgba(157,203,219,.7);background:rgba(245,252,254,.86);backdrop-filter:blur(18px);position:sticky;top:0;z-index:20}.topbar-left{display:flex;align-items:center;gap:14px}.back,.button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);border-radius:8px;background:#edf8fb;color:#477d92;padding:8px 12px;text-decoration:none;cursor:pointer;transition:.15s ease}.back:hover,.button:hover{background:#dff1f7;color:var(--ink);border-color:#84bfd3}.button.primary{background:var(--blue);border-color:var(--blue);color:#fff}.button.primary:hover{background:var(--blue-dark);border-color:var(--blue-dark);color:#fff}.button.danger{color:var(--red)}.button:focus-visible,.star:focus-visible,textarea:focus-visible{outline:3px solid rgba(42,127,165,.24);outline-offset:2px}.brand{font-family:'DM Serif Display',serif;font-size:21px}.brand span{color:var(--blue)}.autosave{font-size:11px;color:var(--faint);display:flex;align-items:center;gap:6px}.autosave::before{content:'';width:7px;height:7px;border-radius:50%;background:#62a993;box-shadow:0 0 0 3px rgba(98,169,147,.12)}
+.page{width:min(1220px,100%);margin:0 auto;padding:34px 28px 54px}.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--blue);font-weight:500;margin-bottom:8px}.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(34px,5vw,50px);line-height:1.02;font-weight:400;letter-spacing:-.02em;margin:0 0 10px}.hero p{margin:0;color:var(--muted);font-size:13px;max-width:670px;line-height:1.55}.hero-actions{display:flex;gap:8px;flex-shrink:0}
+.workspace{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:18px;align-items:start}.panel{background:rgba(247,252,254,.9);border:1px solid rgba(174,215,228,.9);border-radius:14px;box-shadow:0 18px 46px rgba(35,91,111,.08),inset 0 1px 0 rgba(255,255,255,.9);overflow:hidden}.panel-head{padding:17px 18px 14px;border-bottom:1px solid var(--line-soft);display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.panel-title{font-size:15px;font-weight:500;margin:0}.panel-sub{font-size:11px;color:var(--faint);margin-top:4px;line-height:1.45}.step{width:25px;height:25px;border-radius:50%;background:#d8edf5;color:var(--blue);display:grid;place-items:center;font-size:11px;font-weight:500;flex:0 0 auto}.head-copy{display:flex;gap:10px;align-items:flex-start}.transcript-body{padding:18px}.transcript-input{width:100%;min-height:310px;resize:vertical;padding:15px 16px;border:1px solid var(--line);border-radius:10px;background:#edf7fa;color:var(--ink);font-size:13px;line-height:1.65;outline:none}.transcript-input::placeholder{color:#91b0bc}.transcript-input:focus{border-color:var(--blue);background:#f3fbfd}.input-meta{display:flex;justify-content:space-between;gap:12px;color:var(--faint);font-size:11px;margin:9px 1px 14px}.input-actions{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}.status{font-size:11px;color:var(--muted);min-height:17px}.status.success{color:var(--green)}.status.error{color:var(--red)}
+.preview-wrap{border-top:1px solid var(--line-soft);padding:18px}.preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.preview-head h2{font-size:12px;margin:0;font-weight:500}.message-counts{font-size:10px;color:var(--faint)}.preview{display:flex;flex-direction:column;gap:9px;max-height:410px;overflow:auto;padding-right:4px}.preview-empty{border:1px dashed var(--line);border-radius:10px;color:var(--faint);text-align:center;padding:30px 18px;font-size:12px;line-height:1.55}.message{border:1px solid var(--line-soft);border-left:3px solid var(--line);border-radius:8px;padding:10px 12px;background:#f7fcfd}.message.human{border-left-color:#4b8eb0}.message.contact{border-left-color:#7995a1}.message.ai{border-left-color:#9d77ba}.message-label{font-size:9px;letter-spacing:.12em;font-weight:500;color:var(--faint);margin-bottom:5px}.message.human .message-label{color:#397c9d}.message.ai .message-label{color:#80589d}.message-text{font-size:12px;line-height:1.55;color:#335767;white-space:pre-wrap;overflow-wrap:anywhere}
+.review-panel{position:sticky;top:76px}.review-summary{padding:16px 18px;border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:auto 1fr;gap:13px;align-items:center}.score-ring{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--blue) var(--score-progress,0%),#dceef4 0);position:relative}.score-ring::before{content:'';position:absolute;inset:6px;background:#f7fcfd;border-radius:50%}.score-ring strong{position:relative;font-size:17px;font-weight:500}.score-ring strong span{font-size:10px;color:var(--faint)}.summary-title{font-size:13px;font-weight:500}.summary-sub{font-size:11px;color:var(--faint);margin-top:4px}.progress{height:5px;border-radius:999px;background:#dceef4;overflow:hidden;margin-top:9px}.progress span{display:block;height:100%;width:0;background:var(--blue);border-radius:inherit;transition:width .2s}.criteria{padding:0 18px;max-height:calc(100vh - 260px);overflow:auto}.criterion{padding:16px 1px;border-bottom:1px solid var(--line-soft)}.criterion:last-child{border-bottom:0}.criterion-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.criterion-name{font-size:13px;font-weight:500}.criterion-help{font-size:10px;line-height:1.4;color:var(--faint);margin-top:3px;max-width:300px}.stars{display:flex;gap:1px;flex-shrink:0}.star{border:0;background:transparent;color:#c5dbe3;font-size:22px;line-height:1;padding:0 1px;cursor:pointer;transition:color .12s,transform .12s}.star:hover{transform:translateY(-1px)}.star.active{color:var(--gold)}.explanation{width:100%;min-height:54px;resize:vertical;margin-top:11px;padding:9px 10px;border:1px solid var(--line-soft);border-radius:7px;background:#edf7fa;color:var(--ink);font-size:11px;line-height:1.45;outline:none}.explanation:focus{border-color:#75b5cd;background:#f5fcfe}.explanation::placeholder{color:#9cb7c2}.panel-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:14px 18px;border-top:1px solid var(--line-soft);background:rgba(236,248,251,.65)}.foot-note{font-size:10px;color:var(--faint)}.button.small{font-size:11px;padding:7px 10px}
+.toast{position:fixed;right:22px;bottom:22px;background:var(--ink);color:#fff;padding:10px 14px;border-radius:8px;font-size:11px;box-shadow:0 12px 30px rgba(19,58,73,.2);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s;z-index:40}.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:900px){.workspace{grid-template-columns:1fr}.review-panel{position:static}.criteria{max-height:none}.hero{align-items:flex-start;flex-direction:column}.hero-actions{width:100%}.hero-actions .button{flex:1}}
+@media(max-width:560px){.topbar{padding:0 14px}.autosave{display:none}.page{padding:24px 14px 40px}.hero-actions{flex-direction:column}.panel-head,.transcript-body,.preview-wrap,.criteria{padding-left:14px;padding-right:14px}.criterion-top{flex-direction:column;gap:8px}.stars{width:100%;justify-content:space-between}.star{font-size:27px}.panel-foot{align-items:flex-start;flex-direction:column}.panel-foot .button{width:100%}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left"><a href="index.html" class="back"><i class="ti ti-arrow-left"></i> Home</a><div class="brand">Prompt <span>Lab</span></div></div>
+  <div class="autosave" id="autosave-state">Saved in this browser</div>
+</header>
+<main class="page">
+  <section class="hero">
+    <div><div class="eyebrow">Conversation quality review</div><h1>Rate the chat,<br>spot what matters.</h1><p>Paste a sales conversation, check that the speakers were detected, then score it across the qualities that make a helpful and effective exchange.</p></div>
+    <div class="hero-actions"><button class="button" id="example-btn"><i class="ti ti-file-smile"></i> Load example</button><button class="button danger" id="clear-btn"><i class="ti ti-trash"></i> Clear review</button></div>
+  </section>
+  <div class="workspace">
+    <section class="panel transcript-panel">
+      <div class="panel-head"><div class="head-copy"><span class="step">1</span><div><h2 class="panel-title">Paste the conversation</h2><div class="panel-sub">Use the labels [HUMAN], [CONTACT] and [AI]. Timestamps can stay exactly where they are.</div></div></div></div>
+      <div class="transcript-body">
+        <label for="transcript" class="panel-title" style="position:absolute;left:-9999px">Conversation transcript</label>
+        <textarea id="transcript" class="transcript-input" spellcheck="true" placeholder="[HUMAN] Hi, would you like a free quote?&#10;[CONTACT] How much does it cost?&#10;[AI] I can help with that. Could I ask one quick question?"></textarea>
+        <div class="input-meta"><span>Nothing is uploaded or sent to AI.</span><span id="char-count">0 characters</span></div>
+        <div class="input-actions"><div class="status" id="parse-status" role="status" aria-live="polite">Paste a conversation to begin.</div><button class="button primary" id="review-btn"><i class="ti ti-message-check"></i> Start review</button></div>
+      </div>
+      <div class="preview-wrap">
+        <div class="preview-head"><h2>Conversation preview</h2><div class="message-counts" id="message-counts">No messages detected</div></div>
+        <div class="preview" id="preview"><div class="preview-empty">Your formatted conversation will appear here.<br>The original order and wording remain unchanged.</div></div>
+      </div>
+    </section>
+    <section class="panel review-panel">
+      <div class="panel-head"><div class="head-copy"><span class="step">2</span><div><h2 class="panel-title">Rate the conversation</h2><div class="panel-sub">Choose one to five stars. Every explanation is optional.</div></div></div></div>
+      <div class="review-summary">
+        <div class="score-ring" id="score-ring"><strong id="average-score">—<span>/5</span></strong></div>
+        <div><div class="summary-title" id="summary-title">No ratings yet</div><div class="summary-sub" id="summary-sub">Rate each topic to complete the review.</div><div class="progress"><span id="rating-progress"></span></div></div>
+      </div>
+      <div class="criteria" id="criteria"></div>
+      <div class="panel-foot"><div class="foot-note">Your ratings are saved only on this device.</div><button class="button small" id="copy-btn"><i class="ti ti-copy"></i> Copy review summary</button></div>
+    </section>
+  </div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+if(sessionStorage.getItem('jt_unlocked')!=='1')window.location.href='index.html';
+
+const STORAGE_KEY='jt_prompt_lab_review_v1';
+const CRITERIA=[
+  {id:'human',name:'Human-sounding',help:'Natural, believable language without robotic or scripted phrasing.'},
+  {id:'understanding',name:'Listening & intent',help:'Recognises what the contact actually asked for and responds to it.'},
+  {id:'sales',name:'Sales effectiveness',help:'Moves the conversation forward without being pushy or losing trust.'},
+  {id:'tone',name:'Empathy & tone',help:'Feels respectful, calm and appropriate for the contact’s mood.'},
+  {id:'clarity',name:'Clarity & concision',help:'Easy to understand, direct and free of unnecessary wording.'},
+  {id:'objections',name:'Objection handling',help:'Handles hesitation or resistance constructively and helpfully.'},
+  {id:'boundaries',name:'Respecting boundaries',help:'Honours requests such as no calls, no visits or stopping contact.'},
+  {id:'overall',name:'Overall quality',help:'Your overall judgement of the complete conversation and outcome.'}
+];
+const EXAMPLE=`[HUMAN] Hi Sam, we helped with your gutters before. Would you like a free roof-cleaning quote?\n[CONTACT] How much would it cost?\n[AI] I can help with that. The price depends on the roof size and condition. If you share your postcode and property type, I can narrow it down for you.\n[CONTACT] I only want a rough price, no phone call please.\n[AI] Of course — we will not call. I can give you a rough range here once I know whether it is a terraced, semi-detached or detached property.`;
+
+const transcript=document.getElementById('transcript');
+const preview=document.getElementById('preview');
+const status=document.getElementById('parse-status');
+let ratings=Object.fromEntries(CRITERIA.map(item=>[item.id,{score:0,explanation:''}]));
+let parsedMessages=[];
+let saveTimer;
+
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));}
+function parseTranscript(text){
+  const messages=[];let current=null;const ignored=[];
+  text.replace(/\r\n?/g,'\n').split('\n').forEach((line,index)=>{
+    const match=line.match(/^\s*\[(HUMAN|CONTACT|AI)\]\s*(.*)$/i);
+    if(match){if(current)messages.push(current);current={role:match[1].toUpperCase(),text:match[2],line:index+1};}
+    else if(current){current.text+=(current.text?'\n':'')+line;}
+    else if(line.trim()){ignored.push(index+1);}
+  });
+  if(current)messages.push(current);
+  return{messages,ignored};
+}
+function renderPreview(showFeedback=false){
+  const result=parseTranscript(transcript.value);parsedMessages=result.messages;
+  document.getElementById('char-count').textContent=`${transcript.value.length.toLocaleString()} characters`;
+  if(!parsedMessages.length){preview.innerHTML='<div class="preview-empty">Your formatted conversation will appear here.<br>The original order and wording remain unchanged.</div>';document.getElementById('message-counts').textContent='No messages detected';if(showFeedback)setStatus('No labelled messages were found. Start each message with [HUMAN], [CONTACT] or [AI].','error');else setStatus('Paste a conversation to begin.','');return;}
+  const counts={HUMAN:0,CONTACT:0,AI:0};parsedMessages.forEach(item=>counts[item.role]++);
+  preview.innerHTML=parsedMessages.map(item=>`<article class="message ${item.role.toLowerCase()}"><div class="message-label">${item.role}</div><div class="message-text">${escapeHtml(item.text)}</div></article>`).join('');
+  document.getElementById('message-counts').textContent=`${parsedMessages.length} messages · ${counts.HUMAN} human · ${counts.CONTACT} contact · ${counts.AI} AI`;
+  if(result.ignored.length)setStatus(`Messages detected, but text before the first speaker label was ignored (line ${result.ignored[0]}).`,'error');
+  else if(showFeedback)setStatus(`${parsedMessages.length} messages detected. Ready to rate.`,'success');
+  else setStatus(`${parsedMessages.length} messages detected.`,'success');
+}
+function setStatus(message,type){status.textContent=message;status.className='status'+(type?' '+type:'');}
+function renderCriteria(){
+  document.getElementById('criteria').innerHTML=CRITERIA.map(item=>{
+    const value=ratings[item.id];
+    return `<div class="criterion" data-id="${item.id}"><div class="criterion-top"><div><div class="criterion-name">${item.name}</div><div class="criterion-help">${item.help}</div></div><div class="stars" role="group" aria-label="Rate ${item.name} out of five">${[1,2,3,4,5].map(score=>`<button class="star${score<=value.score?' active':''}" type="button" data-score="${score}" aria-label="${score} star${score===1?'':'s'}" aria-pressed="${score===value.score}">★</button>`).join('')}</div></div><textarea class="explanation" data-explanation="${item.id}" placeholder="Optional explanation for this rating…">${escapeHtml(value.explanation)}</textarea></div>`;
+  }).join('');
+  document.querySelectorAll('.criterion .star').forEach(button=>button.addEventListener('click',()=>{
+    const id=button.closest('.criterion').dataset.id;ratings[id].score=Number(button.dataset.score);renderCriteria();updateSummary();scheduleSave();
+  }));
+  document.querySelectorAll('[data-explanation]').forEach(input=>input.addEventListener('input',()=>{ratings[input.dataset.explanation].explanation=input.value;scheduleSave();}));
+}
+function updateSummary(){
+  const scored=CRITERIA.map(item=>ratings[item.id].score).filter(Boolean);const count=scored.length;const average=count?scored.reduce((total,value)=>total+value,0)/count:0;const completion=count/CRITERIA.length;
+  document.getElementById('average-score').innerHTML=count?`${average.toFixed(1)}<span>/5</span>`:'—<span>/5</span>';
+  document.getElementById('summary-title').textContent=count===CRITERIA.length?'Review complete':count?`${count} of ${CRITERIA.length} topics rated`:'No ratings yet';
+  document.getElementById('summary-sub').textContent=count===CRITERIA.length?`Average rating: ${average.toFixed(1)} out of 5.`:'Rate each topic to complete the review.';
+  document.getElementById('rating-progress').style.width=`${completion*100}%`;
+  document.getElementById('score-ring').style.setProperty('--score-progress',`${average/5*100}%`);
+}
+function scheduleSave(){clearTimeout(saveTimer);document.getElementById('autosave-state').textContent='Saving…';saveTimer=setTimeout(saveState,250);}
+function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({transcript:transcript.value,ratings}));document.getElementById('autosave-state').textContent='Saved in this browser';}catch(error){document.getElementById('autosave-state').textContent='Could not save';}}
+function loadState(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(!saved)return;transcript.value=typeof saved.transcript==='string'?saved.transcript:'';CRITERIA.forEach(item=>{if(saved.ratings?.[item.id])ratings[item.id]={score:Number(saved.ratings[item.id].score)||0,explanation:String(saved.ratings[item.id].explanation||'')};});}catch(error){localStorage.removeItem(STORAGE_KEY);}}
+function reviewSummary(){
+  const result=parseTranscript(transcript.value);const lines=['PROMPT LAB REVIEW','',`Messages: ${result.messages.length}`];
+  const scored=CRITERIA.map(item=>ratings[item.id].score).filter(Boolean);if(scored.length)lines.push(`Average: ${(scored.reduce((a,b)=>a+b,0)/scored.length).toFixed(1)}/5`);lines.push('');
+  CRITERIA.forEach(item=>{const value=ratings[item.id];lines.push(`${item.name}: ${value.score?value.score+'/5':'Not rated'}`);if(value.explanation.trim())lines.push(`Reason: ${value.explanation.trim()}`);lines.push('');});
+  lines.push('ORIGINAL CHAT','',transcript.value.trim());return lines.join('\n');
+}
+function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.remove('show'),1800);}
+
+transcript.addEventListener('input',()=>{renderPreview(false);scheduleSave();});
+document.getElementById('review-btn').addEventListener('click',()=>{renderPreview(true);if(parsedMessages.length)document.querySelector('.review-panel').scrollIntoView({behavior:'smooth',block:'start'});});
+document.getElementById('example-btn').addEventListener('click',()=>{if(transcript.value.trim()&&!confirm('Replace the current conversation with the example?'))return;transcript.value=EXAMPLE;renderPreview(true);scheduleSave();});
+document.getElementById('clear-btn').addEventListener('click',()=>{if((transcript.value.trim()||CRITERIA.some(item=>ratings[item.id].score||ratings[item.id].explanation))&&!confirm('Clear this conversation and all ratings?'))return;transcript.value='';ratings=Object.fromEntries(CRITERIA.map(item=>[item.id,{score:0,explanation:''}]));localStorage.removeItem(STORAGE_KEY);renderCriteria();renderPreview(false);updateSummary();showToast('Review cleared');});
+document.getElementById('copy-btn').addEventListener('click',async()=>{if(!transcript.value.trim()&&!CRITERIA.some(item=>ratings[item.id].score)){showToast('Nothing to copy yet');return;}try{await navigator.clipboard.writeText(reviewSummary());showToast('Review summary copied');}catch(error){const area=document.createElement('textarea');area.value=reviewSummary();document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();showToast('Review summary copied');}});
+
+loadState();renderCriteria();renderPreview(false);updateSummary();
+</script>
+</body>
+</html>
