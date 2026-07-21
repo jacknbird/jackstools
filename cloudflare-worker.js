@@ -88,11 +88,15 @@ function applyPromptChanges(prompt,changes){
 }
 
 function validPromptLabPayload(payload){
-  if(!payload||!['suggest','refine'].includes(payload.action)||typeof payload.sourcePrompt!=='string'||!payload.sourcePrompt.trim()||payload.sourcePrompt.length>MAX_SOURCE_PROMPT_CHARACTERS||!Array.isArray(payload.messages)||!Array.isArray(payload.review))return false;
+  if(!payload||!['suggest','refine','revise_edit'].includes(payload.action)||typeof payload.sourcePrompt!=='string'||!payload.sourcePrompt.trim()||payload.sourcePrompt.length>MAX_SOURCE_PROMPT_CHARACTERS||!Array.isArray(payload.messages)||!Array.isArray(payload.review))return false;
   if(payload.messages.length<2||payload.messages.length>300||payload.review.length<1||payload.review.length>20)return false;
   const messagesAreValid=payload.messages.every((message,index)=>message&&message.index===index&&['HUMAN','CONTACT','AI'].includes(message.role)&&typeof message.text==='string'&&message.text.length<=50000&&typeof message.timestamp==='string'&&message.timestamp.length<=1000);
   const conversationCharacters=payload.messages.reduce((total,message)=>total+String(message?.text||'').length+String(message?.timestamp||'').length,0);
   const reviewIsValid=payload.review.every(item=>item&&typeof item.topic==='string'&&item.topic.length<=500&&Number.isFinite(item.score)&&item.score>=1&&item.score<=5&&typeof item.explanation==='string'&&item.explanation.length<=20000);
+  if(payload.action==='revise_edit'){
+    const changes=payload.previousPlan?.changes;const index=payload.targetChangeIndex;
+    if(!Array.isArray(changes)||!Number.isInteger(index)||index<0||index>=changes.length||typeof changes[index]?.originalText!=='string'||typeof payload.changeRequest!=='string'||!payload.changeRequest.trim()||payload.changeRequest.length>20000)return false;
+  }
   return messagesAreValid&&conversationCharacters<=MAX_CONVERSATION_CHARACTERS&&reviewIsValid;
 }
 
@@ -112,12 +116,13 @@ function sanitisePlan(plan,sourcePrompt){
 
 async function handlePromptLab(payload,origin,env){
   if(!validPromptLabPayload(payload))return json({error:'A valid source prompt, conversation, ratings and action are required.'},400,origin,env);
+  const focusedRevision=payload.action==='revise_edit';
   const schema={
     type:'object',additionalProperties:false,
     properties:{
       overview:{type:'string',description:'A concise overview of the proposed editing strategy.'},
       conversationReply:{type:'string',description:'A short collaborative reply to the reviewer, especially after feedback.'},
-      changes:{type:'array',items:{type:'object',additionalProperties:false,properties:{
+      changes:{type:'array',...(focusedRevision?{minItems:1,maxItems:1}:{}),items:{type:'object',additionalProperties:false,properties:{
         originalText:{type:'string',description:'An exact, unique excerpt copied verbatim from the source prompt.'},
         replacementText:{type:'string',description:'Replacement wording with the same line count, headings, placeholders, tokens and list structure as originalText.'},
         whatChanges:{type:'string',description:'A specific description of the prompt instruction or wording being changed.'},
@@ -125,6 +130,14 @@ async function handlePromptLab(payload,origin,env){
       },required:['originalText','replacementText','whatChanges','why']}}
     },required:['overview','conversationReply','changes']
   };
+  const revisionMode=focusedRevision?`
+
+Focused single-edit revision:
+- Revise exactly the one edit identified by targetChangeIndex in previousPlan.changes.
+- Follow changeRequest for that edit only.
+- Return exactly one change object.
+- originalText must be copied exactly from the targeted previous edit. Do not choose a different source-prompt excerpt.
+- Revise replacementText, whatChanges and why as needed. Do not return or modify any other proposed edit.`:'';
   const instructions=`Role: You are a sales-prompt quality editor.
 
 Goal: Improve the SOURCE PROMPT using the example conversation, human review scores, explanations and latest feedback as evidence of how that prompt performed.
@@ -149,7 +162,7 @@ Hard constraints:
 Output:
 - overview: under 90 words.
 - conversationReply: under 45 words, collaborative and specific.
-- changes: only source-prompt excerpts whose wording should actually be different.`;
+- changes: only source-prompt excerpts whose wording should actually be different.${revisionMode}`;
   try{
     const result=await callOpenAI(env,{
       model:env.OPENAI_PROMPT_LAB_MODEL||env.OPENAI_MODEL||'gpt-5.6-sol',store:false,reasoning:{effort:'low'},max_output_tokens:2500,
@@ -157,6 +170,11 @@ Output:
     });
     const text=outputText(result);if(!text)return json({error:'OpenAI returned no Prompt Lab plan.'},502,origin,env);
     const plan=sanitisePlan(JSON.parse(text),payload.sourcePrompt);
+    if(focusedRevision){
+      const targetOriginal=payload.previousPlan.changes[payload.targetChangeIndex].originalText;
+      plan.changes=plan.changes.filter(change=>change.originalText===targetOriginal).slice(0,1);
+      if(!plan.changes.length)return json({error:'The AI could not produce a safe revision for that edit. Try describing the change differently.'},422,origin,env);
+    }
     return json({plan,usage:result.usage||null},200,origin,env);
   }catch(error){console.error('Prompt Lab worker error',error);return json({error:error.message||'The Prompt Lab AI service failed.'},error.status||500,origin,env);}
 }
