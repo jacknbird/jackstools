@@ -114,6 +114,14 @@ button,input{font:inherit}
 .ai-note{font-size:9px;color:#8ba9b5;line-height:1.45;margin-top:6px}
 .unwrap-status{display:none;margin-top:10px;border-radius:7px;padding:9px 10px;font-size:10px;line-height:1.5;background:#e5f3f8;color:#4f7b8c;border:0.5px solid #bdd9e4}
 .unwrap-status.show{display:block}.unwrap-status.success{background:#e3f5ea;color:#34734d;border-color:#b7dfc6}.unwrap-status.error{background:#fff0f0;color:#9a4f4f;border-color:#e8c1c1}
+.quality-report{display:none;margin-top:10px;padding:10px;border:0.5px solid var(--line);border-radius:9px;background:rgba(235,248,252,.72)}
+.quality-report.show{display:block}.quality-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.quality-title{font-size:10px;font-weight:600;color:#456f80}.quality-grade{min-width:27px;height:21px;padding:0 6px;border-radius:6px;display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff;background:#7f9ba7}.quality-grade.a{background:#2f9b63}.quality-grade.b{background:#4f91b0}.quality-grade.c{background:#c48b3e}.quality-grade.d{background:#b85a5a}.quality-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.quality-metric{padding:7px;border-radius:7px;background:rgba(249,253,255,.72);border:0.5px solid rgba(151,201,220,.48)}.quality-value{display:block;font-size:11px;font-weight:600;color:#356b80;font-variant-numeric:tabular-nums}.quality-label{display:block;margin-top:2px;font-size:8px;color:#8aa8b4;text-transform:uppercase;letter-spacing:.05em}.quality-source{margin-top:7px;font-size:9px;line-height:1.4;color:#789aa7}
+.unwrap-inspector{margin-top:12px;padding:11px;border:0.5px solid var(--line);border-radius:10px;background:linear-gradient(150deg,rgba(242,251,254,.88),rgba(222,242,250,.62));box-shadow:var(--glass-highlight)}
+.inspector-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.inspector-title{font-size:10px;font-weight:600;color:#456f80}.inspector-live{display:inline-flex;align-items:center;gap:5px;font-size:8px;text-transform:uppercase;letter-spacing:.07em;color:#7fa1af}.inspector-live::before{content:'';width:6px;height:6px;border-radius:50%;background:#9ab4be}.unwrap-inspector.running .inspector-live::before{background:#2a9fc7;box-shadow:0 0 0 3px rgba(42,159,199,.12);animation:inspector-pulse 1.15s ease-in-out infinite}.unwrap-inspector.complete .inspector-live::before{background:#35a36a}.unwrap-inspector.failed .inspector-live::before{background:#c25b5b}
+@keyframes inspector-pulse{50%{opacity:.35;transform:scale(.75)}}
+.inspector-summary{font-size:9px;line-height:1.45;color:#789aa7;margin:6px 0 9px}.inspector-stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;margin-bottom:9px}.inspector-stage{min-width:0;padding:5px 2px;border-radius:5px;background:rgba(250,253,255,.66);border:0.5px solid rgba(151,201,220,.45);text-align:center;color:#9ab0b9;font-size:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.inspector-stage.running{color:#217ca1;border-color:#70b7cf;background:#e2f4fa}.inspector-stage.done{color:#337b52;border-color:#9fd0b1;background:#e9f7ee}.inspector-stage.fallback{color:#8a672f;border-color:#dbc08a;background:#fff7e7}.inspector-stage.failed{color:#a54848;border-color:#dfabab;background:#fff0f0}
+.inspector-preview{position:relative;border-radius:8px;overflow:hidden;border:0.5px solid #416b7a;background:#0f303b}.inspector-preview canvas{display:block;width:100%;aspect-ratio:1.35/1}.inspector-preview-label{position:absolute;left:7px;top:6px;max-width:calc(100% - 14px);padding:3px 5px;border-radius:4px;background:rgba(5,30,39,.74);color:#bde9f6;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(8px)}
+.inspector-help{margin:6px 0 8px;font-size:8px;line-height:1.4;color:#87a6b2}.inspector-candidates{display:flex;flex-direction:column;gap:5px}.inspector-empty{padding:9px;border-radius:7px;background:rgba(249,253,255,.65);color:#8aa8b4;font-size:9px;line-height:1.45}.candidate-card{width:100%;appearance:none;border:0.5px solid rgba(151,201,220,.62);border-radius:7px;background:rgba(249,253,255,.72);padding:7px;text-align:left;color:inherit;cursor:pointer}.candidate-card:hover,.candidate-card.selected{border-color:#58a6c2;background:#e6f5fa}.candidate-card.winner{border-color:#57aa76;background:#e8f7ed;box-shadow:inset 3px 0 0 #43a56a}.candidate-top{display:flex;align-items:center;justify-content:space-between;gap:6px}.candidate-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:600;color:#456f80}.candidate-state{flex:none;border-radius:9px;padding:2px 5px;background:#e8f1f4;color:#7998a4;font-size:7px;text-transform:uppercase;letter-spacing:.05em}.candidate-state.running{background:#dff2f8;color:#287c9c}.candidate-state.passed{background:#e4f5ea;color:#34764f}.candidate-state.winner{background:#35a36a;color:#fff}.candidate-state.rejected,.candidate-state.failed{background:#fff0f0;color:#a34d4d}.candidate-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin-top:6px}.candidate-metric{font-size:8px;color:#819faa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}.candidate-metric strong{display:block;color:#456f80;font-size:9px;font-weight:600}.candidate-error{margin-top:5px;color:#a35a5a;font-size:8px;line-height:1.35}.inspector-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(151,201,220,.45)}.inspector-score-note{font-size:8px;line-height:1.35;color:#87a6b2}.inspector-copy{flex:none;border:0.5px solid var(--line);background:var(--paper);color:var(--blue);border-radius:6px;padding:5px 7px;font-size:8px;cursor:pointer}.inspector-copy:hover{background:var(--hover)}.inspector-copy:disabled{opacity:.48;cursor:not-allowed}
 .version-block{margin-top:17px;padding-top:15px;border-top:0.5px solid var(--line)}
 .version-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
 .version-title{font-size:10px;font-weight:600;color:#456f80}.version-badge{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:#88aab7}
@@ -248,18 +256,18 @@ button,input{font:inherit}
         <section class="tool-panel" id="unwrap-panel">
           <div class="panel-head">
             <div><div class="panel-title">UV Unwrapping</div><div class="panel-copy">Create, relax and pack texture islands.</div></div>
-            <span class="layout-badge">AI assisted</span>
+            <span class="layout-badge">AI auto-select</span>
           </div>
 
           <div class="ai-connect">
             <div class="ai-connect-head"><span class="ai-connect-title"><span class="status-dot" id="ai-status-dot"></span>OpenAI service</span><span class="ai-connect-state" id="ai-connect-state">Not connected</span></div>
             <div class="endpoint-row"><input class="input" id="ai-endpoint" type="url" placeholder="Paste your secure Worker URL"><button class="endpoint-save" id="save-endpoint" type="button">Save</button></div>
-            <div class="ai-note">With the Blender service, AI studies six views and Blender validates several production unwraps. Without it, xatlas is clearly treated as a browser preview. Paste the Worker URL—not your API key.</div>
+            <div class="ai-note">Your existing Worker chooses the unwrap strategy from mesh statistics. The browser then builds several UV candidates, measures distortion, fragmentation and UV-space use, and keeps the best one automatically. No Worker changes are required.</div>
           </div>
 
           <div class="field">
             <div class="field-head"><label for="seam-strategy">Seam strategy</label></div>
-            <select class="select" id="seam-strategy"><option selected>Auto / topology aware</option><option>Garment / open surface</option><option>AI assisted</option><option>Angle based</option><option>Minimal seams</option><option>Use existing seams</option></select>
+            <select class="select" id="seam-strategy"><option selected>AI / fully automatic</option><option>Auto / topology aware</option><option>Garment / open surface</option><option>Hard surface</option><option>Angle based</option><option>Minimal seams</option><option>Use existing seams</option></select>
           </div>
           <div class="field">
             <div class="field-head"><label for="angle-threshold">Angle threshold</label><span class="field-value">66°</span></div>
@@ -281,8 +289,31 @@ button,input{font:inherit}
           <div class="control-row"><span>Fix overlaps</span><label class="switch"><input id="fix-overlaps" type="checkbox" checked><span class="slider"></span></label></div>
           <div class="control-row"><span>Preserve existing seams</span><label class="switch"><input id="preserve-seams" type="checkbox"><span class="slider"></span></label></div>
 
-          <button class="tool-action" id="unwrap-btn" type="button">Generate validated UV layout</button>
+          <button class="tool-action" id="unwrap-btn" type="button">Generate best automatic UVs</button>
           <div class="unwrap-status" id="unwrap-status" aria-live="polite"></div>
+          <div class="quality-report" id="quality-report" aria-live="polite">
+            <div class="quality-head"><span class="quality-title">UV quality report</span><span class="quality-grade" id="quality-grade">—</span></div>
+            <div class="quality-grid">
+              <div class="quality-metric"><span class="quality-value" id="quality-islands">—</span><span class="quality-label">Islands</span></div>
+              <div class="quality-metric"><span class="quality-value" id="quality-fill">—</span><span class="quality-label">UV fill</span></div>
+              <div class="quality-metric"><span class="quality-value" id="quality-stretch">—</span><span class="quality-label">P95 stretch</span></div>
+              <div class="quality-metric"><span class="quality-value" id="quality-errors">—</span><span class="quality-label">Invalid faces</span></div>
+            </div>
+            <div class="quality-source" id="quality-source"></div>
+          </div>
+
+          <section class="unwrap-inspector" id="unwrap-inspector" aria-label="Live unwrap inspector">
+            <div class="inspector-head"><span class="inspector-title">Live unwrap inspector</span><span class="inspector-live" id="inspector-live">Ready</span></div>
+            <p class="inspector-summary" id="inspector-summary">Run automatic UVs to watch the planner test and rank each layout.</p>
+            <div class="inspector-stages" id="inspector-stages" aria-label="Unwrap stages"></div>
+            <div class="inspector-preview">
+              <canvas id="inspector-preview" width="520" height="384" aria-label="Selected candidate UV preview"></canvas>
+              <span class="inspector-preview-label" id="inspector-preview-label">No candidate selected</span>
+            </div>
+            <p class="inspector-help">Click any candidate below to inspect its sampled UV layout. This preview is diagnostic; the main UV view always shows the applied winner.</p>
+            <div class="inspector-candidates" id="inspector-candidates"><div class="inspector-empty">Candidates will appear here as they are generated.</div></div>
+            <div class="inspector-actions"><span class="inspector-score-note">Lower score wins: stretch + excess islands + wasted space.</span><button class="inspector-copy" id="copy-unwrap-report" type="button" disabled>Copy debug report</button></div>
+          </section>
 
           <div class="version-block">
             <div class="version-head"><span class="version-title">UV versions</span><span class="version-badge">Autosaved</span></div>
@@ -311,7 +342,8 @@ import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { UVUnwrapper } from 'xatlas-three';
 
-if(sessionStorage.getItem('jt_unlocked')!=='1') window.location.replace('index.html');
+const isLocalPreview=window.location.protocol==='file:'||['localhost','127.0.0.1'].includes(window.location.hostname);
+if(!isLocalPreview&&sessionStorage.getItem('jt_unlocked')!=='1') window.location.replace('index.html');
 
 const canvas=document.getElementById('canvas');
 const viewport=document.getElementById('viewport');
@@ -407,6 +439,188 @@ const WORKSPACE_DB='jacks-tools-uv-studio';
 const WORKSPACE_STORE='workspace';
 const SETTINGS_KEY='jt_uv_studio_settings';
 let databasePromise=null;
+const INSPECTOR_STAGE_LABELS={analyse:'Analyse',plan:'AI plan',search:'Search',validate:'Validate',apply:'Apply'};
+
+function createUnwrapDiagnostics(){
+  return {startedAt:null,finishedAt:null,summary:'Run automatic UVs to watch the planner test and rank each layout.',plan:null,topology:null,planningSource:null,winnerId:null,selectedId:null,stages:Object.fromEntries(Object.keys(INSPECTOR_STAGE_LABELS).map(key=>[key,{status:'idle',note:''}])),candidates:[]};
+}
+let unwrapDiagnostics=createUnwrapDiagnostics();
+
+function resetUnwrapInspector(started=true){
+  unwrapDiagnostics=createUnwrapDiagnostics();
+  if(started){
+    unwrapDiagnostics.startedAt=new Date().toISOString();
+    unwrapDiagnostics.summary='Reading the mesh and preparing the automatic UV search…';
+  }
+  renderUnwrapInspector();
+}
+
+function setInspectorStage(key,status,note=''){
+  if(!unwrapDiagnostics.stages[key])return;
+  unwrapDiagnostics.stages[key]={status,note};
+  if(status==='running'&&note)unwrapDiagnostics.summary=note;
+  renderUnwrapInspector();
+}
+
+function setInspectorContext({plan,topology,planningSource}={}){
+  if(plan)unwrapDiagnostics.plan={...plan};
+  if(topology)unwrapDiagnostics.topology={...topology};
+  if(planningSource)unwrapDiagnostics.planningSource=planningSource;
+  renderUnwrapInspector();
+}
+
+function upsertInspectorCandidate(candidate){
+  const existingIndex=unwrapDiagnostics.candidates.findIndex(item=>item.id===candidate.id);
+  const existing=existingIndex>=0?unwrapDiagnostics.candidates[existingIndex]:{};
+  const next={...existing,...candidate};
+  if(existingIndex>=0)unwrapDiagnostics.candidates.splice(existingIndex,1,next);
+  else unwrapDiagnostics.candidates.push(next);
+  if(!unwrapDiagnostics.selectedId||candidate.status==='running')unwrapDiagnostics.selectedId=candidate.id;
+  renderUnwrapInspector();
+}
+
+function finishUnwrapInspector(winnerId,summary){
+  unwrapDiagnostics.winnerId=winnerId;
+  unwrapDiagnostics.selectedId=winnerId;
+  unwrapDiagnostics.finishedAt=new Date().toISOString();
+  unwrapDiagnostics.summary=summary;
+  unwrapDiagnostics.candidates=unwrapDiagnostics.candidates.map(candidate=>candidate.id===winnerId?{...candidate,status:'winner'}:candidate);
+  renderUnwrapInspector();
+}
+
+function failUnwrapInspector(error){
+  const runningKey=Object.keys(unwrapDiagnostics.stages).find(key=>unwrapDiagnostics.stages[key].status==='running')||'validate';
+  unwrapDiagnostics.stages[runningKey]={status:'failed',note:error?.message||String(error)};
+  unwrapDiagnostics.finishedAt=new Date().toISOString();
+  unwrapDiagnostics.summary=error?.message||'The automatic UV run failed.';
+  renderUnwrapInspector();
+}
+
+function inspectorMetric(value,fallback='—'){
+  return Number.isFinite(Number(value))?Number(value):fallback;
+}
+
+function renderUnwrapInspector(){
+  const container=document.getElementById('unwrap-inspector');
+  if(!container)return;
+  const stageValues=Object.values(unwrapDiagnostics.stages);
+  const running=stageValues.some(stage=>stage.status==='running')||unwrapDiagnostics.candidates.some(candidate=>candidate.status==='running');
+  const failed=stageValues.some(stage=>stage.status==='failed');
+  const complete=unwrapDiagnostics.stages.apply.status==='done';
+  container.classList.toggle('running',running);
+  container.classList.toggle('failed',failed);
+  container.classList.toggle('complete',complete&&!failed);
+  document.getElementById('inspector-live').textContent=failed?'Stopped':running?'Live':complete?'Complete':'Ready';
+  document.getElementById('inspector-summary').textContent=unwrapDiagnostics.summary;
+
+  const stages=document.getElementById('inspector-stages');
+  stages.replaceChildren();
+  for(const [key,label] of Object.entries(INSPECTOR_STAGE_LABELS)){
+    const stage=document.createElement('span');
+    stage.className='inspector-stage '+unwrapDiagnostics.stages[key].status;
+    stage.textContent=label;
+    stage.title=unwrapDiagnostics.stages[key].note||label;
+    stages.append(stage);
+  }
+
+  const list=document.getElementById('inspector-candidates');
+  list.replaceChildren();
+  if(!unwrapDiagnostics.candidates.length){
+    const empty=document.createElement('div');empty.className='inspector-empty';empty.textContent='Candidates will appear here as they are generated.';list.append(empty);
+  }else for(const candidate of unwrapDiagnostics.candidates){
+    const card=document.createElement('button');
+    card.type='button';card.className='candidate-card';card.dataset.candidateId=candidate.id;
+    card.classList.toggle('selected',candidate.id===unwrapDiagnostics.selectedId);
+    card.classList.toggle('winner',candidate.id===unwrapDiagnostics.winnerId);
+    const top=document.createElement('span');top.className='candidate-top';
+    const name=document.createElement('span');name.className='candidate-name';name.textContent=candidate.label;
+    const state=document.createElement('span');state.className='candidate-state '+candidate.status;state.textContent=candidate.status||'queued';
+    top.append(name,state);card.append(top);
+    const metrics=document.createElement('span');metrics.className='candidate-metrics';
+    const values=[
+      ['Score',Number.isFinite(candidate.score)?candidate.score.toFixed(1):'—'],
+      ['Islands',Number.isFinite(candidate.quality?.islandCount)?candidate.quality.islandCount.toLocaleString():'—'],
+      ['Fill',Number.isFinite(candidate.quality?.fillRatio)?Math.round(candidate.quality.fillRatio*100)+'%':'—'],
+      ['Stretch',Number.isFinite(candidate.quality?.p95Stretch)?candidate.quality.p95Stretch.toFixed(2)+'×':'—']
+    ];
+    for(const [label,value] of values){const metric=document.createElement('span');metric.className='candidate-metric';const strong=document.createElement('strong');strong.textContent=value;metric.append(strong,document.createTextNode(label));metrics.append(metric);}
+    card.append(metrics);
+    if(Number.isFinite(candidate.durationMs)){const timing=document.createElement('span');timing.className='candidate-error';timing.style.color='#7b9aa6';timing.textContent='Generated and checked in '+Math.round(candidate.durationMs).toLocaleString()+' ms';card.append(timing);}
+    if(candidate.error){const error=document.createElement('span');error.className='candidate-error';error.textContent=candidate.error;card.append(error);}
+    card.addEventListener('click',()=>{unwrapDiagnostics.selectedId=candidate.id;renderUnwrapInspector();});
+    list.append(card);
+  }
+  document.getElementById('copy-unwrap-report').disabled=!unwrapDiagnostics.startedAt;
+  drawInspectorPreview();
+}
+
+function sampleCandidateUVs(entries,uvArrays,maxTriangles=2200){
+  const total=entries.reduce((sum,entry)=>sum+entry.triangleCount,0),stride=Math.max(1,Math.ceil(total/maxTriangles));
+  const sampled=[];let triangleIndex=0;
+  for(let entryIndex=0;entryIndex<entries.length;entryIndex++){
+    const uv=uvArrays[entryIndex],triangles=entries[entryIndex].triangleCount;
+    for(let triangle=0;triangle<triangles;triangle++,triangleIndex++){
+      if(triangleIndex%stride)continue;
+      const offset=triangle*6;
+      if(!Number.isFinite(uv[offset])||!Number.isFinite(uv[offset+5]))continue;
+      for(let corner=0;corner<6;corner++)sampled.push(uv[offset+corner]);
+    }
+  }
+  return new Float32Array(sampled);
+}
+
+function sampleModelUVs(totalTriangles,maxTriangles=2200){
+  const stride=Math.max(1,Math.ceil(Math.max(totalTriangles,1)/maxTriangles)),sampled=[];let triangleIndex=0;
+  currentModel?.traverse(mesh=>{
+    if(!mesh.isMesh||!mesh.geometry?.attributes?.position||!mesh.geometry.attributes.uv)return;
+    const geometry=mesh.geometry,index=geometry.index,uv=geometry.attributes.uv;
+    const triangles=Math.floor((index?.count||geometry.attributes.position.count)/3);
+    for(let triangle=0;triangle<triangles;triangle++,triangleIndex++){
+      if(triangleIndex%stride)continue;
+      const values=[];
+      for(let corner=0;corner<3;corner++){
+        const vertex=index?index.getX(triangle*3+corner):triangle*3+corner;
+        values.push(uv.getX(vertex),uv.getY(vertex));
+      }
+      if(values.every(Number.isFinite))sampled.push(...values);
+    }
+  });
+  return new Float32Array(sampled);
+}
+
+function drawInspectorPreview(){
+  const canvas=document.getElementById('inspector-preview');if(!canvas)return;
+  const bounds=canvas.getBoundingClientRect(),width=Math.max(220,Math.round(bounds.width||260)),height=Math.round(width/1.35),dpr=Math.min(window.devicePixelRatio||1,2);
+  if(canvas.width!==Math.round(width*dpr)||canvas.height!==Math.round(height*dpr)){canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);}
+  const context=canvas.getContext('2d');context.setTransform(dpr,0,0,dpr,0,0);context.clearRect(0,0,width,height);context.fillStyle='#0f303b';context.fillRect(0,0,width,height);
+  const padding=12,size=Math.min(width-padding*2,height-padding*2),left=(width-size)/2,top=(height-size)/2;
+  context.strokeStyle='rgba(115,180,201,.16)';context.lineWidth=.5;
+  for(let line=0;line<=4;line++){const offset=line*size/4;context.beginPath();context.moveTo(left+offset,top);context.lineTo(left+offset,top+size);context.moveTo(left,top+offset);context.lineTo(left+size,top+offset);context.stroke();}
+  context.strokeStyle='rgba(127,206,230,.48)';context.strokeRect(left+.5,top+.5,size-1,size-1);
+  const candidate=unwrapDiagnostics.candidates.find(item=>item.id===unwrapDiagnostics.selectedId);
+  const label=document.getElementById('inspector-preview-label');
+  if(!candidate){label.textContent='No candidate selected';context.fillStyle='#7697a3';context.font='10px DM Sans, sans-serif';context.textAlign='center';context.fillText('UV candidates appear here while testing',width/2,height/2);return;}
+  label.textContent=candidate.label+(candidate.id===unwrapDiagnostics.winnerId?' · winner':' · '+candidate.status);
+  if(!candidate.preview?.length){context.fillStyle='#86a5b0';context.font='10px DM Sans, sans-serif';context.textAlign='center';context.fillText(candidate.status==='running'?'Generating UV layout…':'No valid preview',width/2,height/2);return;}
+  context.beginPath();
+  for(let offset=0;offset<candidate.preview.length;offset+=6){
+    const x1=left+THREE.MathUtils.clamp(candidate.preview[offset],0,1)*size,y1=top+(1-THREE.MathUtils.clamp(candidate.preview[offset+1],0,1))*size;
+    const x2=left+THREE.MathUtils.clamp(candidate.preview[offset+2],0,1)*size,y2=top+(1-THREE.MathUtils.clamp(candidate.preview[offset+3],0,1))*size;
+    const x3=left+THREE.MathUtils.clamp(candidate.preview[offset+4],0,1)*size,y3=top+(1-THREE.MathUtils.clamp(candidate.preview[offset+5],0,1))*size;
+    context.moveTo(x1,y1);context.lineTo(x2,y2);context.lineTo(x3,y3);context.closePath();
+  }
+  context.strokeStyle=candidate.id===unwrapDiagnostics.winnerId?'rgba(112,230,151,.78)':'rgba(89,202,236,.62)';context.lineWidth=.55;context.stroke();
+}
+
+async function copyUnwrapDebugReport(){
+  const report={schema:'jacks-tools-uv-inspector-v1',model:currentName,startedAt:unwrapDiagnostics.startedAt,finishedAt:unwrapDiagnostics.finishedAt,planningSource:unwrapDiagnostics.planningSource,plan:unwrapDiagnostics.plan,topology:unwrapDiagnostics.topology,winnerId:unwrapDiagnostics.winnerId,stages:unwrapDiagnostics.stages,candidates:unwrapDiagnostics.candidates.map(({preview,...candidate})=>({...candidate,previewTriangles:Math.floor((preview?.length||0)/6)}))};
+  const text=JSON.stringify(report,null,2),button=document.getElementById('copy-unwrap-report');
+  try{
+    if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(text);
+    else{const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.append(area);area.select();document.execCommand('copy');area.remove();}
+    button.textContent='Copied';setTimeout(()=>button.textContent='Copy debug report',1500);
+  }catch(error){console.error(error);button.textContent='Copy failed';setTimeout(()=>button.textContent='Copy debug report',1500);}
+}
 
 function setAutosaveState(message,type=''){
   const state=document.getElementById('autosave-state');
@@ -497,7 +711,7 @@ function restoreSavedSettings(){
   const setValue=(id,value)=>{if(value!==undefined&&document.getElementById(id))document.getElementById(id).value=value;};
   const setChecked=(id,value)=>{if(typeof value==='boolean'&&document.getElementById(id))document.getElementById(id).checked=value;};
   setValue('target-faces',settings.targetFaces);setValue('surface-detail',settings.surfaceDetail);setValue('edge-flow',settings.edgeFlow);
-  const savedSeamStrategy=settings.seamStrategy==='AI assisted'?'Auto / topology aware':settings.seamStrategy;
+  const savedSeamStrategy=settings.seamStrategy==='AI assisted'?'AI / fully automatic':settings.seamStrategy;
   setValue('seam-strategy',savedSeamStrategy);setValue('angle-threshold',settings.angleThreshold);setValue('island-padding',settings.islandPadding);setValue('texture-size',settings.textureSize);
   setChecked('preserve-boundaries',settings.preserveBoundaries);setChecked('preserve-sharp',settings.preserveSharp);setChecked('preserve-symmetry',settings.preserveSymmetry);setChecked('preserve-materials',settings.preserveMaterials);
   setChecked('normalize-texel',settings.normalizeTexel);setChecked('pack-islands',settings.packIslands);setChecked('rotate-islands',settings.rotateIslands);setChecked('fix-overlaps',settings.fixOverlaps);setChecked('preserve-seams',settings.preserveSeams);
@@ -584,6 +798,8 @@ function setModel(object,name){
   document.getElementById('download-btn').disabled=true;
   setDownloadLabel('Download GLB');
   setUnwrapStatus('');
+  setQualityReport(null);
+  resetUnwrapInspector(false);
   renderVersionHistory();
   object.traverse(child=>{
     if(child.isMesh){child.castShadow=true;child.receiveShadow=true;}
@@ -999,14 +1215,38 @@ function collectMeshProfile(){
   };
 }
 
-function localUnwrapPlan(preferences){
+function collectAIUnwrapProfile(existingQuality){
+  const profile=collectMeshProfile();
+  const topologyEntries=[];
+  let filteredTriangles=0;
+  currentModel?.traverse(mesh=>{
+    if(!mesh.isMesh||!mesh.geometry?.attributes?.position)return;
+    const source=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
+    const cleaned=buildCleanUVProxy(source,false);
+    filteredTriangles+=cleaned.filteredTriangles;
+    if(cleaned.proxy)topologyEntries.push({proxy:cleaned.proxy});
+    source.dispose();
+  });
+  const topology=topologyEntries.length?analyseProxyTopology(topologyEntries):null;
+  topologyEntries.forEach(entry=>entry.proxy.dispose());
+  const dimensions=Object.values(profile.bounds).sort((a,b)=>b-a);
   return {
-    strategy:preferences.textureSize>=4096?'detail':'balanced',
+    ...profile,
+    shape:{elongation:dimensions[2]>0?Number((dimensions[0]/dimensions[2]).toFixed(2)):null,flatness:dimensions[0]>0?Number((dimensions[2]/dimensions[0]).toFixed(3)):null},
+    topology:topology?{openSurface:topology.openSurface,smoothClosed:topology.smoothClosed,boundaryRatio:Number(topology.boundaryRatio.toFixed(4)),sharpEdgeRatio:Number(topology.sharpRatio.toFixed(4)),nonManifoldEdges:topology.nonManifoldEdges,averageDihedralDegrees:Number(THREE.MathUtils.radToDeg(topology.averageDihedral).toFixed(2)),filteredTriangles}:null,
+    existingUVs:existingQuality?{grade:existingQuality.grade,islands:existingQuality.islandCount,fillRatio:Number(existingQuality.fillRatio.toFixed(4)),p95Stretch:Number.isFinite(existingQuality.p95Stretch)?Number(existingQuality.p95Stretch.toFixed(3)):null,overlaps:existingQuality.overlaps,collapsed:existingQuality.collapsedTriangles,outOfBounds:existingQuality.outOfBounds}:null
+  };
+}
+
+function localUnwrapPlan(preferences){
+  const mode=preferences.seamStrategy.toLowerCase();
+  return {
+    strategy:mode.includes('minimal')?'compact':mode.includes('hard')||mode.includes('angle')||preferences.textureSize>=4096?'detail':'balanced',
     angleThreshold:preferences.angleThreshold,
     padding:preferences.padding,
     textureSize:preferences.textureSize,
     rotateIslands:preferences.rotateIslands,
-    summary:'Secure AI endpoint not connected, so your selected settings were used locally.'
+    summary:'The local topology analyser selected an automatic candidate search.'
   };
 }
 
@@ -1018,48 +1258,16 @@ function normalizePlan(plan,preferences){
     padding:THREE.MathUtils.clamp(Math.round(Number(plan?.padding)||preferences.padding),1,64),
     textureSize:allowedSizes.includes(Number(plan?.textureSize))?Number(plan.textureSize):preferences.textureSize,
     rotateIslands:typeof plan?.rotateIslands==='boolean'?plan.rotateIslands:preferences.rotateIslands,
-    summary:String(plan?.summary||'The AI selected a balanced unwrap plan.').slice(0,240)
+    summary:String(plan?.summary||'A balanced automatic unwrap plan was selected.').slice(0,240)
   };
-}
-
-function endpointFor(path){
-  const endpoint=localStorage.getItem('jt_ai_unwrap_endpoint')||'';
-  if(!endpoint)return '';
-  const url=new URL(endpoint,window.location.href);
-  url.pathname=url.pathname.replace(/\/(?:unwrap|unwrap-model)\/?$/,'').replace(/\/$/,'')+path;
-  return url.toString();
-}
-
-async function requestBlenderUnwrap(preferences){
-  const endpoint=endpointFor('/unwrap-model');
-  if(!endpoint)return null;
-  const source=await exportCurrentModel();
-  const response=await fetch(endpoint,{
-    method:'POST',
-    headers:{'Content-Type':'model/gltf-binary','X-UV-Preferences':encodeURIComponent(JSON.stringify(preferences))},
-    body:source
-  });
-  if([404,405,501,503].includes(response.status))return null;
-  if(!response.ok){
-    const data=await response.json().catch(()=>({}));
-    throw new Error(data.error||'The AI seam-analysis service could not unwrap this model.');
-  }
-  const contentType=response.headers.get('content-type')||'';
-  if(!contentType.includes('model/gltf-binary')&&!contentType.includes('application/octet-stream'))throw new Error('The AI seam-analysis service returned an invalid model.');
-  const data=await response.arrayBuffer();
-  const gltf=await new Promise((resolve,reject)=>new GLTFLoader().parse(data,'',resolve,reject));
-  let quality=null;
-  try{
-    const encoded=response.headers.get('x-uv-quality');
-    if(encoded)quality=JSON.parse(decodeURIComponent(encoded));
-  }catch{}
-  return {model:gltf.scene,engine:response.headers.get('x-uv-engine')||'AI + Blender',quality};
 }
 
 async function requestAIUnwrapPlan(profile,preferences){
   const endpoint=localStorage.getItem('jt_ai_unwrap_endpoint')||'';
   if(!endpoint)return null;
-  const response=await fetch(endpoint,{
+  const url=new URL(endpoint,window.location.href);
+  url.pathname=url.pathname.replace(/\/unwrap-model\/?$/,'/unwrap');
+  const response=await fetch(url.toString(),{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({mesh:profile,preferences})
@@ -1070,29 +1278,45 @@ async function requestAIUnwrapPlan(profile,preferences){
 }
 
 function analyseProxyTopology(entries){
-  let meshCount=0,openMeshCount=0,boundaryEdges=0,totalEdges=0,nonManifoldEdges=0;
+  let meshCount=0,openMeshCount=0,boundaryEdges=0,totalEdges=0,nonManifoldEdges=0,sharedEdges=0,sharpEdges=0,dihedralTotal=0;
   entries.forEach(entry=>{
     const geometry=entry.proxy;
-    const index=geometry?.index;
+    const index=geometry?.index,position=geometry?.attributes?.position;
     if(!geometry||!index)return;
     meshCount++;
     const edges=new Map();
+    const normals=[];
     for(let corner=0;corner<index.count;corner+=3){
       const triangle=[index.getX(corner),index.getX(corner+1),index.getX(corner+2)];
+      const a=new THREE.Vector3().fromBufferAttribute(position,triangle[0]);
+      const b=new THREE.Vector3().fromBufferAttribute(position,triangle[1]);
+      const c=new THREE.Vector3().fromBufferAttribute(position,triangle[2]);
+      normals.push(new THREE.Vector3().crossVectors(b.sub(a),c.sub(a)).normalize());
+      const face=corner/3;
       [[triangle[0],triangle[1]],[triangle[1],triangle[2]],[triangle[2],triangle[0]]].forEach(([a,b])=>{
         const key=a<b?`${a}:${b}`:`${b}:${a}`;
-        edges.set(key,(edges.get(key)||0)+1);
+        const edge=edges.get(key)||[];edge.push(face);edges.set(key,edge);
       });
     }
     let meshBoundary=0;
-    edges.forEach(count=>{totalEdges++;if(count===1){boundaryEdges++;meshBoundary++;}else if(count>2)nonManifoldEdges++;});
+    edges.forEach(faces=>{
+      totalEdges++;
+      if(faces.length===1){boundaryEdges++;meshBoundary++;}
+      else if(faces.length>2)nonManifoldEdges++;
+      else{
+        const angle=Math.acos(THREE.MathUtils.clamp(normals[faces[0]].dot(normals[faces[1]]),-1,1));
+        sharedEdges++;dihedralTotal+=angle;if(angle>THREE.MathUtils.degToRad(45))sharpEdges++;
+      }
+    });
     if(meshBoundary)openMeshCount++;
   });
   const openSurface=meshCount>0&&openMeshCount===meshCount&&nonManifoldEdges===0;
-  return {openSurface,meshCount,openMeshCount,boundaryEdges,totalEdges,nonManifoldEdges,boundaryRatio:totalEdges?boundaryEdges/totalEdges:0};
+  const sharpRatio=sharedEdges?sharpEdges/sharedEdges:0;
+  const smoothClosed=meshCount>0&&boundaryEdges===0&&nonManifoldEdges===0&&sharpRatio<.08;
+  return {openSurface,smoothClosed,meshCount,openMeshCount,boundaryEdges,totalEdges,nonManifoldEdges,boundaryRatio:totalEdges?boundaryEdges/totalEdges:0,sharpRatio,averageDihedral:sharedEdges?dihedralTotal/sharedEdges:0};
 }
 
-async function getUVUnwrapper(plan,preferences,totalTriangles,topology){
+async function loadUVUnwrapper(){
   if(!uvUnwrapper){
     uvUnwrapper=new UVUnwrapper({BufferAttribute:THREE.BufferAttribute});
     uvLibraryPromise=uvUnwrapper.loadLibrary(
@@ -1100,7 +1324,7 @@ async function getUVUnwrapper(plan,preferences,totalTriangles,topology){
         const value=Number(progress);
         const percent=value<=1?value*100:value;
         const suffix=Number.isFinite(percent)?` ${Math.round(percent)}%`:'';
-        setUnwrapStatus(`Loading browser preview UV engine${suffix}…`);
+        setUnwrapStatus(`Loading the local UV engine${suffix}…`);
       },
       'https://cdn.jsdelivr.net/npm/xatlasjs@0.2.0/dist/xatlas.wasm',
       'https://cdn.jsdelivr.net/npm/xatlasjs@0.2.0/dist/xatlas.js'
@@ -1110,30 +1334,46 @@ async function getUVUnwrapper(plan,preferences,totalTriangles,topology){
   catch(error){
     uvUnwrapper=null;
     uvLibraryPromise=null;
-    throw new Error('The browser preview UV engine could not load. Check your connection and try again.');
+    throw new Error('The local UV engine could not load. Check your connection and try again.');
   }
+  return uvUnwrapper;
+}
 
+function buildAtlasCandidates(plan,preferences,totalTriangles,topology){
   const seamMode=preferences.seamStrategy.toLowerCase();
-  const garmentMode=seamMode.includes('garment')||(seamMode.includes('auto')&&topology.openSurface);
-  const normalBias=seamMode.includes('minimal')?1.5:seamMode.includes('angle')?6:4;
   const thresholdBias=THREE.MathUtils.mapLinear(THREE.MathUtils.clamp(plan.angleThreshold,1,180),1,180,8,.75);
-  uvUnwrapper.chartOptions={
+  const candidates=[];
+  const add=candidate=>{if(!candidates.some(item=>item.id===candidate.id))candidates.push(candidate);};
+  if(topology.openSurface||seamMode.includes('garment'))add({id:'open-panels',label:'Coherent open panels',maxCost:100,maxIterations:8,normalDeviationWeight:.01,normalSeamWeight:.01,roundnessWeight:0,straightnessWeight:.01});
+  if(topology.smoothClosed||seamMode.includes('minimal'))add({id:'organic-coherent',label:'Coherent organic',maxCost:24,maxIterations:7,normalDeviationWeight:.35,normalSeamWeight:.75,roundnessWeight:.003,straightnessWeight:.35});
+  if(topology.sharpRatio>.12||seamMode.includes('hard'))add({id:'hard-surface',label:'Hard-surface edges',maxCost:2.4,maxIterations:5,normalDeviationWeight:Math.max(4,thresholdBias),normalSeamWeight:8,roundnessWeight:.01,straightnessWeight:6});
+  add({id:'balanced',label:'Balanced topology',maxCost:4,maxIterations:5,normalDeviationWeight:Math.max(1.2,thresholdBias*.55),normalSeamWeight:4,roundnessWeight:.01,straightnessWeight:4});
+  add({id:'low-stretch',label:'Low stretch',maxCost:1.65,maxIterations:5,normalDeviationWeight:Math.max(3,thresholdBias),normalSeamWeight:6,roundnessWeight:.015,straightnessWeight:6});
+  add({id:'compact',label:'Compact islands',maxCost:8,maxIterations:6,normalDeviationWeight:.9,normalSeamWeight:1.5,roundnessWeight:.006,straightnessWeight:1.5});
+  if(plan.strategy==='detail')candidates.sort((a,b)=>(a.id==='low-stretch'?-1:0)-(b.id==='low-stretch'?-1:0));
+  if(plan.strategy==='compact')candidates.sort((a,b)=>(a.id==='compact'?-1:0)-(b.id==='compact'?-1:0));
+  const maximum=totalTriangles>200000?3:totalTriangles>90000?4:5;
+  return candidates.slice(0,maximum);
+}
+
+function configureUVUnwrapper(unwrapper,candidate,plan,preferences,totalTriangles){
+  unwrapper.chartOptions={
     fixWinding:true,
     maxBoundaryLength:0,
     maxChartArea:0,
-    maxCost:garmentMode?100:plan.strategy==='detail'?1.5:plan.strategy==='compact'?3:2,
-    maxIterations:garmentMode?8:plan.strategy==='detail'?4:2,
-    normalDeviationWeight:garmentMode ? .01 : thresholdBias,
-    normalSeamWeight:garmentMode ? .01 : normalBias,
-    roundnessWeight:garmentMode?0:.01,
-    straightnessWeight:garmentMode ? .01 : 6,
+    maxCost:candidate.maxCost,
+    maxIterations:candidate.maxIterations,
+    normalDeviationWeight:candidate.normalDeviationWeight,
+    normalSeamWeight:candidate.normalSeamWeight,
+    roundnessWeight:candidate.roundnessWeight,
+    straightnessWeight:candidate.straightnessWeight,
     textureSeamWeight:preferences.preserveSeams?8:.5,
     useInputMeshUvs:preferences.preserveSeams
   };
-  uvUnwrapper.packOptions={
+  unwrapper.packOptions={
     bilinear:true,
     blockAlign:false,
-    bruteForce:plan.strategy==='detail'&&totalTriangles<=100000,
+    bruteForce:(candidate.id==='low-stretch'||plan.strategy==='detail')&&totalTriangles<=80000,
     createImage:false,
     maxChartSize:0,
     padding:plan.padding,
@@ -1142,11 +1382,10 @@ async function getUVUnwrapper(plan,preferences,totalTriangles,topology){
     rotateChartsToAxis:plan.rotateIslands,
     texelsPerUnit:0
   };
-  uvUnwrapper.useNormals=false;
-  uvUnwrapper.timeUnwrap=false;
-  uvUnwrapper.logProgress=false;
-  uvUnwrapper.userData={garmentMode,topology};
-  return uvUnwrapper;
+  unwrapper.useNormals=true;
+  unwrapper.timeUnwrap=false;
+  unwrapper.logProgress=false;
+  unwrapper.userData={candidate};
 }
 
 function buildCleanUVProxy(source,preserveSeams){
@@ -1192,245 +1431,381 @@ function buildCleanUVProxy(source,preserveSeams){
   if(preserveSeams&&existingUV)proxy.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(inputUVs),2));
   const welded=mergeVertices(proxy,1e-6);
   proxy.dispose();
+  welded.computeVertexNormals();
   return {proxy:welded,validCorners,filteredTriangles};
 }
 
-function auditUVBuffer(uv,triangleCount){
-  let invalidCoordinates=0;
-  let collapsedTriangles=0;
-  let worstQuality=1;
+function quantizedUVPoint(x,y){return `${Math.round(x*1e6)}:${Math.round(y*1e6)}`;}
+
+function auditUVBuffer(uv,triangleCount,positions=null,triangleRecords=null,meshId=0){
+  let invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,uvArea=0,worstQuality=1;
+  const stretchValues=[];
+  const parents=Array.from({length:triangleCount},(_,index)=>index);
+  const ranks=new Uint8Array(triangleCount);
+  const edgeOwners=new Map();
+  const find=index=>{while(parents[index]!==index){parents[index]=parents[parents[index]];index=parents[index];}return index;};
+  const unite=(a,b)=>{a=find(a);b=find(b);if(a===b)return;if(ranks[a]<ranks[b])parents[a]=b;else{parents[b]=a;if(ranks[a]===ranks[b])ranks[a]++;}};
   for(let triangle=0;triangle<triangleCount;triangle++){
     const first=triangle*6;
-    const ax=uv[first],ay=uv[first+1];
-    const bx=uv[first+2],by=uv[first+3];
-    const cx=uv[first+4],cy=uv[first+5];
+    const ax=uv[first],ay=uv[first+1],bx=uv[first+2],by=uv[first+3],cx=uv[first+4],cy=uv[first+5];
     if(![ax,ay,bx,by,cx,cy].every(Number.isFinite)){invalidCoordinates++;continue;}
+    if(Math.min(ax,ay,bx,by,cx,cy)<-1e-5||Math.max(ax,ay,bx,by,cx,cy)>1.00001)outOfBounds++;
     const abx=bx-ax,aby=by-ay,acx=cx-ax,acy=cy-ay,bcx=cx-bx,bcy=cy-by;
     const doubleArea=Math.abs(abx*acy-aby*acx);
     const edgeEnergy=abx*abx+aby*aby+acx*acx+acy*acy+bcx*bcx+bcy*bcy;
     const quality=edgeEnergy>0?(2*Math.sqrt(3)*doubleArea)/edgeEnergy:0;
     worstQuality=Math.min(worstQuality,quality);
-    if(edgeEnergy<=1e-16||doubleArea<=1e-12)collapsedTriangles++;
+    if(edgeEnergy<=1e-16||doubleArea<=1e-12){collapsedTriangles++;continue;}
+    uvArea+=doubleArea*.5;
+    const points=[[ax,ay],[bx,by],[cx,cy]];
+    for(const [start,end] of [[0,1],[1,2],[2,0]]){
+      const a=quantizedUVPoint(...points[start]),b=quantizedUVPoint(...points[end]);
+      const key=a<b?`${a}|${b}`:`${b}|${a}`;
+      const owner=edgeOwners.get(key);
+      if(owner===undefined)edgeOwners.set(key,triangle);else unite(owner,triangle);
+    }
+    if(positions){
+      const p=triangle*9;
+      const edge3D=[
+        Math.hypot(positions[p+3]-positions[p],positions[p+4]-positions[p+1],positions[p+5]-positions[p+2]),
+        Math.hypot(positions[p+6]-positions[p+3],positions[p+7]-positions[p+4],positions[p+8]-positions[p+5]),
+        Math.hypot(positions[p]-positions[p+6],positions[p+1]-positions[p+7],positions[p+2]-positions[p+8])
+      ];
+      const edgeUV=[Math.hypot(abx,aby),Math.hypot(bcx,bcy),Math.hypot(acx,acy)];
+      const ab3=[positions[p+3]-positions[p],positions[p+4]-positions[p+1],positions[p+5]-positions[p+2]];
+      const ac3=[positions[p+6]-positions[p],positions[p+7]-positions[p+1],positions[p+8]-positions[p+2]];
+      const crossX=ab3[1]*ac3[2]-ab3[2]*ac3[1],crossY=ab3[2]*ac3[0]-ab3[0]*ac3[2],crossZ=ab3[0]*ac3[1]-ab3[1]*ac3[0];
+      const area3D=.5*Math.hypot(crossX,crossY,crossZ);
+      if(area3D>1e-16){
+        const scale=Math.sqrt((doubleArea*.5)/area3D);
+        const ratios=edgeUV.map((length,index)=>edge3D[index]>1e-12?length/(edge3D[index]*scale):1).filter(Number.isFinite);
+        if(ratios.length===3){const min=Math.min(...ratios),max=Math.max(...ratios);stretchValues.push(Math.max(max,1/Math.max(min,1e-9)));}
+      }
+    }
+    if(triangleRecords)triangleRecords.push({meshId,triangle,points,minX:Math.min(ax,bx,cx),maxX:Math.max(ax,bx,cx),minY:Math.min(ay,by,cy),maxY:Math.max(ay,by,cy)});
   }
-  return {invalidCoordinates,collapsedTriangles,worstQuality};
+  const islands=new Set();
+  for(let triangle=0;triangle<triangleCount;triangle++)if(parents[triangle]!==undefined)islands.add(find(triangle));
+  return {invalidCoordinates,collapsedTriangles,outOfBounds,worstQuality,uvArea,islandCount:islands.size,stretchValues};
 }
 
-async function applyProductionAtlas(plan,preferences){
-  const entries=[];
-  let totalTriangles=0;
-  let filteredTriangles=0;
-  let oversizedMeshCount=0;
-  let clampedCoordinates=0;
-  let invalidUVCoordinates=0;
-  let collapsedUVTriangles=0;
-  currentModel.updateMatrixWorld(true);
+function signedTriangleArea(points){return .5*((points[1][0]-points[0][0])*(points[2][1]-points[0][1])-(points[1][1]-points[0][1])*(points[2][0]-points[0][0]));}
 
-  currentModel.traverse(mesh=>{
+function triangleOverlapArea(first,second){
+  let polygon=first.points.map(point=>[point[0],point[1]]);
+  const orientation=Math.sign(signedTriangleArea(second.points))||1;
+  for(let edge=0;edge<3&&polygon.length;edge++){
+    const a=second.points[edge],b=second.points[(edge+1)%3],input=polygon;
+    polygon=[];
+    const distance=point=>orientation*((b[0]-a[0])*(point[1]-a[1])-(b[1]-a[1])*(point[0]-a[0]));
+    for(let index=0;index<input.length;index++){
+      const current=input[index],previous=input[(index+input.length-1)%input.length];
+      const currentDistance=distance(current),previousDistance=distance(previous);
+      if(currentDistance>=-1e-10){
+        if(previousDistance< -1e-10){const t=previousDistance/(previousDistance-currentDistance);polygon.push([previous[0]+(current[0]-previous[0])*t,previous[1]+(current[1]-previous[1])*t]);}
+        polygon.push(current);
+      }else if(previousDistance>=-1e-10){const t=previousDistance/(previousDistance-currentDistance);polygon.push([previous[0]+(current[0]-previous[0])*t,previous[1]+(current[1]-previous[1])*t]);}
+    }
+  }
+  if(polygon.length<3)return 0;
+  let area=0;for(let index=0;index<polygon.length;index++){const a=polygon[index],b=polygon[(index+1)%polygon.length];area+=a[0]*b[1]-a[1]*b[0];}
+  return Math.abs(area)*.5;
+}
+
+function countUVOverlaps(records){
+  if(!records.length)return 0;
+  const cells=Array.from({length:64*64},()=>[]),tested=new Set();
+  let overlaps=0;
+  for(let index=0;index<records.length;index++){
+    const triangle=records[index];
+    const minX=THREE.MathUtils.clamp(Math.floor(triangle.minX*64),0,63),maxX=THREE.MathUtils.clamp(Math.floor(triangle.maxX*64),0,63);
+    const minY=THREE.MathUtils.clamp(Math.floor(triangle.minY*64),0,63),maxY=THREE.MathUtils.clamp(Math.floor(triangle.maxY*64),0,63);
+    for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++){
+      const cell=cells[y*64+x];
+      for(const otherIndex of cell){
+        const key=`${otherIndex}:${index}`;if(tested.has(key))continue;tested.add(key);
+        const other=records[otherIndex];
+        if(triangle.maxX<=other.minX+1e-9||other.maxX<=triangle.minX+1e-9||triangle.maxY<=other.minY+1e-9||other.maxY<=triangle.minY+1e-9)continue;
+        if(triangleOverlapArea(triangle,other)>1e-9){overlaps++;if(overlaps>=500)return overlaps;}
+      }
+      cell.push(index);
+    }
+  }
+  return overlaps;
+}
+
+function qualityGrade(quality){
+  if(quality.overlapCheckSkipped)return 'C';
+  const errors=quality.missingMeshes+quality.invalidCoordinates+quality.collapsedTriangles+quality.outOfBounds+quality.overlaps;
+  if(errors)return 'D';
+  if(quality.p95Stretch<=2.25&&quality.fillRatio>=.35)return 'A';
+  if(quality.p95Stretch<=4&&quality.fillRatio>=.2)return 'B';
+  return 'C';
+}
+
+function collectModelUVQuality({checkOverlaps=true,source='Current UVs'}={}){
+  const records=[],stretchValues=[];
+  const exactOverlapCheck=checkOverlaps&&collectMeshProfile().triangles<=60000;
+  let meshId=0,meshCount=0,missingMeshes=0,triangleCount=0,islandCount=0,invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,uvArea=0;
+  currentModel?.traverse(mesh=>{
     if(!mesh.isMesh||!mesh.geometry?.attributes?.position)return;
-    const source=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
-    const triangleCount=Math.floor(source.attributes.position.count/3);
-    if(!triangleCount){source.dispose();return;}
-
-    // xatlas gets a position-welded proxy so flat normals do not split every face.
-    // The generated UVs are then transferred back to the untouched render attributes.
-    const cleaned=buildCleanUVProxy(source,preferences.preserveSeams);
-    filteredTriangles+=cleaned.filteredTriangles;
-    if(!cleaned.proxy){
-      source.dispose();
-      return;
-    }
-    if(cleaned.proxy.attributes.position.count>65535){
-      source.dispose();
-      cleaned.proxy.dispose();
-      oversizedMeshCount++;
-      return;
-    }
-    cleaned.proxy.userData.worldScale=mesh.getWorldScale(new THREE.Vector3()).toArray();
-    entries.push({mesh,source,proxy:cleaned.proxy,validCorners:cleaned.validCorners,triangleCount});
-    totalTriangles+=triangleCount;
+    meshCount++;
+    const geometry=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
+    const uv=geometry.attributes.uv,position=geometry.attributes.position;
+    const triangles=Math.floor(position.count/3);triangleCount+=triangles;
+    if(!uv){missingMeshes++;geometry.dispose();meshId++;return;}
+    const audit=auditUVBuffer(uv.array,triangles,position.array,exactOverlapCheck?records:null,meshId++);
+    invalidCoordinates+=audit.invalidCoordinates;collapsedTriangles+=audit.collapsedTriangles;outOfBounds+=audit.outOfBounds;uvArea+=audit.uvArea;islandCount+=audit.islandCount;stretchValues.push(...audit.stretchValues);
+    geometry.dispose();
   });
+  stretchValues.sort((a,b)=>a-b);
+  const p95Stretch=stretchValues.length?stretchValues[Math.min(stretchValues.length-1,Math.floor(stretchValues.length*.95))]:Infinity;
+  const quality={source,meshCount,missingMeshes,triangleCount,islandCount,invalidCoordinates,collapsedTriangles,outOfBounds,uvArea,fillRatio:Math.min(uvArea,9.99),p95Stretch,overlaps:exactOverlapCheck?countUVOverlaps(records):checkOverlaps?null:0,overlapCheckSkipped:checkOverlaps&&!exactOverlapCheck};
+  quality.grade=qualityGrade(quality);
+  return quality;
+}
 
-  if(filteredTriangles){
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
-    throw new Error(`${filteredTriangles.toLocaleString()} zero-area or needle-thin mesh faces were found. The unwrap was stopped instead of collapsing their UVs. Repair or retopologize those faces, then try again.`);
-  }
-  if(oversizedMeshCount){
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
-    throw new Error('One mesh exceeds 65,535 welded vertices. Split that mesh into smaller objects, then unwrap again.');
-  }
-  if(!totalTriangles)throw new Error('This model does not contain any triangles to unwrap.');
-  if(!entries.length)throw new Error('Every face in this model is degenerate or too thin to unwrap safely.');
-  if(!entries.some(entry=>entry.proxy)){
-    entries.forEach(entry=>entry.source.dispose());
-    throw new Error('Every face in this model is degenerate or too thin to unwrap safely.');
-  }
-  if(totalTriangles>500000){
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
-    throw new Error('This browser build supports models up to 500,000 triangles per unwrap.');
-  }
+function isProfessionalUVQuality(quality){
+  const islandLimit=Math.max(12,quality.meshCount*8,Math.ceil(Math.sqrt(Math.max(quality.triangleCount,1))/3));
+  return quality.missingMeshes===0&&quality.invalidCoordinates===0&&quality.collapsedTriangles===0&&quality.outOfBounds===0&&quality.overlaps===0&&quality.fillRatio>=.18&&quality.p95Stretch<=3.5&&quality.islandCount<=islandLimit;
+}
 
-  const topology=analyseProxyTopology(entries);
-  let unwrapper;
-  try{unwrapper=await getUVUnwrapper(plan,preferences,totalTriangles,topology);}
-  catch(error){
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
-    throw error;
-  }
-  let atlas;
-  try{
-    setUnwrapStatus(topology.openSurface?'Flattening the connected open surface into coherent garment-style panels…':'Creating connected UV charts and minimizing stretch…');
-    atlas=await unwrapper.packAtlas(entries.filter(entry=>entry.proxy).map(entry=>entry.proxy),'uv','uv');
-  }catch(error){
-    console.error(error);
-    uvUnwrapper=null;
-    uvLibraryPromise=null;
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
-    throw new Error('The mesh could not be parameterized. Check for invalid or zero-area faces, then try again.');
-  }
+function setQualityReport(quality){
+  const report=document.getElementById('quality-report');if(!report)return;
+  if(!quality){report.classList.remove('show');return;}
+  const grade=String(quality.grade||'C').toUpperCase();
+  const errors=Number(quality.invalidCoordinates||0)+Number(quality.collapsedTriangles||quality.collapsed||0)+Number(quality.outOfBounds||0)+Number(quality.overlaps||0);
+  document.getElementById('quality-grade').textContent=grade;
+  document.getElementById('quality-grade').className=`quality-grade ${grade.toLowerCase()}`;
+  document.getElementById('quality-islands').textContent=Number(quality.islandCount??quality.islands??0).toLocaleString();
+  document.getElementById('quality-fill').textContent=Number.isFinite(Number(quality.fillRatio))?`${Math.round(Number(quality.fillRatio)*100)}%`:'—';
+  document.getElementById('quality-stretch').textContent=Number.isFinite(Number(quality.p95Stretch))?`${Number(quality.p95Stretch).toFixed(2)}×`:'—';
+  document.getElementById('quality-errors').textContent=errors.toLocaleString();
+  document.getElementById('quality-source').textContent=quality.source||'Geometry-validated UV layout';
+  report.classList.add('show');
+}
 
+function extractAtlasCandidate(entries,plan,label){
+  const uvArrays=[];
+  let clampedCoordinates=0,invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,islandCount=0,uvArea=0;
+  const stretchValues=[];
   for(const entry of entries){
-    if(!entry.proxy)continue;
-    const atlasUV=entry.proxy.attributes.uv;
-    const atlasIndex=entry.proxy.index;
-    if(!atlasUV||!atlasIndex||atlasIndex.count!==entry.validCorners.length){
-      entries.forEach(item=>{item.source.dispose();item.proxy?.dispose();});
-      throw new Error('The UV engine returned an incomplete atlas for this mesh.');
-    }
+    const atlasUV=entry.proxy?.attributes?.uv;
+    const atlasIndex=entry.proxy?.index;
+    if(!atlasUV||!atlasIndex||atlasIndex.count!==entry.validCorners.length)throw new Error('The UV engine returned an incomplete candidate.');
     const uv=new Float32Array(entry.source.attributes.position.count*2);
     const safeInset=Math.max(.5/plan.textureSize,1e-6);
     const firstAtlasVertex=atlasIndex.getX(0);
     const fallbackU=THREE.MathUtils.clamp(atlasUV.getX(firstAtlasVertex),safeInset,1-safeInset);
     const fallbackV=THREE.MathUtils.clamp(atlasUV.getY(firstAtlasVertex),safeInset,1-safeInset);
     for(let corner=0;corner<entry.source.attributes.position.count;corner++){
-      uv[corner*2]=fallbackU;
-      uv[corner*2+1]=fallbackV;
+      uv[corner*2]=fallbackU;uv[corner*2+1]=fallbackV;
     }
     for(let corner=0;corner<atlasIndex.count;corner++){
-      const atlasVertex=atlasIndex.getX(corner);
-      const sourceCorner=entry.validCorners[corner];
-      const rawU=atlasUV.getX(atlasVertex);
-      const rawV=atlasUV.getY(atlasVertex);
+      const atlasVertex=atlasIndex.getX(corner),sourceCorner=entry.validCorners[corner];
+      const rawU=atlasUV.getX(atlasVertex),rawV=atlasUV.getY(atlasVertex);
       const u=THREE.MathUtils.clamp(Number.isFinite(rawU)?rawU:fallbackU,safeInset,1-safeInset);
       const v=THREE.MathUtils.clamp(Number.isFinite(rawV)?rawV:fallbackV,safeInset,1-safeInset);
       if(u!==rawU||v!==rawV)clampedCoordinates++;
-      uv[sourceCorner*2]=u;
-      uv[sourceCorner*2+1]=v;
+      uv[sourceCorner*2]=u;uv[sourceCorner*2+1]=v;
     }
-    const audit=auditUVBuffer(uv,entry.triangleCount);
-    invalidUVCoordinates+=audit.invalidCoordinates;
-    collapsedUVTriangles+=audit.collapsedTriangles;
+    const audit=auditUVBuffer(uv,entry.triangleCount,entry.source.attributes.position.array);
+    invalidCoordinates+=audit.invalidCoordinates;collapsedTriangles+=audit.collapsedTriangles;outOfBounds+=audit.outOfBounds;
+    islandCount+=audit.islandCount;uvArea+=audit.uvArea;stretchValues.push(...audit.stretchValues);uvArrays.push(uv);
+  }
+  stretchValues.sort((a,b)=>a-b);
+  const p95Stretch=stretchValues.length?stretchValues[Math.min(stretchValues.length-1,Math.floor(stretchValues.length*.95))]:Infinity;
+  const quality={source:label+' candidate',meshCount:entries.length,missingMeshes:0,triangleCount:entries.reduce((total,entry)=>total+entry.triangleCount,0),islandCount,invalidCoordinates,collapsedTriangles,outOfBounds,overlaps:0,overlapCheckSkipped:false,uvArea,fillRatio:Math.min(uvArea,9.99),p95Stretch};
+  quality.grade=qualityGrade(quality);
+  return {uvArrays,quality,clampedCoordinates,preview:sampleCandidateUVs(entries,uvArrays)};
+}
+
+function automaticQualityScore(quality,plan,topology){
+  const errors=Number(quality.missingMeshes||0)+Number(quality.invalidCoordinates||0)+Number(quality.collapsedTriangles||0)+Number(quality.outOfBounds||0)+Number(quality.overlaps||0);
+  if(errors||quality.overlapCheckSkipped||!Number.isFinite(quality.p95Stretch))return 1e12+errors*1e8;
+  const preferredIslands=topology.openSurface?Math.max(2,quality.meshCount*2):topology.smoothClosed?Math.max(4,quality.meshCount*3):Math.max(8,quality.meshCount*5);
+  const islandWeight=plan.strategy==='compact'?1.6:plan.strategy==='detail'?.35:.8;
+  const islandPenalty=Math.max(0,quality.islandCount-preferredIslands)*islandWeight;
+  const stretchPenalty=Math.max(0,quality.p95Stretch-1)*18+Math.max(0,quality.p95Stretch-4)*80;
+  const fillPenalty=Math.max(0,.52-Math.min(quality.fillRatio,.52))*38;
+  return islandPenalty+stretchPenalty+fillPenalty;
+}
+
+function rebuildCandidateProxies(entries,preserveSeams){
+  for(const entry of entries){
+    const cleaned=buildCleanUVProxy(entry.source,preserveSeams);
+    if(cleaned.filteredTriangles||!cleaned.proxy)throw new Error('A candidate could not be built from this mesh.');
+    cleaned.proxy.userData.worldScale=entry.worldScale;
+    entry.proxy=cleaned.proxy;entry.validCorners=cleaned.validCorners;
+  }
+}
+
+async function applyAutomaticAtlas(plan,preferences,existingQuality){
+  const entries=[];
+  let totalTriangles=0,filteredTriangles=0,oversizedMeshCount=0;
+  currentModel.updateMatrixWorld(true);
+  currentModel.traverse(mesh=>{
+    if(!mesh.isMesh||!mesh.geometry?.attributes?.position)return;
+    const source=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();
+    const triangleCount=Math.floor(source.attributes.position.count/3);
+    if(!triangleCount){source.dispose();return;}
+    const cleaned=buildCleanUVProxy(source,preferences.preserveSeams);
+    filteredTriangles+=cleaned.filteredTriangles;
+    if(!cleaned.proxy){source.dispose();return;}
+    if(cleaned.proxy.attributes.position.count>65535){source.dispose();cleaned.proxy.dispose();oversizedMeshCount++;return;}
+    const worldScale=mesh.getWorldScale(new THREE.Vector3()).toArray();
+    cleaned.proxy.userData.worldScale=worldScale;
+    entries.push({mesh,source,proxy:cleaned.proxy,validCorners:cleaned.validCorners,triangleCount,worldScale});
+    totalTriangles+=triangleCount;
+  });
+  const disposeAll=()=>{
+    entries.forEach(entry=>{entry.source?.dispose();entry.proxy?.dispose();entry.proxy=null;});
+  };
+  if(filteredTriangles){disposeAll();throw new Error(filteredTriangles.toLocaleString()+' zero-area or needle-thin faces were found. Repair or retopologize them, then try again.');}
+  if(oversizedMeshCount){disposeAll();throw new Error('One mesh exceeds 65,535 welded vertices. Split that mesh into smaller objects, then unwrap again.');}
+  if(!totalTriangles||!entries.length){disposeAll();throw new Error('This model does not contain valid triangles to unwrap.');}
+  if(totalTriangles>500000){disposeAll();throw new Error('This browser build supports models up to 500,000 triangles per unwrap.');}
+
+  const topology=analyseProxyTopology(entries);
+  const candidates=buildAtlasCandidates(plan,preferences,totalTriangles,topology);
+  setInspectorContext({plan,topology});
+  setInspectorStage('analyse','done','Topology analysed: '+totalTriangles.toLocaleString()+' triangles across '+entries.length.toLocaleString()+' meshes.');
+  setInspectorStage('search','running','Building and ranking '+candidates.length+' automatic UV candidates…');
+  candidates.forEach(candidate=>upsertInspectorCandidate({id:candidate.id,label:candidate.label,status:'queued',settings:{...candidate}}));
+  let best=null,candidatesTested=0;
+  const existingEligible=existingQuality&&existingQuality.missingMeshes===0&&existingQuality.invalidCoordinates===0&&existingQuality.collapsedTriangles===0&&existingQuality.outOfBounds===0&&existingQuality.overlaps===0&&!existingQuality.overlapCheckSkipped;
+  if(existingEligible){
+    const score=automaticQualityScore(existingQuality,plan,topology),preview=sampleModelUVs(existingQuality.triangleCount);
+    best={id:'source',keptExisting:true,quality:existingQuality,score,label:'Validated source UVs',clampedCoordinates:0,preview};
+    upsertInspectorCandidate({id:'source',label:'Validated source UVs',status:'passed',score,quality:existingQuality,durationMs:0,preview});
+    candidatesTested++;
+  }else if(existingQuality){
+    upsertInspectorCandidate({id:'source',label:'Source UVs',status:'rejected',quality:existingQuality,durationMs:0,preview:sampleModelUVs(existingQuality.triangleCount),error:'Source UVs did not pass strict geometry validation.'});
+  }
+
+  for(let index=0;index<candidates.length;index++){
+    const candidate=candidates[index];
+    const started=performance.now();
+    upsertInspectorCandidate({id:candidate.id,label:candidate.label,status:'running',settings:{...candidate},error:''});
+    setUnwrapStatus('Testing '+candidate.label+' · candidate '+(index+1)+' of '+candidates.length+'…');
+    await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
+    try{
+      if(index>0)rebuildCandidateProxies(entries,preferences.preserveSeams);
+      const unwrapper=await loadUVUnwrapper();
+      configureUVUnwrapper(unwrapper,candidate,plan,preferences,totalTriangles);
+      const atlas=await unwrapper.packAtlas(entries.map(entry=>entry.proxy),'uv','uv');
+      candidatesTested++;
+      if((atlas?.atlasCount||1)!==1){
+        upsertInspectorCandidate({id:candidate.id,label:candidate.label,status:'rejected',durationMs:performance.now()-started,error:'Rejected because it required '+atlas.atlasCount+' texture atlases.'});
+        continue;
+      }
+      setInspectorStage('validate','running','Checking UV bounds, collapsed faces, stretch, density and island fragmentation…');
+      const result=extractAtlasCandidate(entries,plan,candidate.label);
+      const score=automaticQualityScore(result.quality,plan,topology);
+      const passed=score<1e12;
+      upsertInspectorCandidate({id:candidate.id,label:candidate.label,status:passed?'passed':'rejected',score,quality:result.quality,durationMs:performance.now()-started,preview:result.preview,error:passed?'':'Rejected by strict UV validation.'});
+      if(passed&&(!best||score<best.score))best={...result,id:candidate.id,score,label:candidate.label,atlas};
+    }catch(error){
+      console.error('UV candidate failed',candidate.id,error);
+      upsertInspectorCandidate({id:candidate.id,label:candidate.label,status:'failed',durationMs:performance.now()-started,error:error.message||'Candidate generation failed.'});
+      uvUnwrapper=null;uvLibraryPromise=null;
+    }finally{
+      entries.forEach(entry=>{entry.proxy?.dispose();entry.proxy=null;});
+    }
+  }
+
+  setInspectorStage('search','done',candidatesTested+' layouts were generated or compared.');
+  setInspectorStage('validate','done','Every usable layout passed geometry checks and received a comparable quality score.');
+  if(!best){disposeAll();throw new Error('None of the automatic UV candidates passed validation. Repair non-manifold or degenerate geometry and try again.');}
+  best.quality.source=best.label+' · best of '+candidatesTested+' tested layouts';
+  best.quality.candidatesTested=candidatesTested;
+  setInspectorStage('apply','running','Applying '+best.label+' to the model…');
+  if(best.keptExisting){
+    entries.forEach(entry=>entry.source.dispose());
+    setInspectorStage('apply','done','The validated source UVs already had the best score, so no geometry was changed.');
+    finishUnwrapInspector(best.id,best.label+' won with score '+best.score.toFixed(1)+'. The original UVs were kept.');
+    return {triangleCount:totalTriangles,atlas:{atlasCount:1},clampedCoordinates:0,topology,quality:best.quality,candidateLabel:best.label,candidatesTested,keptExisting:true};
+  }
+
+  for(let index=0;index<entries.length;index++){
+    const entry=entries[index],uv=best.uvArrays[index];
     entry.source.setAttribute('uv',new THREE.BufferAttribute(uv,2));
     entry.source.attributes.uv.needsUpdate=true;
-    entry.source.computeBoundingBox();
-    entry.source.computeBoundingSphere();
-  }
-
-  if(invalidUVCoordinates||collapsedUVTriangles){
-    entries.forEach(entry=>{entry.source.dispose();entry.proxy?.dispose();});
-    throw new Error(`UV validation rejected this atlas: ${invalidUVCoordinates.toLocaleString()} invalid coordinates and ${collapsedUVTriangles.toLocaleString()} collapsed UV faces. The original model was left unchanged.`);
-  }
-
-  for(const entry of entries){
+    entry.source.computeBoundingBox();entry.source.computeBoundingSphere();
     const oldGeometry=entry.mesh.geometry;
-    entry.mesh.geometry=entry.source;
-    oldGeometry.dispose();
-    entry.proxy?.dispose();
+    entry.mesh.geometry=entry.source;oldGeometry.dispose();
   }
-  return {triangleCount:totalTriangles,atlas,filteredTriangles,clampedCoordinates,invalidUVCoordinates,collapsedUVTriangles,topology};
+  setInspectorStage('apply','done',best.label+' was written to every mesh and is visible in the main UV view.');
+  finishUnwrapInspector(best.id,best.label+' won with score '+best.score.toFixed(1)+' and was applied to the model.');
+  return {triangleCount:totalTriangles,atlas:best.atlas,clampedCoordinates:best.clampedCoordinates,topology,quality:best.quality,candidateLabel:best.label,candidatesTested,keptExisting:false};
 }
 
 async function runUVUnwrap(){
   if(!currentModel)return;
   const button=document.getElementById('unwrap-btn');
+  resetUnwrapInspector(true);
+  setInspectorStage('analyse','running','Inspecting topology, existing UVs and surface continuity…');
   button.disabled=true;
-  button.textContent='Analysing mesh…';
-  setUnwrapStatus('Preparing mesh statistics and unwrap settings…');
+  button.textContent='Analysing topology…';
+  setUnwrapStatus('Inspecting topology, existing UVs and surface continuity…');
   const preferences=getUnwrapPreferences();
-  const profile=collectMeshProfile();
   try{
-    let productionResult=null;
+    const existingQuality=collectModelUVQuality({checkOverlaps:true,source:'Validated source UVs'});
+    const profile=collectAIUnwrapProfile(existingQuality);
+    setInspectorStage('analyse','done','Mesh profile ready: '+profile.triangles.toLocaleString()+' triangles, '+profile.meshCount.toLocaleString()+' meshes.');
+    let response=null,aiNote='';
     const hasEndpoint=Boolean(localStorage.getItem('jt_ai_unwrap_endpoint'));
     const localFileMode=window.location.protocol==='file:';
-    let fallbackNote='';
-    let remoteUnavailable=false;
-    if(hasEndpoint&&localFileMode){
-      fallbackNote=' Local file mode uses the browser preview; open the deployed HTTPS website to use the Blender service.';
-      setUnwrapStatus('Local preview detected. Building safely in the browser without contacting the secure Blender service…');
-    }else if(hasEndpoint){
-      button.textContent='AI seam analysis in progress…';
-      setUnwrapStatus('Analysing six views of the shape, planning seams and validating the Blender unwrap. Complex models can take several minutes…');
-      try{productionResult=await requestBlenderUnwrap(preferences);}
-      catch(error){
-        console.error(error);
-        remoteUnavailable=true;
-        fallbackNote=' The secure Blender service could not be reached, so this result uses the browser preview.';
-      }
+    if(hasEndpoint&&!localFileMode){
+      setInspectorStage('plan','running','Sending the mesh profile to the connected AI planner…');
+      button.textContent='AI selecting strategy…';
+      setUnwrapStatus('Asking the connected AI to choose the best unwrap strategy for this mesh…');
+      try{response=await requestAIUnwrapPlan(profile,preferences);setInspectorStage('plan','done','The connected AI selected the candidate search strategy.');}
+      catch(error){console.error(error);aiNote=' The AI planner was unavailable, so the topology analyser chose the strategy locally.';setInspectorStage('plan','fallback','The Worker was unavailable; the browser topology analyser selected the strategy.');}
+    }else if(hasEndpoint&&localFileMode){
+      aiNote=' Local file mode cannot call the Worker, so the topology analyser chose the strategy locally.';
+      setInspectorStage('plan','fallback','Local file mode cannot call HTTPS; using the browser topology planner.');
+    }else{
+      aiNote=' No Worker is connected, so the topology analyser chose the strategy locally.';
+      setInspectorStage('plan','fallback','No Worker endpoint is saved; using the browser topology planner.');
     }
-    if(productionResult){
-      const originalName=currentName;
-      setModel(productionResult.model,originalName);
-      hasGeneratedUVs=true;
-      document.getElementById('download-btn').disabled=false;
-      setDownloadLabel('Download Production GLB');
-      const quality=productionResult.quality;
-      const plan={
-        strategy:'AI + Blender',
-        angleThreshold:preferences.angleThreshold,
-        padding:preferences.padding,
-        textureSize:preferences.textureSize,
-        rotateIslands:preferences.rotateIslands,
-        summary:'Blender detected the topology, tested garment-aware and semantic candidates, then relaxed, packed and quality-scored the result.',
-        qualityGrade:quality?.grade||null
-      };
-      const resultProfile=collectMeshProfile();
-      captureUVVersion(plan,resultProfile.triangles);
-      setViewMode('split');
-      saveSettings();
-      button.textContent='Saving workspace…';
-      try{await persistWorkingModel();}
-      catch(error){console.error(error);setAutosaveState('Model could not be saved','error');}
-      const qualityLabel=quality?` Quality ${quality.grade}; ${quality.overlaps} overlaps, ${quality.collapsed} collapsed faces, ${quality.p95Stretch}× p95 stretch.`:'';
-      const qualityType=!quality||quality.accepted?'success':'error';
-      setUnwrapStatus(`${productionResult.engine} unwrap complete: ${resultProfile.triangles.toLocaleString()} triangles analysed, cut, relaxed and packed.${qualityLabel}${quality&&!quality.accepted?' This layout needs artist review before production.':''} Hover the UV preview to inspect matching model faces.`,qualityType);
-      return;
-    }
-    let response=null;
-    if(hasEndpoint&&!localFileMode&&!remoteUnavailable){
-      try{response=await requestAIUnwrapPlan(profile,preferences);}
-      catch(error){console.error(error);fallbackNote=' The AI planner was unavailable, so your local settings were used.';}
-    }
+
     const plan=normalizePlan(response?.plan||localUnwrapPlan(preferences),preferences);
+    setInspectorContext({plan,planningSource:response?'connected AI Worker':'browser topology planner'});
     document.getElementById('angle-threshold').value=plan.angleThreshold;
     document.getElementById('island-padding').value=plan.padding;
     const sizeOption=[...document.getElementById('texture-size').options].find(option=>Number.parseInt(option.value,10)===plan.textureSize);
     if(sizeOption)document.getElementById('texture-size').value=sizeOption.value;
     document.getElementById('rotate-islands').checked=plan.rotateIslands;
-    button.textContent='Building validated browser preview…';
-    const {triangleCount,atlas,clampedCoordinates,topology}=await applyProductionAtlas(plan,preferences);
+
+    button.textContent='Building UV candidates…';
+    const allowExisting=/ai|auto|use existing/i.test(preferences.seamStrategy)||preferences.preserveSeams;
+    const result=await applyAutomaticAtlas(plan,preferences,allowExisting?existingQuality:null);
     hasGeneratedUVs=true;
     document.getElementById('download-btn').disabled=false;
-    setDownloadLabel('Download Preview GLB');
-    const openSurfacePreview=Boolean(topology?.openSurface);
-    const previewPlan={...plan,strategy:openSurfacePreview?'Topology-aware open-surface preview':'Browser preview'};
-    captureUVVersion(previewPlan,triangleCount);
+    setDownloadLabel('Download Optimized GLB');
+    const strategyName=(response?'AI · ':'Auto · ')+result.candidateLabel;
+    const versionPlan={...plan,strategy:strategyName,qualityGrade:result.quality.grade};
+    captureUVVersion(versionPlan,result.triangleCount);
     setViewMode('split');
+    setQualityReport(result.quality);
     saveSettings();
+
     button.textContent='Saving workspace…';
     try{await persistWorkingModel();}
     catch(error){console.error(error);setAutosaveState('Model could not be saved','error');}
+
     const tokens=response?.usage?.total_tokens;
-    const atlasLabel=atlas?.atlasCount===1?'one atlas':`${atlas?.atlasCount||1} atlases`;
-    const cleanup=[];
-    if(clampedCoordinates)cleanup.push(`${clampedCoordinates.toLocaleString()} boundary coordinates corrected`);
-    const previewName=openSurfacePreview?'Topology-aware open-surface preview':'Validated xatlas preview';
-    const topologyNote=openSurfacePreview?' Fold-driven cuts were suppressed so connected garment panels stay together.':'';
-    setUnwrapStatus(`${previewName} complete: ${triangleCount.toLocaleString()} triangles packed into ${atlasLabel} with no collapsed UV faces.${topologyNote}${cleanup.length?' '+cleanup.join(' · ')+'.':''}${tokens?` AI usage: ${tokens.toLocaleString()} tokens.`:''}${fallbackNote||' Final production validation still requires the Blender service.'}`,'success');
+    const cleanup=result.clampedCoordinates?' '+result.clampedCoordinates.toLocaleString()+' boundary coordinates were corrected.':'';
+    const kept=result.keptExisting?' The source UVs won the comparison and were kept unchanged.':' The winning geometry was applied to the model.';
+    setUnwrapStatus((response?'AI-guided':'Automatic')+' unwrap complete. '+result.candidatesTested+' layouts were tested; '+result.candidateLabel+' won with grade '+result.quality.grade+', '+result.quality.islandCount.toLocaleString()+' islands, '+Math.round(result.quality.fillRatio*100)+'% UV fill and '+result.quality.p95Stretch.toFixed(2)+'× p95 stretch.'+kept+cleanup+(tokens?' AI usage: '+tokens.toLocaleString()+' tokens.':'')+aiNote,'success');
   }catch(error){
     console.error(error);
+    failUnwrapInspector(error);
     setUnwrapStatus(error.message||'The UV layout could not be generated.','error');
   }finally{
     button.disabled=false;
-    button.textContent='Generate validated UV layout';
+    button.textContent='Generate best automatic UVs';
   }
 }
 
@@ -1524,6 +1899,7 @@ function resize(){
     camera.updateProjectionMatrix();
   }
   drawUVPreview();
+  drawInspectorPreview();
 }
 
 document.getElementById('file-input').addEventListener('change',event=>loadFile(event.target.files[0]));
@@ -1543,6 +1919,7 @@ document.getElementById('checker-toggle').addEventListener('change',event=>{setC
 document.getElementById('rotate-toggle').addEventListener('change',event=>{controls.autoRotate=event.target.checked;saveSettings();});
 document.getElementById('unwrap-btn').addEventListener('click',runUVUnwrap);
 document.getElementById('download-btn').addEventListener('click',downloadUnwrappedGLB);
+document.getElementById('copy-unwrap-report').addEventListener('click',copyUnwrapDebugReport);
 
 function updateEndpointUI(){
   const endpoint=localStorage.getItem('jt_ai_unwrap_endpoint')||'';
@@ -1610,6 +1987,7 @@ viewport.addEventListener('drop',event=>{
 });
 
 new ResizeObserver(resize).observe(viewport);
+resetUnwrapInspector(false);
 initializeWorkspace();
 
 function animate(){
