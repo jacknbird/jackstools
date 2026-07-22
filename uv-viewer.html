@@ -112,6 +112,8 @@ button,input{font:inherit}
 .endpoint-row{display:flex;gap:5px}.endpoint-row .input{min-width:0}.endpoint-save{border:0.5px solid var(--line);background:var(--paper);color:var(--blue);border-radius:7px;padding:0 9px;font-size:10px;cursor:pointer}
 .endpoint-save:hover{background:var(--hover)}
 .ai-note{font-size:9px;color:#8ba9b5;line-height:1.45;margin-top:6px}
+.test-lab{margin-bottom:16px;padding:11px;border-radius:11px;border:0.5px solid var(--line);background:rgba(244,251,254,.7);box-shadow:var(--glass-highlight)}
+.test-lab-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}.test-lab-title{font-size:10px;font-weight:600;color:#456f80}.test-lab-badge{font-size:7px;letter-spacing:.07em;text-transform:uppercase;color:#2f7fa0;background:#dff2f8;border-radius:8px;padding:3px 5px}.test-lab-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px}.test-load{border:0.5px solid var(--blue);background:var(--blue);color:#fff;border-radius:7px;padding:0 9px;font-size:9px;font-weight:600;cursor:pointer}.test-load:hover{background:#1a6a8a}.test-mode{display:flex;align-items:center;gap:7px;margin-top:8px;color:#6c909e;font-size:9px}.test-mode input{accent-color:var(--blue)}.test-lab-note{font-size:8px;line-height:1.4;color:#8ba9b5;margin-top:6px}
 .unwrap-status{display:none;margin-top:10px;border-radius:7px;padding:9px 10px;font-size:10px;line-height:1.5;background:#e5f3f8;color:#4f7b8c;border:0.5px solid #bdd9e4}
 .unwrap-status.show{display:block}.unwrap-status.success{background:#e3f5ea;color:#34734d;border-color:#b7dfc6}.unwrap-status.error{background:#fff0f0;color:#9a4f4f;border-color:#e8c1c1}
 .quality-report{display:none;margin-top:10px;padding:10px;border:0.5px solid var(--line);border-radius:9px;background:rgba(235,248,252,.72)}
@@ -121,7 +123,7 @@ button,input{font:inherit}
 @keyframes inspector-pulse{50%{opacity:.35;transform:scale(.75)}}
 .inspector-summary{font-size:9px;line-height:1.45;color:#789aa7;margin:6px 0 9px}.inspector-stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;margin-bottom:9px}.inspector-stage{min-width:0;padding:5px 2px;border-radius:5px;background:rgba(250,253,255,.66);border:0.5px solid rgba(151,201,220,.45);text-align:center;color:#9ab0b9;font-size:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.inspector-stage.running{color:#217ca1;border-color:#70b7cf;background:#e2f4fa}.inspector-stage.done{color:#337b52;border-color:#9fd0b1;background:#e9f7ee}.inspector-stage.fallback{color:#8a672f;border-color:#dbc08a;background:#fff7e7}.inspector-stage.failed{color:#a54848;border-color:#dfabab;background:#fff0f0}
 .inspector-preview{position:relative;border-radius:8px;overflow:hidden;border:0.5px solid #416b7a;background:#0f303b}.inspector-preview canvas{display:block;width:100%;aspect-ratio:1.35/1}.inspector-preview-label{position:absolute;left:7px;top:6px;max-width:calc(100% - 14px);padding:3px 5px;border-radius:4px;background:rgba(5,30,39,.74);color:#bde9f6;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(8px)}
-.inspector-help{margin:6px 0 8px;font-size:8px;line-height:1.4;color:#87a6b2}.inspector-candidates{display:flex;flex-direction:column;gap:5px}.inspector-empty{padding:9px;border-radius:7px;background:rgba(249,253,255,.65);color:#8aa8b4;font-size:9px;line-height:1.45}.candidate-card{width:100%;appearance:none;border:0.5px solid rgba(151,201,220,.62);border-radius:7px;background:rgba(249,253,255,.72);padding:7px;text-align:left;color:inherit;cursor:pointer}.candidate-card:hover,.candidate-card.selected{border-color:#58a6c2;background:#e6f5fa}.candidate-card.winner{border-color:#57aa76;background:#e8f7ed;box-shadow:inset 3px 0 0 #43a56a}.candidate-top{display:flex;align-items:center;justify-content:space-between;gap:6px}.candidate-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:600;color:#456f80}.candidate-state{flex:none;border-radius:9px;padding:2px 5px;background:#e8f1f4;color:#7998a4;font-size:7px;text-transform:uppercase;letter-spacing:.05em}.candidate-state.running{background:#dff2f8;color:#287c9c}.candidate-state.passed{background:#e4f5ea;color:#34764f}.candidate-state.winner{background:#35a36a;color:#fff}.candidate-state.rejected,.candidate-state.failed{background:#fff0f0;color:#a34d4d}.candidate-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin-top:6px}.candidate-metric{font-size:8px;color:#819faa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}.candidate-metric strong{display:block;color:#456f80;font-size:9px;font-weight:600}.candidate-error{margin-top:5px;color:#a35a5a;font-size:8px;line-height:1.35}.inspector-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(151,201,220,.45)}.inspector-score-note{font-size:8px;line-height:1.35;color:#87a6b2}.inspector-copy{flex:none;border:0.5px solid var(--line);background:var(--paper);color:var(--blue);border-radius:6px;padding:5px 7px;font-size:8px;cursor:pointer}.inspector-copy:hover{background:var(--hover)}.inspector-copy:disabled{opacity:.48;cursor:not-allowed}
+.inspector-help{margin:6px 0 8px;font-size:8px;line-height:1.4;color:#87a6b2}.inspector-candidates{display:flex;flex-direction:column;gap:5px}.inspector-empty{padding:9px;border-radius:7px;background:rgba(249,253,255,.65);color:#8aa8b4;font-size:9px;line-height:1.45}.candidate-card{width:100%;appearance:none;border:0.5px solid rgba(151,201,220,.62);border-radius:7px;background:rgba(249,253,255,.72);padding:7px;text-align:left;color:inherit;cursor:pointer}.candidate-card:hover,.candidate-card.selected{border-color:#58a6c2;background:#e6f5fa}.candidate-card.winner{border-color:#57aa76;background:#e8f7ed;box-shadow:inset 3px 0 0 #43a56a}.candidate-top{display:flex;align-items:center;justify-content:space-between;gap:6px}.candidate-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:600;color:#456f80}.candidate-state{flex:none;border-radius:9px;padding:2px 5px;background:#e8f1f4;color:#7998a4;font-size:7px;text-transform:uppercase;letter-spacing:.05em}.candidate-state.running{background:#dff2f8;color:#287c9c}.candidate-state.passed{background:#e4f5ea;color:#34764f}.candidate-state.winner{background:#35a36a;color:#fff}.candidate-state.rejected,.candidate-state.failed{background:#fff0f0;color:#a34d4d}.candidate-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 3px;margin-top:6px}.candidate-metric{font-size:8px;color:#819faa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}.candidate-metric strong{display:block;color:#456f80;font-size:9px;font-weight:600}.candidate-error{margin-top:5px;color:#a35a5a;font-size:8px;line-height:1.35}.inspector-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(151,201,220,.45)}.inspector-score-note{font-size:8px;line-height:1.35;color:#87a6b2}.inspector-copy{flex:none;border:0.5px solid var(--line);background:var(--paper);color:var(--blue);border-radius:6px;padding:5px 7px;font-size:8px;cursor:pointer}.inspector-copy:hover{background:var(--hover)}.inspector-copy:disabled{opacity:.48;cursor:not-allowed}
 .version-block{margin-top:17px;padding-top:15px;border-top:0.5px solid var(--line)}
 .version-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
 .version-title{font-size:10px;font-weight:600;color:#456f80}.version-badge{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:#88aab7}
@@ -262,7 +264,14 @@ button,input{font:inherit}
           <div class="ai-connect">
             <div class="ai-connect-head"><span class="ai-connect-title"><span class="status-dot" id="ai-status-dot"></span>OpenAI service</span><span class="ai-connect-state" id="ai-connect-state">Not connected</span></div>
             <div class="endpoint-row"><input class="input" id="ai-endpoint" type="url" placeholder="Paste your secure Worker URL"><button class="endpoint-save" id="save-endpoint" type="button">Save</button></div>
-            <div class="ai-note">Your existing Worker chooses the unwrap strategy from mesh statistics. The browser then builds several UV candidates, measures distortion, fragmentation and UV-space use, and keeps the best one automatically. No Worker changes are required.</div>
+            <div class="ai-note">Your existing Worker chooses the high-level strategy. The browser creates topology-aware seam candidates, measures real seam length, texel-density consistency, distortion and packing, then keeps the best validated layout. No Worker changes are required.</div>
+          </div>
+
+          <div class="test-lab">
+            <div class="test-lab-head"><span class="test-lab-title">Automatic unwrap test lab</span><span class="test-lab-badge">6 shapes</span></div>
+            <div class="test-lab-grid"><select class="select" id="test-shape"><option value="knot">Torus knot · tubular</option><option value="loop">Looped tube · tubular</option><option value="torus">Torus · genus 1</option><option value="sphere">Sphere · closed organic</option><option value="capsule">Capsule · elongated</option><option value="box">Box · hard surface</option></select><button class="test-load" id="load-test-shape" type="button">Load</button></div>
+            <label class="test-mode"><input id="strip-test-uvs" type="checkbox" checked>Remove source UVs before testing</label>
+            <div class="test-lab-note">UV-less mode prevents the clean procedural map from winning automatically, so it tests the unwrap engine honestly.</div>
           </div>
 
           <div class="field">
@@ -298,6 +307,8 @@ button,input{font:inherit}
               <div class="quality-metric"><span class="quality-value" id="quality-fill">—</span><span class="quality-label">UV fill</span></div>
               <div class="quality-metric"><span class="quality-value" id="quality-stretch">—</span><span class="quality-label">P95 stretch</span></div>
               <div class="quality-metric"><span class="quality-value" id="quality-errors">—</span><span class="quality-label">Invalid faces</span></div>
+              <div class="quality-metric"><span class="quality-value" id="quality-density">—</span><span class="quality-label">Density spread</span></div>
+              <div class="quality-metric"><span class="quality-value" id="quality-seams">—</span><span class="quality-label">Seam ratio</span></div>
             </div>
             <div class="quality-source" id="quality-source"></div>
           </div>
@@ -312,7 +323,7 @@ button,input{font:inherit}
             </div>
             <p class="inspector-help">Click any candidate below to inspect its sampled UV layout. This preview is diagnostic; the main UV view always shows the applied winner.</p>
             <div class="inspector-candidates" id="inspector-candidates"><div class="inspector-empty">Candidates will appear here as they are generated.</div></div>
-            <div class="inspector-actions"><span class="inspector-score-note">Lower score wins: stretch + excess islands + wasted space.</span><button class="inspector-copy" id="copy-unwrap-report" type="button" disabled>Copy debug report</button></div>
+            <div class="inspector-actions"><span class="inspector-score-note">Lower wins: seam length + islands + density + distortion + wasted space.</span><button class="inspector-copy" id="copy-unwrap-report" type="button" disabled>Copy debug report</button></div>
           </section>
 
           <div class="version-block">
@@ -541,7 +552,9 @@ function renderUnwrapInspector(){
       ['Score',Number.isFinite(candidate.score)?candidate.score.toFixed(1):'—'],
       ['Islands',Number.isFinite(candidate.quality?.islandCount)?candidate.quality.islandCount.toLocaleString():'—'],
       ['Fill',Number.isFinite(candidate.quality?.fillRatio)?Math.round(candidate.quality.fillRatio*100)+'%':'—'],
-      ['Stretch',Number.isFinite(candidate.quality?.p95Stretch)?candidate.quality.p95Stretch.toFixed(2)+'×':'—']
+      ['Stretch',Number.isFinite(candidate.quality?.p95Stretch)?candidate.quality.p95Stretch.toFixed(2)+'×':'—'],
+      ['Density',Number.isFinite(candidate.quality?.densitySpread)?candidate.quality.densitySpread.toFixed(2)+'×':'—'],
+      ['Seams',Number.isFinite(candidate.quality?.seamRatio)?Math.round(candidate.quality.seamRatio*100)+'%':'—']
     ];
     for(const [label,value] of values){const metric=document.createElement('span');metric.className='candidate-metric';const strong=document.createElement('strong');strong.textContent=value;metric.append(strong,document.createTextNode(label));metrics.append(metric);}
     card.append(metrics);
@@ -613,7 +626,7 @@ function drawInspectorPreview(){
 }
 
 async function copyUnwrapDebugReport(){
-  const report={schema:'jacks-tools-uv-inspector-v1',model:currentName,startedAt:unwrapDiagnostics.startedAt,finishedAt:unwrapDiagnostics.finishedAt,planningSource:unwrapDiagnostics.planningSource,plan:unwrapDiagnostics.plan,topology:unwrapDiagnostics.topology,winnerId:unwrapDiagnostics.winnerId,stages:unwrapDiagnostics.stages,candidates:unwrapDiagnostics.candidates.map(({preview,...candidate})=>({...candidate,previewTriangles:Math.floor((preview?.length||0)/6)}))};
+  const report={schema:'jacks-tools-uv-inspector-v2',model:currentName,startedAt:unwrapDiagnostics.startedAt,finishedAt:unwrapDiagnostics.finishedAt,planningSource:unwrapDiagnostics.planningSource,plan:unwrapDiagnostics.plan,topology:unwrapDiagnostics.topology,winnerId:unwrapDiagnostics.winnerId,scoreFormula:'invalid layouts rejected; seam length + excess islands + global density spread + conformal stretch + tiny charts + wasted space',stages:unwrapDiagnostics.stages,candidates:unwrapDiagnostics.candidates.map(({preview,...candidate})=>({...candidate,previewTriangles:Math.floor((preview?.length||0)/6)}))};
   const text=JSON.stringify(report,null,2),button=document.getElementById('copy-unwrap-report');
   try{
     if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(text);
@@ -759,13 +772,51 @@ function applyDisplaySettings(){
   setCheckerForModel(document.getElementById('checker-toggle').checked);
 }
 
-function createDemo(){
-  const geometry=new THREE.TorusKnotGeometry(1,.32,160,24);
-  const material=new THREE.MeshStandardMaterial({color:0x2a7fa5,roughness:.28,metalness:.08});
+const TEST_SHAPE_NAMES={knot:'Torus knot',loop:'Looped tube',torus:'Torus',sphere:'Sphere',capsule:'Capsule',box:'Subdivided box'};
+
+function createTestGeometry(id){
+  if(id==='torus')return new THREE.TorusGeometry(1,.34,32,128);
+  if(id==='sphere')return new THREE.SphereGeometry(1,64,32);
+  if(id==='capsule')return new THREE.CapsuleGeometry(.58,1.35,16,32);
+  if(id==='box')return new THREE.BoxGeometry(1.7,1.35,1.1,8,8,8);
+  if(id==='loop'){
+    const points=[];
+    for(let index=0;index<16;index++){
+      const angle=index/16*Math.PI*2,radius=1+.24*Math.cos(angle*3);
+      points.push(new THREE.Vector3(Math.cos(angle)*radius,.38*Math.sin(angle*2),Math.sin(angle)*radius));
+    }
+    const curve=new THREE.CatmullRomCurve3(points,true,'centripetal');
+    return new THREE.TubeGeometry(curve,160,.24,24,true);
+  }
+  return new THREE.TorusKnotGeometry(1,.32,160,24);
+}
+
+function createTestShape(id='knot',removeUVs=false){
+  const geometry=createTestGeometry(id);
+  geometry.userData.testShape=id;
+  geometry.userData.referenceUVsRemoved=removeUVs;
+  if(removeUVs)geometry.deleteAttribute('uv');
+  const colours={knot:0x2a7fa5,loop:0x3b8b8c,torus:0x4b86b4,sphere:0x5b88a8,capsule:0x527e9b,box:0x5d8191};
+  const material=new THREE.MeshStandardMaterial({color:colours[id]||0x2a7fa5,roughness:.28,metalness:.08});
   const mesh=new THREE.Mesh(geometry,material);
+  mesh.userData.testShape=id;
   mesh.castShadow=true;
   mesh.receiveShadow=true;
   return mesh;
+}
+
+function createDemo(){return createTestShape('knot',false);}
+
+function loadSelectedTestShape(){
+  const id=document.getElementById('test-shape').value;
+  const removeUVs=document.getElementById('strip-test-uvs').checked;
+  setModel(createTestShape(id,removeUVs),TEST_SHAPE_NAMES[id]+(removeUVs?' · UV-less test':' · reference UVs'));
+  activateToolPanel('unwrap');
+  setViewMode('split');
+  document.getElementById('checker-toggle').checked=true;
+  setCheckerForModel(true);
+  setAutosaveState('Test shape · not autosaved');
+  setUnwrapStatus(removeUVs?'UVs removed. Run the automatic unwrap to test seam generation.':'Reference UVs retained so the scorer can compare against a known clean layout.');
 }
 
 function disposeModel(object){
@@ -1233,8 +1284,8 @@ function collectAIUnwrapProfile(existingQuality){
   return {
     ...profile,
     shape:{elongation:dimensions[2]>0?Number((dimensions[0]/dimensions[2]).toFixed(2)):null,flatness:dimensions[0]>0?Number((dimensions[2]/dimensions[0]).toFixed(3)):null},
-    topology:topology?{openSurface:topology.openSurface,smoothClosed:topology.smoothClosed,boundaryRatio:Number(topology.boundaryRatio.toFixed(4)),sharpEdgeRatio:Number(topology.sharpRatio.toFixed(4)),nonManifoldEdges:topology.nonManifoldEdges,averageDihedralDegrees:Number(THREE.MathUtils.radToDeg(topology.averageDihedral).toFixed(2)),filteredTriangles}:null,
-    existingUVs:existingQuality?{grade:existingQuality.grade,islands:existingQuality.islandCount,fillRatio:Number(existingQuality.fillRatio.toFixed(4)),p95Stretch:Number.isFinite(existingQuality.p95Stretch)?Number(existingQuality.p95Stretch.toFixed(3)):null,overlaps:existingQuality.overlaps,collapsed:existingQuality.collapsedTriangles,outOfBounds:existingQuality.outOfBounds}:null
+    topology:topology?{openSurface:topology.openSurface,smoothClosed:topology.smoothClosed,genus:topology.genus,shapeRatio:Number(topology.shapeRatio.toFixed(3)),boundaryRatio:Number(topology.boundaryRatio.toFixed(4)),sharpEdgeRatio:Number(topology.sharpRatio.toFixed(4)),nonManifoldEdges:topology.nonManifoldEdges,averageDihedralDegrees:Number(THREE.MathUtils.radToDeg(topology.averageDihedral).toFixed(2)),filteredTriangles}:null,
+    existingUVs:existingQuality?{grade:existingQuality.grade,islands:existingQuality.islandCount,fillRatio:Number(existingQuality.fillRatio.toFixed(4)),p95Stretch:Number.isFinite(existingQuality.p95Stretch)?Number(existingQuality.p95Stretch.toFixed(3)):null,densitySpread:Number.isFinite(existingQuality.densitySpread)?Number(existingQuality.densitySpread.toFixed(3)):null,seamRatio:Number.isFinite(existingQuality.seamRatio)?Number(existingQuality.seamRatio.toFixed(4)):null,overlaps:existingQuality.overlaps,collapsed:existingQuality.collapsedTriangles,outOfBounds:existingQuality.outOfBounds}:null
   };
 }
 
@@ -1278,12 +1329,16 @@ async function requestAIUnwrapPlan(profile,preferences){
 }
 
 function analyseProxyTopology(entries){
-  let meshCount=0,openMeshCount=0,boundaryEdges=0,totalEdges=0,nonManifoldEdges=0,sharedEdges=0,sharpEdges=0,dihedralTotal=0;
+  let meshCount=0,openMeshCount=0,boundaryEdges=0,totalEdges=0,nonManifoldEdges=0,sharedEdges=0,sharpEdges=0,dihedralTotal=0,vertexCount=0,faceCount=0,genus=0,closedMeshCount=0,shapeRatio=1;
   entries.forEach(entry=>{
     const geometry=entry.proxy;
     const index=geometry?.index,position=geometry?.attributes?.position;
     if(!geometry||!index)return;
     meshCount++;
+    vertexCount+=position.count;faceCount+=index.count/3;
+    geometry.computeBoundingBox();
+    const dimensions=geometry.boundingBox.getSize(new THREE.Vector3()).toArray().sort((a,b)=>b-a);
+    if(dimensions[2]>1e-9)shapeRatio=Math.max(shapeRatio,dimensions[0]/dimensions[2]);
     const edges=new Map();
     const normals=[];
     for(let corner=0;corner<index.count;corner+=3){
@@ -1309,11 +1364,12 @@ function analyseProxyTopology(entries){
       }
     });
     if(meshBoundary)openMeshCount++;
+    else{closedMeshCount++;genus+=Math.max(0,Math.round((2-(position.count-edges.size+index.count/3))/2));}
   });
   const openSurface=meshCount>0&&openMeshCount===meshCount&&nonManifoldEdges===0;
   const sharpRatio=sharedEdges?sharpEdges/sharedEdges:0;
   const smoothClosed=meshCount>0&&boundaryEdges===0&&nonManifoldEdges===0&&sharpRatio<.08;
-  return {openSurface,smoothClosed,meshCount,openMeshCount,boundaryEdges,totalEdges,nonManifoldEdges,boundaryRatio:totalEdges?boundaryEdges/totalEdges:0,sharpRatio,averageDihedral:sharedEdges?dihedralTotal/sharedEdges:0};
+  return {openSurface,smoothClosed,meshCount,openMeshCount,closedMeshCount,vertexCount,faceCount,genus,boundaryEdges,totalEdges,nonManifoldEdges,boundaryRatio:totalEdges?boundaryEdges/totalEdges:0,sharpRatio,averageDihedral:sharedEdges?dihedralTotal/sharedEdges:0,shapeRatio};
 }
 
 async function loadUVUnwrapper(){
@@ -1437,12 +1493,25 @@ function buildCleanUVProxy(source,preserveSeams){
 
 function quantizedUVPoint(x,y){return `${Math.round(x*1e6)}:${Math.round(y*1e6)}`;}
 
+function quantizedPosition(x,y,z){return `${Math.round(x*1e5)}:${Math.round(y*1e5)}:${Math.round(z*1e5)}`;}
+
+function distributionSummary(values){
+  const sorted=values.filter(value=>Number.isFinite(value)&&value>0).sort((a,b)=>a-b);
+  if(!sorted.length)return {median:Infinity,p10:Infinity,p90:Infinity,spread:Infinity,variation:Infinity};
+  const at=ratio=>sorted[Math.min(sorted.length-1,Math.floor((sorted.length-1)*ratio))];
+  const median=at(.5),p10=at(.1),p90=at(.9);
+  const mean=sorted.reduce((sum,value)=>sum+value,0)/sorted.length;
+  const variance=sorted.reduce((sum,value)=>sum+(value-mean)*(value-mean),0)/sorted.length;
+  return {median,p10,p90,spread:p90/Math.max(p10,1e-12),variation:Math.sqrt(variance)/Math.max(mean,1e-12)};
+}
+
 function auditUVBuffer(uv,triangleCount,positions=null,triangleRecords=null,meshId=0){
-  let invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,uvArea=0,worstQuality=1;
-  const stretchValues=[];
+  let invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,uvArea=0,worstQuality=1,seamLength=0,sharedEdgeLength=0;
+  const stretchValues=[],densityValues=[],triangleAreas=new Float64Array(triangleCount);
   const parents=Array.from({length:triangleCount},(_,index)=>index);
   const ranks=new Uint8Array(triangleCount);
   const edgeOwners=new Map();
+  const geometricEdgeOwners=new Map();
   const find=index=>{while(parents[index]!==index){parents[index]=parents[parents[index]];index=parents[index];}return index;};
   const unite=(a,b)=>{a=find(a);b=find(b);if(a===b)return;if(ranks[a]<ranks[b])parents[a]=b;else{parents[b]=a;if(ranks[a]===ranks[b])ranks[a]++;}};
   for(let triangle=0;triangle<triangleCount;triangle++){
@@ -1456,7 +1525,7 @@ function auditUVBuffer(uv,triangleCount,positions=null,triangleRecords=null,mesh
     const quality=edgeEnergy>0?(2*Math.sqrt(3)*doubleArea)/edgeEnergy:0;
     worstQuality=Math.min(worstQuality,quality);
     if(edgeEnergy<=1e-16||doubleArea<=1e-12){collapsedTriangles++;continue;}
-    uvArea+=doubleArea*.5;
+    const triangleUVArea=doubleArea*.5;uvArea+=triangleUVArea;triangleAreas[triangle]=triangleUVArea;
     const points=[[ax,ay],[bx,by],[cx,cy]];
     for(const [start,end] of [[0,1],[1,2],[2,0]]){
       const a=quantizedUVPoint(...points[start]),b=quantizedUVPoint(...points[end]);
@@ -1478,15 +1547,34 @@ function auditUVBuffer(uv,triangleCount,positions=null,triangleRecords=null,mesh
       const area3D=.5*Math.hypot(crossX,crossY,crossZ);
       if(area3D>1e-16){
         const scale=Math.sqrt((doubleArea*.5)/area3D);
+        densityValues.push(scale);
         const ratios=edgeUV.map((length,index)=>edge3D[index]>1e-12?length/(edge3D[index]*scale):1).filter(Number.isFinite);
         if(ratios.length===3){const min=Math.min(...ratios),max=Math.max(...ratios);stretchValues.push(Math.max(max,1/Math.max(min,1e-9)));}
+      }
+      const positionPoints=[
+        [positions[p],positions[p+1],positions[p+2]],
+        [positions[p+3],positions[p+4],positions[p+5]],
+        [positions[p+6],positions[p+7],positions[p+8]]
+      ];
+      for(const [start,end] of [[0,1],[1,2],[2,0]]){
+        const firstPoint=quantizedPosition(...positionPoints[start]),secondPoint=quantizedPosition(...positionPoints[end]);
+        const geometryKey=firstPoint<secondPoint?`${firstPoint}|${secondPoint}`:`${secondPoint}|${firstPoint}`;
+        const firstUV=quantizedUVPoint(...points[start]),secondUV=quantizedUVPoint(...points[end]);
+        const uvKey=firstUV<secondUV?`${firstUV}|${secondUV}`:`${secondUV}|${firstUV}`;
+        const length=edge3D[start],owner=geometricEdgeOwners.get(geometryKey);
+        if(owner){const sharedLength=(owner.length+length)*.5;sharedEdgeLength+=sharedLength;if(owner.uvKey!==uvKey)seamLength+=sharedLength;}
+        else geometricEdgeOwners.set(geometryKey,{uvKey,length});
       }
     }
     if(triangleRecords)triangleRecords.push({meshId,triangle,points,minX:Math.min(ax,bx,cx),maxX:Math.max(ax,bx,cx),minY:Math.min(ay,by,cy),maxY:Math.max(ay,by,cy)});
   }
   const islands=new Set();
   for(let triangle=0;triangle<triangleCount;triangle++)if(parents[triangle]!==undefined)islands.add(find(triangle));
-  return {invalidCoordinates,collapsedTriangles,outOfBounds,worstQuality,uvArea,islandCount:islands.size,stretchValues};
+  const islandAreas=new Map();
+  for(let triangle=0;triangle<triangleCount;triangle++){const root=find(triangle);islandAreas.set(root,(islandAreas.get(root)||0)+triangleAreas[triangle]);}
+  const tinyThreshold=uvArea*.002;
+  const tinyIslandCount=[...islandAreas.values()].filter(area=>area>0&&area<tinyThreshold).length;
+  return {invalidCoordinates,collapsedTriangles,outOfBounds,worstQuality,uvArea,islandCount:islands.size,stretchValues,densityValues,seamLength,sharedEdgeLength,seamRatio:sharedEdgeLength?seamLength/sharedEdgeLength:0,tinyIslandCount};
 }
 
 function signedTriangleArea(points){return .5*((points[1][0]-points[0][0])*(points[2][1]-points[0][1])-(points[1][1]-points[0][1])*(points[2][0]-points[0][0]));}
@@ -1538,15 +1626,16 @@ function qualityGrade(quality){
   if(quality.overlapCheckSkipped)return 'C';
   const errors=quality.missingMeshes+quality.invalidCoordinates+quality.collapsedTriangles+quality.outOfBounds+quality.overlaps;
   if(errors)return 'D';
-  if(quality.p95Stretch<=2.25&&quality.fillRatio>=.35)return 'A';
-  if(quality.p95Stretch<=4&&quality.fillRatio>=.2)return 'B';
+  const aIslandLimit=Math.max(8,quality.meshCount*6),bIslandLimit=Math.max(24,quality.meshCount*12);
+  if(quality.p95Stretch<=1.45&&quality.densitySpread<=1.5&&quality.seamRatio<=.16&&quality.fillRatio>=.28&&quality.islandCount<=aIslandLimit&&!quality.tinyIslandCount)return 'A';
+  if(quality.p95Stretch<=2.5&&quality.densitySpread<=2&&quality.seamRatio<=.34&&quality.fillRatio>=.18&&quality.islandCount<=bIslandLimit)return 'B';
   return 'C';
 }
 
 function collectModelUVQuality({checkOverlaps=true,source='Current UVs'}={}){
-  const records=[],stretchValues=[];
+  const records=[],stretchValues=[],densityValues=[];
   const exactOverlapCheck=checkOverlaps&&collectMeshProfile().triangles<=60000;
-  let meshId=0,meshCount=0,missingMeshes=0,triangleCount=0,islandCount=0,invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,uvArea=0;
+  let meshId=0,meshCount=0,missingMeshes=0,triangleCount=0,islandCount=0,invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,uvArea=0,seamLength=0,sharedEdgeLength=0,tinyIslandCount=0;
   currentModel?.traverse(mesh=>{
     if(!mesh.isMesh||!mesh.geometry?.attributes?.position)return;
     meshCount++;
@@ -1555,19 +1644,20 @@ function collectModelUVQuality({checkOverlaps=true,source='Current UVs'}={}){
     const triangles=Math.floor(position.count/3);triangleCount+=triangles;
     if(!uv){missingMeshes++;geometry.dispose();meshId++;return;}
     const audit=auditUVBuffer(uv.array,triangles,position.array,exactOverlapCheck?records:null,meshId++);
-    invalidCoordinates+=audit.invalidCoordinates;collapsedTriangles+=audit.collapsedTriangles;outOfBounds+=audit.outOfBounds;uvArea+=audit.uvArea;islandCount+=audit.islandCount;stretchValues.push(...audit.stretchValues);
+    invalidCoordinates+=audit.invalidCoordinates;collapsedTriangles+=audit.collapsedTriangles;outOfBounds+=audit.outOfBounds;uvArea+=audit.uvArea;islandCount+=audit.islandCount;seamLength+=audit.seamLength;sharedEdgeLength+=audit.sharedEdgeLength;tinyIslandCount+=audit.tinyIslandCount;stretchValues.push(...audit.stretchValues);densityValues.push(...audit.densityValues);
     geometry.dispose();
   });
   stretchValues.sort((a,b)=>a-b);
   const p95Stretch=stretchValues.length?stretchValues[Math.min(stretchValues.length-1,Math.floor(stretchValues.length*.95))]:Infinity;
-  const quality={source,meshCount,missingMeshes,triangleCount,islandCount,invalidCoordinates,collapsedTriangles,outOfBounds,uvArea,fillRatio:Math.min(uvArea,9.99),p95Stretch,overlaps:exactOverlapCheck?countUVOverlaps(records):checkOverlaps?null:0,overlapCheckSkipped:checkOverlaps&&!exactOverlapCheck};
+  const density=distributionSummary(densityValues);
+  const quality={source,meshCount,missingMeshes,triangleCount,islandCount,invalidCoordinates,collapsedTriangles,outOfBounds,uvArea,fillRatio:Math.min(uvArea,9.99),p95Stretch,densitySpread:density.spread,densityVariation:density.variation,seamLength,sharedEdgeLength,seamRatio:sharedEdgeLength?seamLength/sharedEdgeLength:0,tinyIslandCount,overlaps:exactOverlapCheck?countUVOverlaps(records):checkOverlaps?null:0,overlapCheckSkipped:checkOverlaps&&!exactOverlapCheck};
   quality.grade=qualityGrade(quality);
   return quality;
 }
 
 function isProfessionalUVQuality(quality){
-  const islandLimit=Math.max(12,quality.meshCount*8,Math.ceil(Math.sqrt(Math.max(quality.triangleCount,1))/3));
-  return quality.missingMeshes===0&&quality.invalidCoordinates===0&&quality.collapsedTriangles===0&&quality.outOfBounds===0&&quality.overlaps===0&&quality.fillRatio>=.18&&quality.p95Stretch<=3.5&&quality.islandCount<=islandLimit;
+  const islandLimit=Math.max(12,quality.meshCount*8);
+  return quality.missingMeshes===0&&quality.invalidCoordinates===0&&quality.collapsedTriangles===0&&quality.outOfBounds===0&&quality.overlaps===0&&quality.fillRatio>=.18&&quality.p95Stretch<=2.5&&quality.densitySpread<=2&&quality.seamRatio<=.34&&quality.islandCount<=islandLimit&&!quality.tinyIslandCount;
 }
 
 function setQualityReport(quality){
@@ -1581,14 +1671,16 @@ function setQualityReport(quality){
   document.getElementById('quality-fill').textContent=Number.isFinite(Number(quality.fillRatio))?`${Math.round(Number(quality.fillRatio)*100)}%`:'—';
   document.getElementById('quality-stretch').textContent=Number.isFinite(Number(quality.p95Stretch))?`${Number(quality.p95Stretch).toFixed(2)}×`:'—';
   document.getElementById('quality-errors').textContent=errors.toLocaleString();
+  document.getElementById('quality-density').textContent=Number.isFinite(Number(quality.densitySpread))?`${Number(quality.densitySpread).toFixed(2)}×`:'—';
+  document.getElementById('quality-seams').textContent=Number.isFinite(Number(quality.seamRatio))?`${Math.round(Number(quality.seamRatio)*100)}%`:'—';
   document.getElementById('quality-source').textContent=quality.source||'Geometry-validated UV layout';
   report.classList.add('show');
 }
 
 function extractAtlasCandidate(entries,plan,label){
   const uvArrays=[];
-  let clampedCoordinates=0,invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,islandCount=0,uvArea=0;
-  const stretchValues=[];
+  let clampedCoordinates=0,invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,islandCount=0,uvArea=0,seamLength=0,sharedEdgeLength=0,tinyIslandCount=0;
+  const stretchValues=[],densityValues=[];
   for(const entry of entries){
     const atlasUV=entry.proxy?.attributes?.uv;
     const atlasIndex=entry.proxy?.index;
@@ -1611,24 +1703,235 @@ function extractAtlasCandidate(entries,plan,label){
     }
     const audit=auditUVBuffer(uv,entry.triangleCount,entry.source.attributes.position.array);
     invalidCoordinates+=audit.invalidCoordinates;collapsedTriangles+=audit.collapsedTriangles;outOfBounds+=audit.outOfBounds;
-    islandCount+=audit.islandCount;uvArea+=audit.uvArea;stretchValues.push(...audit.stretchValues);uvArrays.push(uv);
+    islandCount+=audit.islandCount;uvArea+=audit.uvArea;seamLength+=audit.seamLength;sharedEdgeLength+=audit.sharedEdgeLength;tinyIslandCount+=audit.tinyIslandCount;stretchValues.push(...audit.stretchValues);densityValues.push(...audit.densityValues);uvArrays.push(uv);
   }
   stretchValues.sort((a,b)=>a-b);
   const p95Stretch=stretchValues.length?stretchValues[Math.min(stretchValues.length-1,Math.floor(stretchValues.length*.95))]:Infinity;
-  const quality={source:label+' candidate',meshCount:entries.length,missingMeshes:0,triangleCount:entries.reduce((total,entry)=>total+entry.triangleCount,0),islandCount,invalidCoordinates,collapsedTriangles,outOfBounds,overlaps:0,overlapCheckSkipped:false,uvArea,fillRatio:Math.min(uvArea,9.99),p95Stretch};
+  const density=distributionSummary(densityValues);
+  const quality={source:label+' candidate',meshCount:entries.length,missingMeshes:0,triangleCount:entries.reduce((total,entry)=>total+entry.triangleCount,0),islandCount,invalidCoordinates,collapsedTriangles,outOfBounds,overlaps:0,overlapCheckSkipped:false,uvArea,fillRatio:Math.min(uvArea,9.99),p95Stretch,densitySpread:density.spread,densityVariation:density.variation,seamLength,sharedEdgeLength,seamRatio:sharedEdgeLength?seamLength/sharedEdgeLength:0,tinyIslandCount};
   quality.grade=qualityGrade(quality);
   return {uvArrays,quality,clampedCoordinates,preview:sampleCandidateUVs(entries,uvArrays)};
 }
 
+function evaluateUVArrays(entries,uvArrays,label,{knownNonOverlapping=false}={}){
+  const stretchValues=[],densityValues=[],records=[];
+  let invalidCoordinates=0,collapsedTriangles=0,outOfBounds=0,islandCount=0,uvArea=0,seamLength=0,sharedEdgeLength=0,tinyIslandCount=0;
+  const triangleCount=entries.reduce((total,entry)=>total+entry.triangleCount,0);
+  const exactOverlapCheck=!knownNonOverlapping&&triangleCount<=60000;
+  entries.forEach((entry,index)=>{
+    const audit=auditUVBuffer(uvArrays[index],entry.triangleCount,entry.source.attributes.position.array,exactOverlapCheck?records:null,index);
+    invalidCoordinates+=audit.invalidCoordinates;collapsedTriangles+=audit.collapsedTriangles;outOfBounds+=audit.outOfBounds;islandCount+=audit.islandCount;uvArea+=audit.uvArea;seamLength+=audit.seamLength;sharedEdgeLength+=audit.sharedEdgeLength;tinyIslandCount+=audit.tinyIslandCount;stretchValues.push(...audit.stretchValues);densityValues.push(...audit.densityValues);
+  });
+  stretchValues.sort((a,b)=>a-b);
+  const density=distributionSummary(densityValues);
+  const quality={source:label+' candidate',meshCount:entries.length,missingMeshes:0,triangleCount,islandCount,invalidCoordinates,collapsedTriangles,outOfBounds,overlaps:knownNonOverlapping?0:exactOverlapCheck?countUVOverlaps(records):null,overlapCheckSkipped:!knownNonOverlapping&&!exactOverlapCheck,uvArea,fillRatio:Math.min(uvArea,9.99),p95Stretch:stretchValues.length?stretchValues[Math.min(stretchValues.length-1,Math.floor(stretchValues.length*.95))]:Infinity,densitySpread:density.spread,densityVariation:density.variation,seamLength,sharedEdgeLength,seamRatio:sharedEdgeLength?seamLength/sharedEdgeLength:0,tinyIslandCount};
+  quality.grade=qualityGrade(quality);
+  return {uvArrays,quality,clampedCoordinates:0,preview:sampleCandidateUVs(entries,uvArrays),atlas:{atlasCount:1}};
+}
+
+function buildProxyEdges(geometry){
+  const index=geometry.index,position=geometry.attributes.position,unique=new Map();
+  for(let corner=0;corner<index.count;corner+=3){
+    const triangle=[index.getX(corner),index.getX(corner+1),index.getX(corner+2)];
+    for(const [a,b] of [[triangle[0],triangle[1]],[triangle[1],triangle[2]],[triangle[2],triangle[0]]]){
+      const key=a<b?`${a}:${b}`:`${b}:${a}`;
+      if(unique.has(key))continue;
+      const dx=position.getX(a)-position.getX(b),dy=position.getY(a)-position.getY(b),dz=position.getZ(a)-position.getZ(b);
+      unique.set(key,{a,b,length:Math.hypot(dx,dy,dz)});
+    }
+  }
+  return [...unique.values()];
+}
+
+function clusterTubeEdges(edges){
+  const logs=edges.map(edge=>Math.log(Math.max(edge.length,1e-12))).sort((a,b)=>a-b);
+  if(logs.length<24)return [];
+  let centres=[logs[Math.floor(logs.length*.12)],logs[Math.floor(logs.length*.5)],logs[Math.floor(logs.length*.88)]];
+  for(let iteration=0;iteration<12;iteration++){
+    const buckets=[[],[],[]];
+    for(const edge of edges){const value=Math.log(Math.max(edge.length,1e-12));let best=0;for(let index=1;index<3;index++)if(Math.abs(value-centres[index])<Math.abs(value-centres[best]))best=index;buckets[best].push(value);}
+    centres=centres.map((centre,index)=>buckets[index].length?buckets[index].reduce((sum,value)=>sum+value,0)/buckets[index].length:centre);
+  }
+  const groups=[[],[],[]];
+  for(const edge of edges){const value=Math.log(Math.max(edge.length,1e-12));let best=0;for(let index=1;index<3;index++)if(Math.abs(value-centres[index])<Math.abs(value-centres[best]))best=index;groups[best].push(edge);}
+  return groups;
+}
+
+function ringClusterFromEdges(edges,vertexCount){
+  const adjacency=Array.from({length:vertexCount},()=>[]);
+  edges.forEach(edge=>{adjacency[edge.a].push(edge.b);adjacency[edge.b].push(edge.a);});
+  const visited=new Uint8Array(vertexCount),cycles=[];
+  let covered=0;
+  for(let vertex=0;vertex<vertexCount;vertex++){
+    if(visited[vertex]||!adjacency[vertex].length)continue;
+    const stack=[vertex],component=[];visited[vertex]=1;
+    while(stack.length){const current=stack.pop();component.push(current);for(const neighbour of adjacency[current])if(!visited[neighbour]){visited[neighbour]=1;stack.push(neighbour);}}
+    if(component.length>=6&&component.every(item=>adjacency[item].length===2)){cycles.push(component);covered+=component.length;}
+  }
+  if(cycles.length<4||covered/vertexCount<.88)return null;
+  const sizes=cycles.map(cycle=>cycle.length).sort((a,b)=>a-b),median=sizes[Math.floor(sizes.length/2)];
+  if(median<6||median>256)return null;
+  return {adjacency,cycles,coverage:covered/vertexCount,median,score:covered/vertexCount*10+Math.log(cycles.length+1)-median/500};
+}
+
+function ringClusterFromNormals(geometry,edges){
+  const position=geometry.attributes.position,normal=geometry.attributes.normal;if(!normal)return null;
+  const curvatures=edges.map(edge=>{
+    const dx=normal.getX(edge.a)-normal.getX(edge.b),dy=normal.getY(edge.a)-normal.getY(edge.b),dz=normal.getZ(edge.a)-normal.getZ(edge.b);
+    return Math.hypot(dx,dy,dz)/Math.max(edge.length,1e-9);
+  }).filter(value=>Number.isFinite(value)&&value>1e-6).sort((a,b)=>a-b);
+  if(curvatures.length<24)return null;
+  const radius=1/curvatures[Math.floor(curvatures.length*.86)];
+  geometry.computeBoundingBox();const size=geometry.boundingBox.getSize(new THREE.Vector3()),scale=Math.max(size.x,size.y,size.z);
+  if(!Number.isFinite(radius)||radius<scale*.003||radius>scale*.35)return null;
+  const centres=Array.from({length:position.count},(_,vertex)=>new THREE.Vector3(position.getX(vertex)-normal.getX(vertex)*radius,position.getY(vertex)-normal.getY(vertex)*radius,position.getZ(vertex)-normal.getZ(vertex)*radius));
+  const ranked=edges.map(edge=>({edge,distance:centres[edge.a].distanceTo(centres[edge.b])})).sort((a,b)=>a.distance-b.distance);
+  let split=Math.floor(ranked.length*.33),bestGap=-Infinity;
+  for(let index=Math.floor(ranked.length*.18);index<Math.floor(ranked.length*.48);index++){
+    const gap=Math.log((ranked[index+1].distance+scale*1e-8)/(ranked[index].distance+scale*1e-8));
+    if(gap>bestGap){bestGap=gap;split=index+1;}
+  }
+  const cluster=ringClusterFromEdges(ranked.slice(0,split).map(item=>item.edge),position.count);
+  return cluster?{...cluster,estimatedRadius:radius,score:cluster.score+2}:null;
+}
+
+function orderedCycle(component,adjacency){
+  const start=Math.min(...component),ordered=[start];let previous=-1,current=start;
+  while(ordered.length<component.length){const next=adjacency[current].find(vertex=>vertex!==previous&&vertex!==start);if(next===undefined||ordered.includes(next))break;ordered.push(next);previous=current;current=next;}
+  return ordered.length===component.length?ordered:null;
+}
+
+function alignRing(reference,target,position){
+  if(reference.length!==target.length)return null;
+  let best=null,bestCost=Infinity;
+  for(const reverse of [false,true])for(let offset=0;offset<target.length;offset++){
+    let cost=0;
+    for(let index=0;index<reference.length;index++){
+      const targetIndex=reverse?(offset-index+target.length*2)%target.length:(offset+index)%target.length;
+      const a=reference[index],b=target[targetIndex],dx=position.getX(a)-position.getX(b),dy=position.getY(a)-position.getY(b),dz=position.getZ(a)-position.getZ(b);cost+=dx*dx+dy*dy+dz*dz;
+    }
+    if(cost<bestCost){bestCost=cost;best=reference.map((_,index)=>target[reverse?(offset-index+target.length*2)%target.length:(offset+index)%target.length]);}
+  }
+  return best;
+}
+
+function detectTubeGrid(entry,topology){
+  if(topology.genus!==1)return null;
+  const geometry=entry.proxy,position=geometry.attributes.position,edges=buildProxyEdges(geometry);
+  const clusters=[ringClusterFromNormals(geometry,edges),...clusterTubeEdges(edges).map(group=>ringClusterFromEdges(group,position.count))].filter(Boolean).sort((a,b)=>b.score-a.score);
+  if(!clusters.length)return null;
+  const ringCluster=clusters[0],cycles=ringCluster.cycles.map(component=>orderedCycle(component,ringCluster.adjacency));
+  if(cycles.some(cycle=>!cycle))return null;
+  const componentByVertex=new Int32Array(position.count);componentByVertex.fill(-1);
+  cycles.forEach((cycle,index)=>cycle.forEach(vertex=>componentByVertex[vertex]=index));
+  const neighbourCounts=Array.from({length:cycles.length},()=>new Map());
+  for(const edge of edges){const a=componentByVertex[edge.a],b=componentByVertex[edge.b];if(a<0||b<0||a===b)continue;neighbourCounts[a].set(b,(neighbourCounts[a].get(b)||0)+1);neighbourCounts[b].set(a,(neighbourCounts[b].get(a)||0)+1);}
+  const strongest=neighbourCounts.map(map=>[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,2).map(item=>item[0]));
+  let start=strongest.findIndex(neighbours=>neighbours.length===1);if(start<0)start=0;
+  const ringOrder=[],used=new Set();let previous=-1,current=start;
+  while(current!==undefined&&!used.has(current)){ringOrder.push(current);used.add(current);const next=strongest[current].find(item=>item!==previous&&!used.has(item));previous=current;current=next;}
+  if(ringOrder.length!==cycles.length)return null;
+  const orderedRings=[];
+  for(let index=0;index<ringOrder.length;index++){
+    const cycle=cycles[ringOrder[index]];
+    orderedRings.push(index?alignRing(orderedRings[index-1],cycle,position):cycle);
+    if(!orderedRings[index])return null;
+  }
+  const closed=strongest[ringOrder[ringOrder.length-1]].includes(ringOrder[0]);
+  const centres=orderedRings.map(ring=>{const centre=new THREE.Vector3();ring.forEach(vertex=>centre.add(new THREE.Vector3().fromBufferAttribute(position,vertex)));return centre.multiplyScalar(1/ring.length);});
+  const ringDistances=[];let centreLength=0;
+  for(let index=0;index<centres.length-(closed?0:1);index++){const distance=centres[index].distanceTo(centres[(index+1)%centres.length]);ringDistances.push(distance);centreLength+=distance;}
+  let circumference=0;
+  for(const ring of orderedRings)for(let index=0;index<ring.length;index++){const a=ring[index],b=ring[(index+1)%ring.length];circumference+=new THREE.Vector3().fromBufferAttribute(position,a).distanceTo(new THREE.Vector3().fromBufferAttribute(position,b));}
+  circumference/=orderedRings.length;
+  if(!Number.isFinite(centreLength)||!Number.isFinite(circumference)||centreLength<=0||circumference<=0)return null;
+  const uByVertex=new Float64Array(position.count),tByVertex=new Float64Array(position.count);let travelled=0;
+  orderedRings.forEach((ring,ringIndex)=>{if(ringIndex)travelled+=ringDistances[ringIndex-1];ring.forEach((vertex,index)=>{uByVertex[vertex]=index/ring.length;tByVertex[vertex]=travelled/centreLength;});});
+  return {uByVertex,tByVertex,closed,ringCount:orderedRings.length,ringSize:orderedRings[0].length,centreLength,circumference,aspect:centreLength/circumference};
+}
+
+function packUniformCharts(chartCount,chartAspect,plan){
+  const margin=Math.max(2/plan.textureSize,.006),gap=Math.max(plan.padding/plan.textureSize*1.5,.004);let best=null;
+  for(let columns=1;columns<=chartCount;columns++){
+    const rows=Math.ceil(chartCount/columns);
+    const scale=Math.min((1-margin*2-gap*(columns-1))/columns,(1-margin*2-gap*(rows-1))/(rows*chartAspect));
+    if(scale>0&&(!best||scale>best.scale))best={columns,rows,scale,width:scale,height:scale*chartAspect,margin,gap};
+  }
+  return best;
+}
+
+function buildTubeTopologyCandidate(entries,topology,plan){
+  if(entries.length!==1)return null;
+  const entry=entries[0],tube=detectTubeGrid(entry,topology);if(!tube)return null;
+  const chartCount=THREE.MathUtils.clamp(Math.ceil(tube.aspect/2.4),1,6),chartAspect=tube.aspect/chartCount,packing=packUniformCharts(chartCount,chartAspect,plan);
+  if(!packing)return null;
+  const uv=new Float32Array(entry.source.attributes.position.count*2),proxyIndex=entry.proxy.index;
+  for(let triangle=0;triangle<entry.triangleCount;triangle++){
+    const proxyVertices=[proxyIndex.getX(triangle*3),proxyIndex.getX(triangle*3+1),proxyIndex.getX(triangle*3+2)];
+    const radial=proxyVertices.map(vertex=>tube.uByVertex[vertex]),longitudinal=proxyVertices.map(vertex=>tube.tByVertex[vertex]);
+    if(Math.max(...radial)-Math.min(...radial)>.5)for(let index=0;index<3;index++)if(radial[index]<.5)radial[index]+=1;
+    if(tube.closed&&Math.max(...longitudinal)-Math.min(...longitudinal)>.5)for(let index=0;index<3;index++)if(longitudinal[index]<.5)longitudinal[index]+=1;
+    const average=longitudinal.reduce((sum,value)=>sum+value,0)/3,wrappedAverage=((average%1)+1)%1;
+    const chart=Math.min(chartCount-1,Math.floor(wrappedAverage*chartCount));
+    const column=chart%packing.columns,row=Math.floor(chart/packing.columns);
+    for(let corner=0;corner<3;corner++){
+      const sourceCorner=entry.validCorners[triangle*3+corner],localU=THREE.MathUtils.clamp(radial[corner],0,1),localV=THREE.MathUtils.clamp(longitudinal[corner]*chartCount-chart,0,1);
+      uv[sourceCorner*2]=packing.margin+column*(packing.width+packing.gap)+localU*packing.width;
+      uv[sourceCorner*2+1]=packing.margin+row*(packing.height+packing.gap)+localV*packing.height;
+    }
+  }
+  const result=evaluateUVArrays(entries,[uv],'Topology tube cut',{knownNonOverlapping:true});
+  return {...result,id:'topology-tube',label:'Topology tube cut',settings:{algorithm:'ring cut graph',ringCount:tube.ringCount,radialVertices:tube.ringSize,charts:chartCount,physicalAspect:Number(tube.aspect.toFixed(3))},topologyPatch:{tubular:true,tubeAspect:tube.aspect,idealIslands:chartCount}};
+}
+
+function buildAxisOrganicCandidate(entries,topology,plan){
+  if(entries.length!==1||!topology.smoothClosed||topology.genus!==0||topology.shapeRatio<1.35)return null;
+  const entry=entries[0],position=entry.source.attributes.position;entry.source.computeBoundingBox();
+  const box=entry.source.boundingBox,dimensions=box.getSize(new THREE.Vector3()).toArray(),centre=box.getCenter(new THREE.Vector3());
+  const axis=dimensions.indexOf(Math.max(...dimensions)),other=[0,1,2].filter(index=>index!==axis),axisMin=[box.min.x,box.min.y,box.min.z][axis],axisLength=dimensions[axis];
+  const crossDiameter=(dimensions[other[0]]+dimensions[other[1]])*.5,aspect=axisLength/Math.max(Math.PI*crossDiameter,1e-9),packing=packUniformCharts(1,aspect,plan);if(!packing)return null;
+  const uv=new Float32Array(position.count*2),get=(corner,index)=>index===0?position.getX(corner):index===1?position.getY(corner):position.getZ(corner),centreValues=[centre.x,centre.y,centre.z];
+  for(let triangle=0;triangle<entry.triangleCount;triangle++){
+    const corners=[triangle*3,triangle*3+1,triangle*3+2],angles=corners.map(corner=>(Math.atan2(get(corner,other[1])-centreValues[other[1]],get(corner,other[0])-centreValues[other[0]])/(Math.PI*2)+1)%1),vertical=corners.map(corner=>(get(corner,axis)-axisMin)/axisLength);
+    if(Math.max(...angles)-Math.min(...angles)>.5)for(let index=0;index<3;index++)if(angles[index]<.5)angles[index]+=1;
+    corners.forEach((corner,index)=>{const radialDistance=Math.hypot(get(corner,other[0])-centreValues[other[0]],get(corner,other[1])-centreValues[other[1]]);const u=radialDistance<crossDiameter*1e-5?(angles[(index+1)%3]+angles[(index+2)%3])*.5:angles[index];uv[corner*2]=packing.margin+THREE.MathUtils.clamp(u,0,1)*packing.width;uv[corner*2+1]=packing.margin+THREE.MathUtils.clamp(vertical[index],0,1)*packing.height;});
+  }
+  const result=evaluateUVArrays(entries,[uv],'Axial organic cut');
+  return {...result,id:'axis-organic',label:'Axial organic cut',settings:{algorithm:'single axial cut',axis:['X','Y','Z'][axis],physicalAspect:Number(aspect.toFixed(3))},topologyPatch:{idealIslands:1}};
+}
+
+function buildSixViewCandidate(entries,topology,plan){
+  if(entries.length!==1||topology.openSurface||topology.genus>0)return null;
+  const entry=entries[0],position=entry.source.attributes.position;entry.source.computeBoundingBox();
+  const centre=entry.source.boundingBox.getCenter(new THREE.Vector3()),size=entry.source.boundingBox.getSize(new THREE.Vector3()),radius=Math.max(size.x,size.y,size.z)*.5;
+  const margin=Math.max(2/plan.textureSize,.006),gap=Math.max(plan.padding/plan.textureSize*1.5,.004),cellWidth=(1-margin*2-gap*2)/3,cellHeight=(1-margin*2-gap)/2,uv=new Float32Array(position.count*2);
+  const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3(),normal=new THREE.Vector3();
+  for(let triangle=0;triangle<entry.triangleCount;triangle++){
+    const corners=[triangle*3,triangle*3+1,triangle*3+2];a.fromBufferAttribute(position,corners[0]);b.fromBufferAttribute(position,corners[1]);c.fromBufferAttribute(position,corners[2]);normal.crossVectors(b.clone().sub(a),c.clone().sub(a)).normalize();
+    const absolute=[Math.abs(normal.x),Math.abs(normal.y),Math.abs(normal.z)],axis=absolute.indexOf(Math.max(...absolute)),positive=[normal.x,normal.y,normal.z][axis]>=0,chart=axis*2+(positive?0:1),column=chart%3,row=Math.floor(chart/3);
+    corners.forEach(corner=>{const point=new THREE.Vector3().fromBufferAttribute(position,corner).sub(centre);let u,v;if(axis===0){u=(positive?-point.z:point.z)/radius*.5+.5;v=point.y/radius*.5+.5;}else if(axis===1){u=point.x/radius*.5+.5;v=(positive?-point.z:point.z)/radius*.5+.5;}else{u=(positive?point.x:-point.x)/radius*.5+.5;v=point.y/radius*.5+.5;}uv[corner*2]=margin+column*(cellWidth+gap)+THREE.MathUtils.clamp(u,0,1)*cellWidth;uv[corner*2+1]=margin+row*(cellHeight+gap)+THREE.MathUtils.clamp(v,0,1)*cellHeight;});
+  }
+  const result=evaluateUVArrays(entries,[uv],'Six-view projection');
+  return {...result,id:'six-view',label:'Six-view projection',settings:{algorithm:'dominant-axis charting',charts:6},topologyPatch:{idealIslands:6}};
+}
+
+function buildTopologyCandidates(entries,topology,plan){
+  const candidates=[];
+  for(const builder of [buildTubeTopologyCandidate,buildAxisOrganicCandidate,buildSixViewCandidate])try{const candidate=builder(entries,topology,plan);if(candidate&&candidate.quality.invalidCoordinates===0&&candidate.quality.collapsedTriangles===0)candidates.push(candidate);}catch(error){console.error('Topology UV candidate failed',builder.name,error);}
+  return candidates;
+}
+
 function automaticQualityScore(quality,plan,topology){
   const errors=Number(quality.missingMeshes||0)+Number(quality.invalidCoordinates||0)+Number(quality.collapsedTriangles||0)+Number(quality.outOfBounds||0)+Number(quality.overlaps||0);
-  if(errors||quality.overlapCheckSkipped||!Number.isFinite(quality.p95Stretch))return 1e12+errors*1e8;
-  const preferredIslands=topology.openSurface?Math.max(2,quality.meshCount*2):topology.smoothClosed?Math.max(4,quality.meshCount*3):Math.max(8,quality.meshCount*5);
-  const islandWeight=plan.strategy==='compact'?1.6:plan.strategy==='detail'?.35:.8;
-  const islandPenalty=Math.max(0,quality.islandCount-preferredIslands)*islandWeight;
-  const stretchPenalty=Math.max(0,quality.p95Stretch-1)*18+Math.max(0,quality.p95Stretch-4)*80;
-  const fillPenalty=Math.max(0,.52-Math.min(quality.fillRatio,.52))*38;
-  return islandPenalty+stretchPenalty+fillPenalty;
+  if(errors||quality.overlapCheckSkipped||!Number.isFinite(quality.p95Stretch)||!Number.isFinite(quality.densitySpread)||!Number.isFinite(quality.seamRatio))return 1e12+errors*1e8;
+  const preferredIslands=Math.max(1,topology.idealIslands??(topology.tubular?Math.ceil((topology.tubeAspect||4)/2.4):topology.openSurface?quality.meshCount*2:topology.smoothClosed?(topology.genus===1?quality.meshCount*2:quality.meshCount*4):quality.meshCount*6));
+  const islandPenalty=Math.max(0,quality.islandCount-preferredIslands)*8;
+  const seamPenalty=Math.max(0,quality.seamRatio-.025)*150;
+  const densityPenalty=Math.max(0,quality.densitySpread-1)*55+Math.max(0,quality.densitySpread-1.6)*90;
+  const stretchPenalty=Math.max(0,quality.p95Stretch-1)*28+Math.max(0,quality.p95Stretch-2.2)*90;
+  const tinyPenalty=Number(quality.tinyIslandCount||0)*18;
+  const fillPenalty=Math.max(0,.42-Math.min(quality.fillRatio,.42))*24;
+  return islandPenalty+seamPenalty+densityPenalty+stretchPenalty+tinyPenalty+fillPenalty;
 }
 
 function rebuildCandidateProxies(entries,preserveSeams){
@@ -1667,10 +1970,16 @@ async function applyAutomaticAtlas(plan,preferences,existingQuality){
   if(totalTriangles>500000){disposeAll();throw new Error('This browser build supports models up to 500,000 triangles per unwrap.');}
 
   const topology=analyseProxyTopology(entries);
-  const candidates=buildAtlasCandidates(plan,preferences,totalTriangles,topology);
+  const atlasCandidates=buildAtlasCandidates(plan,preferences,totalTriangles,topology);
+  const topologyCandidates=buildTopologyCandidates(entries,topology,plan);
+  const hasProfessionalTopologyCandidate=topologyCandidates.some(candidate=>candidate.quality.grade==='A'&&candidate.quality.overlaps===0);
+  const candidates=hasProfessionalTopologyCandidate?atlasCandidates.filter(candidate=>candidate.id!=='low-stretch'):atlasCandidates;
+  const tubeCandidate=topologyCandidates.find(candidate=>candidate.topologyPatch?.tubular);
+  if(tubeCandidate)Object.assign(topology,tubeCandidate.topologyPatch);
   setInspectorContext({plan,topology});
   setInspectorStage('analyse','done','Topology analysed: '+totalTriangles.toLocaleString()+' triangles across '+entries.length.toLocaleString()+' meshes.');
-  setInspectorStage('search','running','Building and ranking '+candidates.length+' automatic UV candidates…');
+  setInspectorStage('search','running','Building and ranking '+(candidates.length+topologyCandidates.length)+' automatic UV candidates…');
+  topologyCandidates.forEach(candidate=>upsertInspectorCandidate({id:candidate.id,label:candidate.label,status:'queued',settings:candidate.settings}));
   candidates.forEach(candidate=>upsertInspectorCandidate({id:candidate.id,label:candidate.label,status:'queued',settings:{...candidate}}));
   let best=null,candidatesTested=0;
   const existingEligible=existingQuality&&existingQuality.missingMeshes===0&&existingQuality.invalidCoordinates===0&&existingQuality.collapsedTriangles===0&&existingQuality.outOfBounds===0&&existingQuality.overlaps===0&&!existingQuality.overlapCheckSkipped;
@@ -1681,6 +1990,14 @@ async function applyAutomaticAtlas(plan,preferences,existingQuality){
     candidatesTested++;
   }else if(existingQuality){
     upsertInspectorCandidate({id:'source',label:'Source UVs',status:'rejected',quality:existingQuality,durationMs:0,preview:sampleModelUVs(existingQuality.triangleCount),error:'Source UVs did not pass strict geometry validation.'});
+  }
+
+  for(const candidate of topologyCandidates){
+    const candidateTopology={...topology,...candidate.topologyPatch},score=automaticQualityScore(candidate.quality,plan,candidateTopology),passed=score<1e12;
+    candidate.quality.grade=qualityGrade(candidate.quality);
+    upsertInspectorCandidate({id:candidate.id,label:candidate.label,status:passed?'passed':'rejected',settings:candidate.settings,score,quality:candidate.quality,durationMs:0,preview:candidate.preview,error:passed?'':'Rejected by strict UV validation.'});
+    candidatesTested++;
+    if(passed&&(!best||score<best.score))best={...candidate,score};
   }
 
   for(let index=0;index<candidates.length;index++){
@@ -1798,7 +2115,7 @@ async function runUVUnwrap(){
     const tokens=response?.usage?.total_tokens;
     const cleanup=result.clampedCoordinates?' '+result.clampedCoordinates.toLocaleString()+' boundary coordinates were corrected.':'';
     const kept=result.keptExisting?' The source UVs won the comparison and were kept unchanged.':' The winning geometry was applied to the model.';
-    setUnwrapStatus((response?'AI-guided':'Automatic')+' unwrap complete. '+result.candidatesTested+' layouts were tested; '+result.candidateLabel+' won with grade '+result.quality.grade+', '+result.quality.islandCount.toLocaleString()+' islands, '+Math.round(result.quality.fillRatio*100)+'% UV fill and '+result.quality.p95Stretch.toFixed(2)+'× p95 stretch.'+kept+cleanup+(tokens?' AI usage: '+tokens.toLocaleString()+' tokens.':'')+aiNote,'success');
+    setUnwrapStatus((response?'AI-guided':'Automatic')+' unwrap complete. '+result.candidatesTested+' layouts were tested; '+result.candidateLabel+' won with grade '+result.quality.grade+', '+result.quality.islandCount.toLocaleString()+' islands, '+Math.round(result.quality.fillRatio*100)+'% UV fill, '+result.quality.p95Stretch.toFixed(2)+'× p95 stretch, '+result.quality.densitySpread.toFixed(2)+'× density spread and '+Math.round(result.quality.seamRatio*100)+'% seam ratio.'+kept+cleanup+(tokens?' AI usage: '+tokens.toLocaleString()+' tokens.':'')+aiNote,'success');
   }catch(error){
     console.error(error);
     failUnwrapInspector(error);
@@ -1920,6 +2237,7 @@ document.getElementById('rotate-toggle').addEventListener('change',event=>{contr
 document.getElementById('unwrap-btn').addEventListener('click',runUVUnwrap);
 document.getElementById('download-btn').addEventListener('click',downloadUnwrappedGLB);
 document.getElementById('copy-unwrap-report').addEventListener('click',copyUnwrapDebugReport);
+document.getElementById('load-test-shape').addEventListener('click',loadSelectedTestShape);
 
 function updateEndpointUI(){
   const endpoint=localStorage.getItem('jt_ai_unwrap_endpoint')||'';
